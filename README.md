@@ -1,16 +1,25 @@
-###Commit Type
+### Commit Type
 
 `Feat` - 새로운 기능 추가
+
 `Fix` - 버그 수정
+
 `Design` - Design 변경
+
 `Style` - 코드 포맷 변경, 세미콜론 누락, 디렉토리 구조 변경, 기능 변경 없는 오탈자, 띄어쓰기 수정
+
 `Refactor` - 코드 리팩토링
+
 `Comment` - 필요한 주석 추가
+
 `Build` - 빌드 툴 업데이트, 패키지 매니저 설정 등 (프로덕션 코드 변경 X)
+
 `Remove` - 파일을 삭제하는 경우
+
 `Docs` - 문서파일 추가 및 수정
 
-###Commit Subject
+### Commit Subject
+
 • 제목은 최대 50글자가 넘지 않도록 하고 마침표 및 특수기호는 사용하지 않는다.
 
 • 첫 글자는 대문자로 표기한다.
