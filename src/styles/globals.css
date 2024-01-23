@@ -2,32 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer base {
+  html {
+    font-size: 62.5%;
   }
-}
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
+  body {
+    font-size: 1.6rem;
+    font-family: "Pretendard";
+    font-weight: 400;
+  }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  :root {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    cursor: default;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    -moz-tab-size: 4;
+    tab-size: 4;
+  }
+
+  @font-face {
+    font-family: Pretendard;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../../public/fonts/Pretendard/Pretendard-Regular.woff") format("woff");
+  }
+
+  @font-face {
+    font-family: Pretendard;
+    font-weight: 500;
+    font-display: swap;
+    src: url("../../public/fonts/Pretendard/Pretendard-Medium.woff") format("woff");
+  }
+
+  @font-face {
+    font-family: Pretendard;
+    font-weight: 600;
+    font-display: swap;
+    src: url("../../public/fonts/Pretendard/Pretendard-SemiBold.woff") format("woff");
+  }
+
+  @font-face {
+    font-family: Pretendard;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../../public/fonts/Pretendard/Pretendard-Bold.woff") format("woff");
   }
 }
