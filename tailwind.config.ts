@@ -24,7 +24,7 @@ module.exports = {
     colors: {
       violet: {
         DEFAULT: "#5534DA",
-        "100": "#F1EFFD",
+        F1EF: "#F1EFFD",
       },
       red: "#D6173A",
       green: "#7AC555",
@@ -34,17 +34,17 @@ module.exports = {
       pink: "#E876EA",
       black: {
         DEFAULT: "#000",
-        "300": "#171717",
-        "200": "#333236",
-        "100": "#4B4B4B",
+        "1717": "#171717",
+        "3332": "#333236",
+        "4B4B": "#4B4B4B",
         overlay: "rgba(0, 0, 0, 0.70)", // 모달창 뒷 배경
       },
       gray: {
-        "500": "#787486",
-        "400": "#9FA6B2",
-        "300": "#D9D9D9",
-        "200": "#EEEEEE",
-        "100": "#FAFAFA",
+        "7874": "#787486",
+        "9FA6": "#9FA6B2",
+        D9D9: "#D9D9D9",
+        EEEE: "#EEEEEE",
+        FAFA: "#FAFAFA",
       },
       white: "#FFF",
     },
