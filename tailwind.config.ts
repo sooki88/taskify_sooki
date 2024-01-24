@@ -54,7 +54,7 @@ module.exports = {
     screens: {
       mobile: "375px",
       tablet: "744px",
-      pc: "1200px",
+      pc: "1099px",
     },
     zIndex: {
       DEFAULT: "1",
