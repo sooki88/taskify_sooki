@@ -1,0 +1,26 @@
+{
+  "result": "SUCCESS",
+  "data": [
+    {
+      "id": 0,
+      "title": "칼럼타이틀1",
+      "teamId": "string",
+      "createdAt": "2024-01-24T23:56:29.890Z",
+      "updatedAt": "2024-01-24T23:56:29.890Z"
+    },
+    {
+      "id": 1,
+      "title": "칼럼타이틀2",
+      "teamId": "string",
+      "createdAt": "2024-01-24T23:56:29.890Z",
+      "updatedAt": "2024-01-24T23:56:29.890Z"
+    },
+    {
+      "id": 2,
+      "title": "칼럼타이틀3",
+      "teamId": "string",
+      "createdAt": "2024-01-24T23:56:29.890Z",
+      "updatedAt": "2024-01-24T23:56:29.890Z"
+    }
+  ]
+}
