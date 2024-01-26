@@ -38,7 +38,6 @@ module.exports = {
         "3332": "#333236",
         "4B4B": "#4B4B4B",
         overlay: "rgba(0, 0, 0, 0.70)", // 모달창 뒷 배경
-<<<<<<< HEAD
       },
       gray: {
         "7874": "#787486",
@@ -47,16 +46,6 @@ module.exports = {
         EEEE: "#EEEEEE",
         FAFA: "#FAFAFA",
       },
-=======
-      },
-      gray: {
-        "7874": "#787486",
-        "9FA6": "#9FA6B2",
-        D9D9: "#D9D9D9",
-        EEEE: "#EEEEEE",
-        FAFA: "#FAFAFA",
-      },
->>>>>>> 604523895f76137f4b90bb4a335ae688383ca8a2
       white: "#FFF",
     },
     fontFamily: {
@@ -65,11 +54,7 @@ module.exports = {
     screens: {
       mobile: "375px",
       tablet: "744px",
-<<<<<<< HEAD
-      pc: "1200px",
-=======
       pc: "1199px",
->>>>>>> 604523895f76137f4b90bb4a335ae688383ca8a2
     },
     zIndex: {
       DEFAULT: "1",
@@ -82,30 +67,4 @@ module.exports = {
     },
   },
   plugins: [],
-<<<<<<< HEAD
 };
-
-// 이전 코드 : 에러나서 교체했습니다.
-// import type { Config } from "tailwindcss";
-
-// const config: Config = {
-//   content: [
-//     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-//     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-//     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-//   ],
-//   theme: {
-//     extend: {
-//       backgroundImage: {
-//         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-//         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-//       },
-//     },
-
-//   },
-//   plugins: [],
-// };
-// export default config;
-=======
-};
->>>>>>> 604523895f76137f4b90bb4a335ae688383ca8a2
