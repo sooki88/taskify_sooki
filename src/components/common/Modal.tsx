@@ -4,7 +4,7 @@ import Image from "next/image";
 
 interface ModalProps<T = void> {
   children: ReactNode;
-  title: string;
+  title?: string;
   modalType?: "alert" | "create" | "update" | "delete";
   hasOptionsbutton?: boolean;
   callback?: () => T;
@@ -14,7 +14,7 @@ interface ModalProps<T = void> {
 
 function Modal({
   children,
-  title = "title",
+  title,
   modalType = "alert",
   hasOptionsbutton,
   callback,
@@ -57,7 +57,7 @@ function Modal({
         className="fixed inset-0 flex items-center justify-center w-full h-full modal-bg bg-black-overlay"
         onClick={onClose}>
         <div
-          className="bg-white min-w-[327px] min-h-[220px] rounded-5 px-[20px] py-[28px] tablet:px-[28px] grid grid-rows-[auto,1fr,auto]"
+          className="bg-white min-w-[327px] tablet:min-w-[540px] min-h-[220px] tablet:min-h-[250px]: rounded-5 px-[20px] py-[28px] tablet:px-[28px] grid grid-rows-[auto,1fr,auto]"
           onClick={stopEventBubbling}>
           {/* 모달 헤더 영역 */}
           <header className="flex items-center justify-between modal-header mb-[24px] tablet:mt-[4px] tablet:mb-[32px]">
@@ -68,9 +68,9 @@ function Modal({
                 <button
                   onClick={() => {
                     //케밥 컴포넌트 생성 후 추가
-                    console.log("kebob");
+                    console.log("kebab");
                   }}>
-                  <Image src={"/images/kebob.png"} alt="kebob" width={28} height={28} />
+                  <Image src={"/images/kebab.png"} alt="kebab" width={28} height={28} />
                 </button>
                 <button onClick={onClose}>
                   <Image src={"/images/close.png"} alt="close" width={32} height={32} />
