@@ -28,7 +28,7 @@ export const ChipAdd = () => {
 // 상위 컴포넌트에서 import해서 사용시 onClick때 e.currentTarget.dataset.value로 클릭한 값 받을 수 있습니다.
 interface ChipProgressProps {
   columnTitle: string;
-  onClick: React.MouseEventHandler<HTMLDivElement>;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 export const ChipProgress = ({ columnTitle, onClick }: ChipProgressProps) => {

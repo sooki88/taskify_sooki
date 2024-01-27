@@ -13,6 +13,10 @@
     font-weight: 400;
   }
 
+  input {
+    outline: none;
+  }
+
   :root {
     -webkit-tap-highlight-color: transparent;
     -webkit-text-size-adjust: 100%;
