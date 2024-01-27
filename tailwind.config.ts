@@ -2,7 +2,7 @@
 
 const rem0_10 = { ...Array.from(Array(11)).map((_, i) => `${i / 10}rem`) };
 const rem0_100 = { ...Array.from(Array(101)).map((_, i) => `${i / 10}rem`) };
-const rem0_200 = { ...Array.from(Array(201)).map((_, i) => `${i / 10}rem`) };
+const rem0_800 = { ...Array.from(Array(801)).map((_, i) => `${i / 10}rem`) };
 
 module.exports = {
   mode: "jit",
@@ -17,9 +17,9 @@ module.exports = {
       borderRadius: rem0_100,
       fontSize: rem0_100,
       lineHeight: rem0_100,
-      minWidth: rem0_200,
-      minHeight: rem0_200,
-      spacing: rem0_200,
+      minWidth: rem0_800,
+      minHeight: rem0_800,
+      spacing: rem0_800,
     },
     colors: {
       violet: {
