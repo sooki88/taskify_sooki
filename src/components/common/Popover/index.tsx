@@ -28,7 +28,7 @@ function Popover({ children, contents }: PopoverProps) {
   useOnClickOutside(popoverRef, handleOutsideClick);
 
   return (
-    <div className="relative" ref={popoverRef}>
+    <div className="relative flex items-center" ref={popoverRef}>
       <button type="button" onClick={handlePopoverOpen}>
         {children}
       </button>

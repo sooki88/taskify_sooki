@@ -1,19 +1,29 @@
 import React from "react";
 import Avatar from "./Avatar";
 
-interface ProfileLabelProps {
-  data: any;
-  profile?: boolean;
+interface ProfileData {
+  nickname: string;
+  profileImageUrl: string;
 }
 
-function ProfileLabel({ data, profile }: ProfileLabelProps) {
-  //profile이 true인 경우 텍스트 반응형으로 숨김 처리.
-  const labelType = profile ? "hidden mobile:block" : "";
+interface ProfileLabelProps {
+  data: ProfileData;
+  avatarType?: "default" | "modal" | "dropdown";
+}
+
+function ProfileLabel({ data, avatarType = "default" }: ProfileLabelProps) {
+  const labelType = avatarType === "default" ? "hidden tablet:block" : "";
+  const labelSize = avatarType === "modal" ? "text-12 tablet:text-14" : "text-14 tablet:text-16";
+  const labelGaps = {
+    default: "gap-12",
+    modal: "gap-8",
+    dropdown: "gap-6",
+  };
 
   return (
-    <div className="flex items-center gap-6">
-      <Avatar name={data.name} profile />
-      <span className={`text-14 tablet:text-16 text-black-3332 ${labelType}`}>{data.name}</span>
+    <div className={`flex items-center ${labelGaps[avatarType]}`}>
+      <Avatar nickname={data.nickname} profileImageUrl={data.profileImageUrl} avatarType={avatarType} />
+      <span className={`${labelSize} text-black-3332 ${labelType}`}>{data.nickname}</span>
     </div>
   );
 }

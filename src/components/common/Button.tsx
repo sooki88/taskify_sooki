@@ -1,50 +1,37 @@
+import { ButtonHTMLAttributes } from "react";
+
 type Variant = "filled" | "ghost" | "ghost_gray";
+type ButtonType = "auth" | "confirm" | "modal" | "delete" | "comment";
 
-type ButtonProps = {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: Variant;
-  width: string | number;
-  height?: string | number;
-  fontsize: string | number;
-  disabled?: boolean;
-  onClick?: () => void;
-  children?: React.ReactNode;
-};
+  buttonType: ButtonType;
+}
 
-function Button({
-  variant,
-  width,
-  height,
-  fontsize,
-  disabled = false,
-  onClick,
-  children,
-}: ButtonProps): JSX.Element {
-  const variantClasses = (): string => {
-    switch (variant) {
-      case "filled":
-        return `flex justify-center items-center ${disabled ? "bg-gray-9FA6 text-white" : "bg-violet text-white"} rounded-8`;
-      case "ghost":
-        return `flex justify-center items-center bg-white border border-gray-D9D9 text-violet rounded-4`;
-      case "ghost_gray":
-        return `flex justify-center items-center bg-white border border-gray-D9D9 text-gray-7874 rounded-4`;
-      default:
-        return "";
-    }
+function Button({ variant, buttonType, children, ...props }: ButtonProps) {
+  const baseClasses = "flex justify-center items-center";
+  const disabledClasses = props.disabled ? "bg-gray-9FA6" : "bg-violet";
+
+  const variantClasses = {
+    filled: `${disabledClasses} text-white rounded-8`,
+    ghost: "bg-white border border-gray-D9D9 text-violet rounded-4",
+    ghost_gray: "bg-white border border-gray-D9D9 text-gray-7874 rounded-4",
   };
 
-  const inlineStyles = {
-    width: typeof width === 'number' ? `${width}px`: width,
-    height: typeof height === 'number' ? `${height}px` : height,  
-    fontSize: typeof fontsize === 'number' ? `${fontsize}px` : fontsize,
+  const sizeClasses = {
+    //double Button
+    confirm: "w-109 h-28 text-12 tablet:w-72 tablet:h-30 tablet:text-14 pc:w-84 pc:h-32",
+    modal: "w-138 h-42 text-14 tablet:w-120 tablet:h-48 tablet:text-16",
+    //single Button
+    auth: "w-full h-50 text-18",
+    delete: "w-52 h-28 text-12 tablet:w-84 tablet:h-32 tablet:text-14",
+    comment: "w-84 h-28 tablet:h-32",
   };
 
   return (
     <button
-      className={variantClasses()}
-      style={inlineStyles}
-      disabled={disabled}
-      onClick={onClick}
-    >
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[buttonType]}`}
+      {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}>
       {children}
     </button>
   );

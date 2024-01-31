@@ -18,12 +18,12 @@ function AvatarStack({ list }: AvatarsProps) {
   const isVisible = count > visibleCount;
 
   return (
-    <div className={`relative flex h-10 group`}>
-      <div className={`h-38 flex items-center -space-x-4`}>
+    <div className={`relative flex group`}>
+      <div className={`h-38 flex items-center -space-x-10 tablet:-space-x-8`}>
         {list.slice(0, VISIBLE_COUNT_INIT).map((data, index) => {
           return (
             <div key={index} className={`relative`}>
-              <Avatar name={data.name} profile />
+              <Avatar nickname={data.nickname} profileImageUrl={data.profileImageUrl} />
             </div>
           );
         })}
@@ -37,7 +37,7 @@ function AvatarStack({ list }: AvatarsProps) {
       <div
         className={`absolute hidden border border-black rounded-8 border-solid top-38 w-120 left-10 group-hover:flex-col group-hover:flex group-hover:items-center`}>
         {list.map((data, index) => {
-          return <ProfileLabel key={index} data={data} profile />;
+          return <ProfileLabel key={index} data={data} />;
         })}
       </div>
     </div>

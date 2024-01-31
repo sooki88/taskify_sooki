@@ -1,21 +1,30 @@
 import React from "react";
 
+type AvatarType = "default" | "card" | "modal" | "dropdown";
+
 interface AvatarProps {
-  name?: string;
-  src?: string;
-  profile?: boolean;
+  nickname?: string;
+  profileImageUrl?: string;
+  avatarType?: AvatarType;
 }
 
-function Avatar({ name, src, profile }: AvatarProps) {
-  const initial = name?.charAt(0) || "";
+function Avatar({ nickname, profileImageUrl, avatarType = "default" }: AvatarProps) {
+  const initial = nickname?.charAt(0) || "";
 
   const backgroundStyle = {
-    background: src ? `url(${src})` : "orange",
+    background: profileImageUrl ? `url(${profileImageUrl})` : "orange",
     backgroundSize: "cover",
     backgroundPosition: "center",
   };
 
-  const avatarStyle = profile ? "h-34 w-34 mobile:h-38 mobile:w-38" : "h-26 w-26";
+  const sizeClasses = {
+    default: "w-34 h-34 text-14 tablet:w-38 tablet:h-38 tablet:text-16 font-semibold",
+    card: "w-22 h-22 text-10 tablet:w-24 tablet:h-24 tablet:text-12 font-semibold",
+    modal: "w-26 h-26 text-12 tablet:w-34 tablet:h-34 tablet:text-14 font-normal",
+    dropdown: "w-26 h-26 text-12",
+  };
+
+  const avatarStyle = sizeClasses[avatarType];
 
   return (
     <div
