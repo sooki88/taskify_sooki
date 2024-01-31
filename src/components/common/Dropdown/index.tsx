@@ -1,102 +1,110 @@
-import { useState } from "react";
+import React, { useRef, useState, useEffect, ReactNode } from "react";
+import Image from "next/image";
+import { useOnClickOutside, useToggle } from "usehooks-ts";
 import { Lists, Option } from "./Lists";
-import { ChipProgress } from "../Chips";
-import Layout from "./Layout";
 
-function Dropdown({ defaultOption, setValues, options, name }: DropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(defaultOption);
-  /** value 타입 변경 예정*/
-  const handleChange = (value: any) => {
-    setValues((pre) => ({ ...pre, [name]: value }));
-    setSelectedOption(value);
-  };
+type OptionType = string | { [key: string]: string };
 
-  return (
-    <Layout isOpen={isOpen} setIsOpen={setIsOpen}>
-      <span className="flex items-center">
-        <ChipProgress columnTitle={selectedOption} />
-      </span>
-      {isOpen && (
-        <Lists>
-          {options.map((option: TitleOption) => (
-            <Option key={option.id} option={option} handleChange={handleChange} selectedOption={selectedOption}>
-              <ChipProgress columnTitle={option.title} />
-            </Option>
-          ))}
-        </Lists>
-      )}
-    </Layout>
-  );
+interface DropdownProps {
+  options: OptionType[];
+  renderOptions?: (option: OptionType) => ReactNode;
+  filteringTerm?: string;
+  autoComplete?: boolean;
 }
 
-function InputDropdown({ defaultOption, setValues, options, name }: InputDropdownProps) {
-  const { profileImageUrl, nickname, userId } = defaultOption;
-  const DEFAULT_PROFILE = {
-    profileImageUrl: profileImageUrl,
-    nickname: nickname,
-  };
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(userId);
-  const [profile, setProfile] = useState(DEFAULT_PROFILE);
+function Dropdown({ options, renderOptions, filteringTerm, autoComplete }: DropdownProps) {
+  const [inputValue, setInputValue] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isInputMode, setIsInputMode] = useState<boolean>(false);
+  const ref = useRef<HTMLDivElement>(null); //outsideClick ref
+  const inputRef = useRef<HTMLInputElement>(null); // inputfocus ref
 
-  const handleChange = (value: any) => {
-    setValues((pre) => ({ ...pre, [name]: value }));
-    setSelectedOption(value);
+  const [toggleValue, handleToggle, setToggleValue] = useToggle();
+
+  const handleDivClick = () => {
+    setIsInputMode(true);
+    handleToggle();
   };
-  const handleProfileChange = (option: MembersOption) => {
-    if (option.nickname) {
-      setProfile((pre) => ({ ...pre, profileImageUrl: option.profileImageUrl, nickname: option.nickname }));
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleOptionClick = (index: number) => {
+    setSelectedIndex(index);
+    setIsInputMode(false);
+    setToggleValue(false);
+  };
+
+  const handleButtonToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setToggleValue((prev) => !prev);
+  };
+
+  const handleClickOutside = () => {
+    setToggleValue(false);
+    setIsInputMode(false);
+    setInputValue("");
+  };
+
+  const defaultRenderOptions = (option: OptionType) => {
+    return typeof option === "object" ? option[filteringTerm as keyof typeof option] : option;
+  };
+
+  const renderOption = renderOptions || defaultRenderOptions;
+
+  const filteredOptions = isInputMode
+    ? options.filter((option) => {
+        const optionValue =
+          typeof option === "object" && option !== null
+            ? option[filteringTerm as keyof typeof option]?.toString().toLowerCase()
+            : option.toString().toLowerCase();
+        return optionValue.includes(inputValue.toLowerCase());
+      })
+    : options;
+
+  useOnClickOutside(ref, handleClickOutside);
+
+  useEffect(() => {
+    // 입력 모드일 때 입력 필드에 자동으로 포커스
+    if (autoComplete && isInputMode && inputRef.current) {
+      inputRef.current.focus();
     }
-  };
+  }, [autoComplete, isInputMode]);
+
   return (
-    <Layout isOpen={isOpen} setIsOpen={setIsOpen}>
-      <span className="flex items-center">
-        {/* <ProfileLabel name={profile.nickname} src={profile.profileImageUrl} /> */}
-      </span>
-      {isOpen && (
+    <div ref={ref} className="relative w-220 h-48">
+      {autoComplete && isInputMode ? (
+        <input
+          ref={inputRef}
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onClick={() => setToggleValue(true)}
+          className="flex w-full h-48 px-14 py-16 border border-gray-D9D9 rounded-6 justify-between"
+          placeholder="이름을 입력해 주세요"
+        />
+      ) : (
+        <div
+          className="flex items-center w-full h-48 px-16 border border-gray-D9D9 rounded-6 justify-between cursor-pointer"
+          onClick={handleDivClick}>
+          <div>{renderOption(options[selectedIndex])}</div>
+          <button onClick={handleButtonToggle}>
+            <Image src={"/images/arrow_drop_down.png"} width={26} height={26} alt="down" />
+          </button>
+        </div>
+      )}
+      {toggleValue && (
         <Lists>
-          {options.map((option: MembersOption) => (
-            <Option
-              key={option.userId}
-              option={option}
-              handleChange={handleChange}
-              selectedOption={selectedOption}
-              handleProfileChange={handleProfileChange}>
-              {/* <ProfileLabel name={option.nickname} src={option.profileImageUrl} profile /> */}
+          {filteredOptions.map((option, index) => (
+            <Option key={index} onClick={() => handleOptionClick(index)} isSelected={selectedIndex === index}>
+              {renderOption(option)}
             </Option>
           ))}
         </Lists>
       )}
-    </Layout>
+    </div>
   );
 }
 
-export { Dropdown, InputDropdown };
-
-interface InitValue {
-  title: string;
-  assigneeUserId: number;
-}
-
-interface SelectProps<T> {
-  options: T[];
-  defaultOption: T;
-  setValues: React.Dispatch<React.SetStateAction<InitValue>>;
-  name: string;
-}
-
-export interface MembersOption {
-  profileImageUrl: string;
-  nickname: string;
-  userId: number;
-}
-
-export interface TitleOption {
-  id: number;
-  title: string;
-}
-
-type DropdownProps = SelectProps<TitleOption>;
-
-type InputDropdownProps = SelectProps<MembersOption>;
+export default Dropdown;

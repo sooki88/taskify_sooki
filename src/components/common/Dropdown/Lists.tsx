@@ -1,29 +1,30 @@
-import check from "../../../../public/images/check.png";
 import Image from "next/image";
 import { ReactNode } from "react";
-import { TitleOption, MembersOption } from ".";
 
-function Option({ option, children, selectedOption, handleChange, handleProfileChange }: OptionProps) {
-  const value = "title" in option ? option.title : option.userId;
-  const handleClick = () => {
-    handleChange(value);
-    handleProfileChange && handleProfileChange(option as MembersOption);
-  };
+interface OptionProps {
+  children: ReactNode;
+  isSelected: boolean;
+  onClick: () => void;
+}
 
+interface ListsProps {
+  children: ReactNode;
+}
+
+function Option({ children, isSelected, onClick }: OptionProps) {
   return (
-    <li
+    <div
       className="flex gap-6 bg-white cursor-pointer options-center hover:bg-gray-EEEE rounded-4 py-5"
-      value={value}
-      onClick={handleClick}>
+      onClick={onClick}>
       <Image
-        src={check}
+        src={"/images/check.png"}
         alt="selected"
         width={22}
         height={22}
-        className={`${selectedOption === value ? "visible" : "invisible"}`}
+        className={isSelected ? "visible" : "invisible"}
       />
       {children}
-    </li>
+    </div>
   );
 }
 
@@ -36,15 +37,3 @@ function Lists({ children }: ListsProps) {
 }
 
 export { Option, Lists };
-
-interface ListsProps {
-  children: ReactNode;
-}
-
-interface OptionProps {
-  option: TitleOption | MembersOption;
-  children: ReactNode;
-  selectedOption: TitleOption | number;
-  handleChange: (value: string | number) => void;
-  handleProfileChange?: (option: MembersOption) => void;
-}
