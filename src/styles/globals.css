@@ -17,6 +17,13 @@
     outline: none;
   }
 
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #333236;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  }
+
   :root {
     -webkit-tap-highlight-color: transparent;
     -webkit-text-size-adjust: 100%;
