@@ -33,36 +33,35 @@ function Comments({ comment, onDelete }: CommentsProps) {
     <div className="flex gap-10 mt-20 w-287 tablet:w-450">
       <Avatar />
       <div className="flex flex-col">
-        <div className="flex gap-8 items-center">
-          <span className="text-black font-Pretendard text-14 font-bold">이름</span>
-          <span className="text-gray-9FA6 font-Pretendard text-12 font-normal">2022.12.27 14:00</span>
+        <div className="flex items-center gap-8">
+          <span className="font-bold text-black font-Pretendard text-14">이름</span>
+          <span className="font-normal text-gray-9FA6 font-Pretendard text-12">2022.12.27 14:00</span>
         </div>
         {isEditing ? (
           <textarea
-            className="mt-6 w-250 tablet:w-410 h-70 tablet:h-110 p-16 rounded-6 border-2 border-gray-D9D9 outline-none focus:border-violet placeholder:text-gray-9FA6 font-Pretendard text-base font-normal leading-normal resize-none"
-            maxLength={180}
+            className="p-16 mt-6 text-base font-normal leading-normal border-2 outline-none resize-none w-250 tablet:w-410 h-70 tablet:h-110 rounded-6 border-gray-D9D9 focus:border-violet placeholder:text-gray-9FA6 font-Pretendard"
             value={editingComment}
             onChange={(e) => setEditingComment(e.target.value)}
           />
         ) : (
-          <div className="w-250 tablet:w-410 mt-6 text-black font-Pretendard text-14 font-normal">{comment}</div>
+          <div className="mt-6 font-normal text-black w-250 tablet:w-410 font-Pretendard text-14">{comment}</div>
         )}
         <div className="flex gap-12 mt-12">
           {isEditing ? (
             <>
-              <button className="text-gray-9FA6 font-Pretendard text-12 font-normal underline" onClick={handleSave}>
+              <button className="font-normal underline text-gray-9FA6 font-Pretendard text-12" onClick={handleSave}>
                 저장
               </button>
-              <button className="text-gray-9FA6 font-Pretendard text-12 font-normal underline" onClick={handleCancel}>
+              <button className="font-normal underline text-gray-9FA6 font-Pretendard text-12" onClick={handleCancel}>
                 취소
               </button>
             </>
           ) : (
             <>
-              <button className="text-gray-9FA6 font-Pretendard text-12 font-normal underline" onClick={handleEdit}>
+              <button className="font-normal underline text-gray-9FA6 font-Pretendard text-12" onClick={handleEdit}>
                 수정
               </button>
-              <button className="text-gray-9FA6 font-Pretendard text-12 font-normal underline" onClick={handleDelete}>
+              <button className="font-normal underline text-gray-9FA6 font-Pretendard text-12" onClick={handleDelete}>
                 삭제
               </button>
             </>
