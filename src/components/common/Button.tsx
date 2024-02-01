@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from "react";
 
-type Variant = "filled" | "ghost" | "ghost_gray";
+type Variant = "filled" | "filled_4" | "ghost" | "ghost_gray";
 type ButtonType = "auth" | "confirm" | "modal" | "delete" | "comment";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -14,6 +14,7 @@ function Button({ variant, buttonType, children, ...props }: ButtonProps) {
 
   const variantClasses = {
     filled: `${disabledClasses} text-white rounded-8`,
+    filled_4: `${disabledClasses} text-white rounded-4`,
     ghost: "bg-white border border-gray-D9D9 text-violet rounded-4",
     ghost_gray: "bg-white border border-gray-D9D9 text-gray-7874 rounded-4",
   };

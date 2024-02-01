@@ -8,7 +8,7 @@ interface ProfileData {
 
 interface ProfileLabelProps {
   data: ProfileData;
-  avatarType?: "default" | "modal" | "dropdown";
+  avatarType?: "default" | "modal" | "dropdown" | "table";
 }
 
 function ProfileLabel({ data, avatarType = "default" }: ProfileLabelProps) {
@@ -18,6 +18,7 @@ function ProfileLabel({ data, avatarType = "default" }: ProfileLabelProps) {
     default: "gap-12",
     modal: "gap-8",
     dropdown: "gap-6",
+    table: "gap-8 tablet:gap-12", 
   };
 
   return (
