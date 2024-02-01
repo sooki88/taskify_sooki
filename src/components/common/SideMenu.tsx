@@ -1,6 +1,7 @@
-import { getWindowSize } from "@/lib/util/getWindowSize";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useWindowSize } from "usehooks-ts";
 
 interface DashboardItemProps {
   id: number;
@@ -10,23 +11,26 @@ interface DashboardItemProps {
   updatedAt: string;
   createdByMe: boolean;
   userId: number;
-  onClick?: (id: number) => void;
   tabletOrLarge: boolean;
 }
 
 interface SideMenuProps {
-  dashboards: DashboardItemProps[];
-  onClick: (id: number) => void;
+  dashboards?: DashboardItemProps[];
 }
 
 // 사이드 메뉴 안에 있는 대시보드 버튼 하나
-function DashboardItem({ id, title, createdByMe, color, onClick, tabletOrLarge }: DashboardItemProps) {
-  const dashboardColor = `bg-[${color}]`;
+function DashboardItem({ id, title, createdByMe, color, tabletOrLarge }: DashboardItemProps) {
+  const router = useRouter();
+  const dashboardColor = `bg-[${color.toLowerCase()}]`;
+
+  const handleClick = (dashboarId: number) => {
+    return router.push(`/dashboard/${dashboarId}`);
+  };
 
   return (
     <div
       className="flex items-center justify-center gap-6 p-12 tablet:justify-start h-45 rounded-4 hover:bg-violet-F1EF text-gray-7874 hover:text-black-3332"
-      onClick={() => onClick?.(id)}>
+      onClick={() => handleClick(id)}>
       <p className={`flex-none size-8 ${dashboardColor} rounded-full tablet:mr-10 mr-0`} />
       {tabletOrLarge && (
         <>
@@ -43,9 +47,8 @@ function DashboardItem({ id, title, createdByMe, color, onClick, tabletOrLarge }
 }
 
 // 사이드메뉴 전체
-function SideMenu({ dashboards, onClick }: SideMenuProps) {
-  // 윈도우 화면 가로 사이즈 가져오기
-  const { width } = getWindowSize();
+function SideMenu({ dashboards }: SideMenuProps) {
+  const { width } = useWindowSize();
   const tabletOrLarge = width >= 744;
 
   return (
@@ -67,12 +70,7 @@ function SideMenu({ dashboards, onClick }: SideMenuProps) {
         <Image src="/images/add_box.png" alt="대시보드 추가 버튼 이미지" width={20} height={20} />
       </div>
       {dashboards?.map((dashboard) => (
-        <DashboardItem
-          key={dashboard.id}
-          {...dashboard}
-          onClick={() => onClick(dashboard.id)}
-          tabletOrLarge={tabletOrLarge}
-        />
+        <DashboardItem key={dashboard.id} {...dashboard} tabletOrLarge={tabletOrLarge} />
       ))}
     </div>
   );

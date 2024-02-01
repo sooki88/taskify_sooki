@@ -61,7 +61,7 @@ function Modal({ children, title, modalType, hasOptionsbutton, useFormData, call
     portalRoot &&
     createPortal(
       <div
-        className="fixed inset-0 flex items-center justify-center w-full h-full modal-bg bg-black-overlay"
+        className="fixed inset-0 flex items-center justify-center w-full h-full modal-bg bg-black-overlay z-modal"
         onClick={onClose}>
         <div
           className="bg-white min-w-327 tablet:min-w-540 min-h-220 tablet:min-h-250: rounded-5 px-20 py-28 tablet:px-28 grid grid-rows-[auto,1fr,auto]"

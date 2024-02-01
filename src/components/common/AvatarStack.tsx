@@ -1,26 +1,23 @@
-import React, { useState } from "react";
 import Avatar from "./Avatar";
 import ProfileLabel from "./ProfileLabel";
+import { useWindowSize } from "usehooks-ts";
 
 interface AvatarsProps {
   list: any[];
 }
 
-const VISIBLE_COUNT_INIT = 4;
-
 function AvatarStack({ list }: AvatarsProps) {
-  //추후 브라우저 사이즈에 따라 갯수 조정할 예정.
-  const [visibleCount, setVisibleCount] = useState(VISIBLE_COUNT_INIT);
+  const { width } = useWindowSize();
+  const tabletOrLarge = width >= 1199;
 
-  const count = list.length;
-  const others = count - VISIBLE_COUNT_INIT;
-
-  const isVisible = count > visibleCount;
+  const visibleCount = tabletOrLarge ? 4 : 2;
+  const isVisible = list.length > visibleCount;
+  const others = list.length - visibleCount;
 
   return (
     <div className={`relative flex group`}>
       <div className={`h-38 flex items-center -space-x-10 tablet:-space-x-8`}>
-        {list.slice(0, VISIBLE_COUNT_INIT).map((data, index) => {
+        {list.slice(0, visibleCount).map((data, index) => {
           return (
             <div key={index} className={`relative`}>
               <Avatar nickname={data.nickname} profileImageUrl={data.profileImageUrl} />
@@ -29,13 +26,13 @@ function AvatarStack({ list }: AvatarsProps) {
         })}
         {isVisible && (
           <div
-            className={`relative flex items-center justify-center border-2 border-white rounded-full h-38 w-38 bg-[#F4D7DA] text-[#D25B68] tablet:h-34 tablet:w-34`}>
+            className={`relative flex items-center justify-center border-2 border-white rounded-full h-34 w-34 bg-[#F4D7DA] text-[#D25B68] tablet:h-38 tablet:w-38 tablet:text-16 text-14 font-medium`}>
             +{others}
           </div>
         )}
       </div>
       <div
-        className={`absolute hidden border border-black rounded-8 border-solid top-38 w-120 left-10 group-hover:flex-col group-hover:flex group-hover:items-center`}>
+        className={`absolute hidden border border-black rounded-8 border-solid top-38 w-120 left-10 group-hover:flex-col group-hover:flex group-hover:items-center bg-white`}>
         {list.map((data, index) => {
           return <ProfileLabel key={index} data={data} />;
         })}
