@@ -2,7 +2,7 @@ import Image from "next/image";
 import { ChipNum } from "../common/Chips";
 import { mockData } from "./mockData";
 import Card from "@/components/dashboard/Card";
-import AddColumnButton from "../common/AddColumnButton";
+import AddColumnButton from "./AddColumnButton";
 
 interface ColumnProps {
   title: string;

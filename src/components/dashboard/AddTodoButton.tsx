@@ -1,5 +1,5 @@
 import React from "react";
-import { ChipAdd } from "./Chips";
+import { ChipAdd } from "../common/Chips";
 
 function AddTodoButton({ onClick }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
