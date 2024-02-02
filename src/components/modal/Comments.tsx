@@ -30,7 +30,7 @@ function Comments({ comment, onDelete }: CommentsProps) {
   };
 
   return (
-    <div className="flex gap-10 mt-20 w-287 tablet:w-450">
+    <div className="flex gap-10 mt-20 w-320 tablet:w-450">
       <Avatar />
       <div className="flex flex-col">
         <div className="flex items-center gap-8">
@@ -39,12 +39,14 @@ function Comments({ comment, onDelete }: CommentsProps) {
         </div>
         {isEditing ? (
           <textarea
-            className="p-16 mt-6 text-base font-normal leading-normal border-2 outline-none resize-none w-250 tablet:w-410 h-70 tablet:h-110 rounded-6 border-gray-D9D9 focus:border-violet placeholder:text-gray-9FA6 font-Pretendard"
+            className="p-16 mt-6 font-normal leading-normal outline-none resize-none text-12 tablet:text-14 border-1 w-270 tablet:w-400 h-70 tablet:h-110 rounded-6 border-gray-D9D9 focus:border-violet placeholder:text-gray-9FA6 font-Pretendard"
             value={editingComment}
             onChange={(e) => setEditingComment(e.target.value)}
           />
         ) : (
-          <div className="mt-6 font-normal text-black w-250 tablet:w-410 font-Pretendard text-14">{comment}</div>
+          <div className="mt-6 font-normal text-black w-270 tablet:w-400 font-Pretendard text-12 tablet:text-14">
+            {comment}
+          </div>
         )}
         <div className="flex gap-12 mt-12">
           {isEditing ? (
