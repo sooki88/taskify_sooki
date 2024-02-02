@@ -20,7 +20,7 @@ function BoardLayout({ type, sideMenu, dashboardHeader, children }: BoardLayoutP
     },
     editOrMypage: {
       // dashbaord/id/edit 또는 mypage 페이지
-      padding: "tablet:pl-180 tablet:pr-20 tablet:pt-90 pl-79 pr-12 pt-76 pc:pl-320",
+      padding: "tablet:pl-180 tablet:pr-20 tablet:pt-70 pl-79 pr-12 pt-60 pc:pl-320",
       size: "flex-col tablet:gap-12 gap-11 pc:w-620 tablet:w-544",
     },
   };
@@ -41,10 +41,15 @@ export default BoardLayout;
 
 {
   /* Page.tsx에서 사용 샘플 코드
-    <BoardLayout
-      type="myDashboard"
-      sideMenu={<SideMenu dashboards={dashboards} />}
-      dashboardHeader={<DashboardHeader myData={myData} dashboadData={dashboadData} members={members} />}>
-        children 넣는 곳
-    </BoardLayout> */
+    export default function myDashboard () {
+      const sideMenu = <SideMenu deashboards={deashboards} />
+      const header = <DashboardHeader myData={myData} dashboadData={dashboadData} members={members} />
+
+      return (
+        <BoardLayout type="myDashboard" sideMenu={sideMenu} dashboardHeader={header}>
+          children 넣는 곳
+        </BoardLayout>
+      )
+    }
+ */
 }

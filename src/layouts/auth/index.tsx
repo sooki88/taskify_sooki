@@ -8,14 +8,17 @@ export type AuthType = "logIn" | "signUp";
 interface AuthLayoutProps {
   type: AuthType;
   children: ReactNode;
+  disabled: boolean;
 }
 
-function AuthLayout({ type, children }: AuthLayoutProps) {
+function AuthLayout({ type, children, disabled }: AuthLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-FAFA flex justify-center items-center">
-      <div className=" w-544 px-12 mx-auto py-48">
+    <div className="flex items-center justify-center min-h-screen bg-gray-FAFA">
+      <div className="px-12 py-48 mx-auto  w-544">
         <AuthHeader type={type} />
-        <AuthForm type={type}>{children}</AuthForm>
+        <AuthForm type={type} disabled={disabled}>
+          {children}
+        </AuthForm>
         <AuthFooter type={type} />
       </div>
     </div>

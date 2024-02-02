@@ -81,7 +81,7 @@ export function ChipCard({ tag, index, short }: ChipCardProps) {
       {short ? (
         <>
           {index < 3 && <DefaultChipCard>{tag}</DefaultChipCard>}
-          {index === 4 && (
+          {index === 3 && (
             <div
               className={`inline-flex flex-row justify-center ${colors.bg} items-center tablet:h-22 h-20 rounded-4 px-6 py-4 mr-6 bg-gray-9FA6`}>
               <span className={`tablet:text-12 text-10 text-white ${colors.text} font-normal`}>

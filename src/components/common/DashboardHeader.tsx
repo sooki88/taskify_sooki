@@ -61,7 +61,7 @@ function DashboardHeader({ myData, dashboadData, members }: DashboardHeaderProps
   return (
     <>
       {isModalOpen && <InviteModal onClose={() => setIsModalOpen(false)} />}
-      <div className="fixed top-0 left-0 right-0 flex items-center justify-end pr-12 bg-white pc:justify-between tablet:h-70 h-60 border-b-1 border-gray-D9D9 pc:pl-340 pl-79 tablet:pl-228 pc:pr-80 tablet:pr-40 zIndex-300">
+      <div className="fixed top-0 left-0 right-0 flex items-center justify-end pr-12 bg-white pc:justify-between tablet:h-70 h-60 border-b-1 border-gray-D9D9 pc:pl-340 pl-79 tablet:pl-228 pc:pr-80 tablet:pr-40 z-[300]">
         <div className="items-center hidden gap-8 font-bold pc:flex text-20 text-black-3332">
           {dashboadData ? dashboadData.title : PATH_TITLE[path]}
           {ownerIsMe && <Image src="/images/crown.png" alt="왕관 아이콘 이모지" width="20" height="16" />}
@@ -72,7 +72,7 @@ function DashboardHeader({ myData, dashboadData, members }: DashboardHeaderProps
               <Link href={`/dashboard/${dashboadData?.id}/edit`}>
                 <SettingButton />
               </Link>
-              <InviteButton onClick={() => setIsModalOpen(true)} />
+              <InviteButton variant="ghost" onClick={() => setIsModalOpen(true)} />
             </div>
           )}
           <div className="flex items-center gap-12 pc:gap-32 tablet:gap-24">
