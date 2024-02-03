@@ -1,4 +1,4 @@
-import Button from "../common/Button";
+import Button from "./Button/Button";
 import SearchBar from "./SearchBar";
 
 const MOCK_MEMBERS = [
@@ -12,7 +12,7 @@ const MOCK_MEMBERS = [
 
 function InviteDashTable() {
     return (
-        <div className="px-16 tablet:px-28">
+        <div className="px-16 tablet:px-28 bg-white"> 
             <p className="text-20 font-bold tablet:text-24 pt-24 tablet:pt-32">초대받은 대시보드</p>
             <div className="pt-20">
                 <SearchBar />

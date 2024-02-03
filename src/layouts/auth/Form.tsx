@@ -1,4 +1,5 @@
-import Button from "@/components/common/Button";
+import Button from "@/components/common/Button/Button";
+import { AuthType } from ".";
 import { ReactNode } from "react";
 import { AUTH_MAPPING } from "@/lib/constants";
 

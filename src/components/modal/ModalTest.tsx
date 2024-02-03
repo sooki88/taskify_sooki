@@ -5,7 +5,7 @@ import { CreateTodo, UpdateTodo } from "@/components/modal/todo";
 import AlertModal from "./alert";
 import TaskModal from "./task";
 import InviteModal from "./invite";
-import Button from "../common/Button";
+import Button from "../common/Button/Button";
 import Avatar from "../common/Avatar";
 import AvatarStack from "../common/AvatarStack";
 import ProfileLabel from "../common/ProfileLabel";

@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import Comments from "../Comments";
-import Button from "@/components/common/Button";
+import Button from "@/components/common/Button/Button";
 
 function CommentInput() {
   const [comment, setComment] = useState("");

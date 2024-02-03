@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useFormContext, FieldValues } from "react-hook-form";
-import Button from "./Button";
+import Button from "./Button/Button";
 import Popover from "./Popover";
 import { MODAL_POPOVER } from "@/lib/constants";
 
