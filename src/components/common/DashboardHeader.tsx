@@ -31,7 +31,7 @@ interface MembersProps {
   userId: number;
   email: string;
   nickname: string;
-  profileImageUrl: string | null ; // 받아오는 데이터값이 null이라 추가했습니다.
+  profileImageUrl: string | null ;
   createdAt: string;
   updatedAt: string;
   isOwner: boolean;
@@ -60,7 +60,7 @@ function DashboardHeader({ myData, dashboardData, members }: DashboardHeaderProp
   return (     
     <>
       {isModalOpen && <InviteModal onClose={() => setIsModalOpen(false)} />}
-      <div className="fixed top-0 left-0 right-0 flex items-center justify-end pr-12 bg-white pc:justify-between tablet:h-70 h-60 border-b-1 border-gray-D9D9 pc:pl-340 pl-79 tablet:pl-228 pc:pr-80 tablet:pr-40 z-[300]">
+      <div className="fixed top-0 left-0 right-0 flex items-center justify-end pr-12 bg-white pc:justify-between tablet:h-70 h-60 border-b-1 border-gray-D9D9 pc:pl-340 pl-0 pc:pr-80 tablet:pr-40 z-[300]">
         <div className="items-center hidden gap-8 font-bold pc:flex text-20 text-black-3332">
           {dashboardData ? dashboardData.title : PATH_TITLE[path]}
           {ownerIsMe && <Image src="/images/crown.png" alt="왕관 아이콘 이모지" width="20" height="16" />}

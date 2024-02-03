@@ -16,7 +16,6 @@ interface DashboardItemProps {
 
 interface SideMenuProps {
   dashboards?: DashboardItemProps[];
-  // dashboards?: DashboardItemProps[] | undefined | null;
 }
 
 // 사이드 메뉴 안에 있는 대시보드 버튼 하나
@@ -53,7 +52,7 @@ function SideMenu({ dashboards }: SideMenuProps) {
   const tabletOrLarge = width >= 744;
 
   return (
-    <div className="fixed top-0 left-0 flex flex-col h-screen gap-3 px-12 py-20 bg-white pc:w-300 tablet:w-160 w-67 border-r-1 border-gray-D9D9 z-sticky">
+    <div className="sticky top-0 left-0 bottom-0 flex flex-col h-screen gap-3 px-12 py-20 bg-white pc:w-300 tablet:w-160 w-67 border-r-1 border-gray-D9D9 z-sticky">
       <Link href="/">
         <div className="relative ml-12 tablet:w-109 tablet:h-33 w-23 h-27 tablet:mb-42 mb-27">
           <Image
