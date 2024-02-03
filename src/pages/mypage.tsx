@@ -1,5 +1,5 @@
 import { AuthInputField } from "@/components/Auth/AuthInputField";
-import BackButton from "@/components/common/BackButton";
+import BackButton from "@/components/common/Button/BackButton";
 import DashboardHeader from "@/components/common/DashboardHeader";
 import SideMenu from "@/components/common/SideMenu";
 import { Mock_DashBoard, Mock_MyData } from "@/components/mypage/MockData";

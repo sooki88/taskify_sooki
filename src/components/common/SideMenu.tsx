@@ -11,7 +11,6 @@ interface DashboardItemProps {
   updatedAt: string;
   createdByMe: boolean;
   userId: number;
-  tabletOrLarge: boolean;
 }
 
 interface SideMenuProps {
@@ -19,7 +18,9 @@ interface SideMenuProps {
 }
 
 // 사이드 메뉴 안에 있는 대시보드 버튼 하나
-function DashboardItem({ id, title, createdByMe, color, tabletOrLarge }: DashboardItemProps) {
+function DashboardItem({ id, title, createdByMe, color }: DashboardItemProps) {
+  const { width } = useWindowSize();
+  const tabletOrLarge = width >= 744;
   const router = useRouter();
   const dashboardColor = `bg-[${color.toLowerCase()}]`;
 
@@ -69,9 +70,7 @@ function SideMenu({ dashboards }: SideMenuProps) {
         <span className="font-semibold text-12 text-gray-7874 tablet:inline-block mobile:hidden">Dash Boards</span>
         <Image src="/images/add_box_gray.png" alt="대시보드 추가 버튼 이미지" width={20} height={20} />
       </div>
-      {dashboards?.map((dashboard) => (
-        <DashboardItem key={dashboard.id} {...dashboard} tabletOrLarge={tabletOrLarge} />
-      ))}
+      {dashboards?.map((dashboard) => <DashboardItem key={dashboard.id} {...dashboard} />)}
     </div>
   );
 }
