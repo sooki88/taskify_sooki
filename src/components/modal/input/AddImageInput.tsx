@@ -1,9 +1,9 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import Image from "next/image";
 
-function AddImageInput() {
+function AddImageInput({ value, onChange }: { value?: string; onChange: Dispatch<SetStateAction<File | undefined>> }) {
   const [addImages, setAddImages] = useState<File[]>([]);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | string | null>(null);
 
   const handleImageUpload = () => {
     const imageInput = document.getElementById("imageInput") as HTMLInputElement;
@@ -24,6 +24,11 @@ function AddImageInput() {
     }
   };
 
+  const hanldeSelectedImage = (image: File) => {
+    setSelectedImage(image);
+    onChange(image);
+  };
+
   const handleDeleteImage = (index: number) => {
     setAddImages((prevImages) => prevImages.filter((_, i) => i !== index));
     setSelectedImage(null);
@@ -33,11 +38,11 @@ function AddImageInput() {
     <div className="flex items-center gap-20">
       <input id="imageInput" type="file" accept="image/*" className="hidden" onChange={handleAddImage} />
       <button onClick={handleImageUpload}>
-        <Image src={"/images/addimage.png"} alt="사진 추가" width={76} height={76} priority={true} />
+        <Image src={value || "/images/addimage.png"} alt="사진 추가" width={76} height={76} priority={true} />
       </button>
       {addImages.map((image, index) => (
         <div key={index} className="relative">
-          <div onClick={() => setSelectedImage(image)}>
+          <div onClick={() => hanldeSelectedImage(image)}>
             <img
               src={URL.createObjectURL(image)}
               alt={`추가된 이미지 ${index}`}

@@ -1,26 +1,66 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Comments from "../Comments";
+import { useRouter } from "next/router";
+import { createComment, findComments } from "@/lib/services/comments";
+import { CommentServiceDto, FindCommentsResponseDto } from "@/lib/services/comments/schema";
 import Button from "@/components/common/Button/Button";
 
-function CommentInput() {
-  const [comment, setComment] = useState("");
-  const [commentList, setCommentList] = useState<string[]>([]);
+interface CommentInputProps {
+  cardId: number;
+  columnId: number;
+}
+
+function CommentInput({ cardId, columnId }: CommentInputProps) {
+  const [comment, setComment] = useState<string>("");
+  const [commentList, setCommentList] = useState<CommentServiceDto[]>([]);
+  const {
+    query: { id },
+  } = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (comment.trim() !== "") {
-      setCommentList([comment, ...commentList]);
-      setComment("");
+      const form = {
+        content: comment,
+        cardId,
+        columnId,
+        dashboardId: Number(id),
+      };
+      try {
+        const response = await createComment(form);
+        console.log("comment", response);
+        setComment("");
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   const handleDelete = (id: number) => {
+    console.log(id);
     const updatedComments = commentList.filter((_, index) => index !== id);
     setCommentList(updatedComments);
   };
+
+  useEffect(() => {
+    const fetch = async () => {
+      const qs = {
+        cardId,
+      };
+      try {
+        const response = (await findComments(qs)).data as FindCommentsResponseDto;
+        if (response) {
+          setCommentList(response.comments);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetch();
+  }, [cardId, handleSubmit]);
 
   return (
     <>
@@ -42,7 +82,7 @@ function CommentInput() {
       {commentList && commentList.length > 0 && (
         <div className="overflow-auto max-h-150 w-320 tablet:w-470">
           {commentList.map((comment, index) => (
-            <Comments key={index} comment={comment} onDelete={() => handleDelete(index)} />
+            <Comments key={index} comment={comment.content} onDelete={() => handleDelete(comment.id)} />
           ))}
         </div>
       )}

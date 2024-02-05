@@ -2,8 +2,9 @@ import React from "react";
 import Avatar from "./Avatar";
 
 interface ProfileData {
+  profileImageUrl: string | null;
   nickname: string;
-  profileImageUrl: string;
+  id: number;
 }
 
 interface ProfileLabelProps {
@@ -18,7 +19,7 @@ function ProfileLabel({ data, avatarType = "default" }: ProfileLabelProps) {
     default: "gap-12",
     modal: "gap-8",
     dropdown: "gap-6",
-    table: "gap-8 tablet:gap-12", 
+    table: "gap-8 tablet:gap-12",
   };
 
   return (

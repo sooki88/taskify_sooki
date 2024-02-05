@@ -1,21 +1,56 @@
-import { FormProvider, useForm } from "react-hook-form";
+import { Dispatch, SetStateAction, useContext } from "react";
+import { Controller, FieldValues, FormProvider, useForm } from "react-hook-form";
 import Modal from "@/components/common/Modal";
-import ModalInputField from "@/components/common/ModalInputField";
+import Dropdown from "@/components/common/Dropdown";
+import ProfileLabel from "@/components/common/ProfileLabel";
+import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
+import AddImageInput from "../input/AddImageInput";
+import FormInputField from "../input/FormInputField";
+import FormTagField from "../input/FormTagField";
+import { DashboardContext } from "@/pages/dashboard/[id]";
 
-function CreateTodoModal({ onClose }: any) {
+interface CreateTodoModalProps<T = void> {
+  onClose: () => void;
+  callback?: (data: FieldValues) => Promise<T>;
+  setSelectedImage: Dispatch<SetStateAction<File | undefined>>;
+}
+
+function CreateTodoModal({ onClose, callback, setSelectedImage }: CreateTodoModalProps) {
   const methods = useForm();
+  const { members: memberList } = useContext(DashboardContext);
 
   const rules = { required: "빈 값은 안됨." };
 
+  const renderOptionNickName = (option: MemberApplicationServiceResponseDto) => <ProfileLabel data={option} />;
+  const defaultMemberId = memberList[0]?.userId || "";
+
   return (
     <FormProvider {...methods}>
-      <Modal title="할 일 생성" modalType={"create"} onClose={onClose} useFormData>
-        <ModalInputField labelName="name" labelTitle="이름" />
-        <ModalInputField labelName="title" labelTitle="제목" rules={rules} required />
-        <ModalInputField labelName="description" labelTitle="설명" rules={rules} textArea required />
-        <ModalInputField labelName="deadline" labelTitle="마감일" />
-        <ModalInputField labelName="tag" labelTitle="태그" />
-        <ModalInputField labelName="image" labelTitle="이미지" />
+      <Modal title="할 일 생성" modalType={"create"} onClose={onClose} callback={callback} useFormData>
+        <div className="flex flex-col gap-32">
+          <Controller
+            name="assigneeUserId"
+            control={methods.control}
+            defaultValue={defaultMemberId}
+            render={({ field }) => (
+              <Dropdown
+                options={memberList}
+                renderOptions={renderOptionNickName}
+                onChange={(selectedValue) => field.onChange(selectedValue)}
+                defaultIndex={memberList.findIndex(
+                  (member: MemberApplicationServiceResponseDto) => member.userId === field.value,
+                )}
+                filteringTerm="nickname"
+                autoComplete
+              />
+            )}
+          />
+          <FormInputField labelName="title" labelTitle="제목" rules={rules} required />
+          <FormInputField labelName="description" labelTitle="설명" rules={rules} textArea required />
+          <FormInputField labelName="dueDate" labelTitle="마감일" />
+          <FormTagField />
+          <AddImageInput onChange={setSelectedImage} />
+        </div>
       </Modal>
     </FormProvider>
   );

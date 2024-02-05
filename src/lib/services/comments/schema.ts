@@ -24,6 +24,11 @@ export type FindCommentsRequestDto = {
   cursorId?: number;
 };
 
+export type FindCommentsResponseDto = {
+  cursorId?: number;
+  comments: CommentServiceDto[];
+};
+
 export type UpdateCommentRequestDto = {
   content: string;
 };

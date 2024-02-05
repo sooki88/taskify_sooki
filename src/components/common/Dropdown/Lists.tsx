@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 interface OptionProps {
   children: ReactNode;
   isSelected: boolean;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent) => void;
 }
 
 interface ListsProps {
@@ -15,7 +15,7 @@ function Option({ children, isSelected, onClick }: OptionProps) {
   return (
     <div
       className="flex gap-6 bg-white cursor-pointer options-center hover:bg-gray-EEEE rounded-4 py-5"
-      onClick={onClick}>
+      onClick={(e) => onClick(e)}>
       <Image
         src={"/images/check.png"}
         alt="selected"

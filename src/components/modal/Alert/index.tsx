@@ -1,12 +1,13 @@
 import Modal from "@/components/common/Modal";
 import React from "react";
+import { FieldValues } from "react-hook-form";
 
 export type AlertType = "passwordMismatch" | "emailInUse" | "userNotFound" | "serverError" | "";
 
 interface AlertModalProps {
   modalType: "alert" | "delete";
   alertType?: AlertType;
-  callback?: any;
+  callback?: (data: FieldValues) => Promise<T>;
   onClose: () => void;
 }
 

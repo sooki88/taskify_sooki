@@ -14,3 +14,8 @@ export type FindMembersRequestDto = {
   size?: number;
   dashboardId: number;
 };
+
+export type MemberListResponseDto = {
+  members: MemberApplicationServiceResponseDto[];
+  totalCount: number;
+};

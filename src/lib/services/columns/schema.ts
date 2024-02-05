@@ -1,8 +1,8 @@
-
 export type ColumnServiceResponseDto = {
   id: number;
   title: string;
   teamId: string;
+  dashboardId: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -18,7 +18,7 @@ export type FindColumnsRequestDto = {
 
 export type ResponsePayload_ColumnServiceResponseDto = {
   result: "SUCCESS";
-  data: ColumnServiceResponseDto[] | null;
+  data: ColumnServiceResponseDto[];
 };
 
 export type UpdateColumnRequestDto = {

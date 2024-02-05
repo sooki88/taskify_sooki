@@ -8,6 +8,7 @@ import {
   ResponsePayload_ColumnServiceResponseDto,
   UpdateColumnRequestDto,
 } from "./schema";
+import { AxiosRequestConfig } from "axios";
 
 /**
  * 새로운 컬럼을 생성하는 함수입니다.
@@ -26,8 +27,9 @@ export const createColumn = (data: CreateColumnRequestDto): Promise<ServiceRespo
  */
 export const findColumns = (
   qs?: FindColumnsRequestDto,
+  config: AxiosRequestConfig = {},
 ): Promise<ServiceResponse<ResponsePayload_ColumnServiceResponseDto>> =>
-  service("get", createUrlWithQueryString(columnAddress.column, qs));
+  service("get", createUrlWithQueryString(columnAddress.column, qs), undefined, config);
 
 /**
  * 컬럼에 대한 다양한 작업을 수행하는 함수입니다. HTTP 메소드에 따라 다른 작업을 수행합니다.
@@ -55,11 +57,11 @@ export const column = (method: HttpMethod, columnId: number, data?: UpdateColumn
  * 컬럼에 이미지를 업로드하는 함수입니다.
  *
  * @param {number} columnId - 이미지를 업로드할 컬럼 ID
- * @param {string} imageUrl - 업로드할 이미지의 URL
- * @returns {Promise<any>} 서비스 응답을 포함하는 프로미스
+ * @param {FormData} formData - 업로드할 이미지의 URL
+ * @returns {Promise<{imageUrl:string}>} 서비스 응답을 포함하는 프로미스
  * @throws {Error} 컬럼 ID가 제공되지 않을 경우 오류를 발생시킵니다.
  */
-export const cardUpload = (columnId: number, imageUrl: string): Promise<any> => {
+export const cardUpload = (columnId: number, formData: FormData): Promise<ServiceResponse<{ imageUrl: string }>> => {
   if (!columnId) throw Error("Column ID is required for image upload");
-  return service("post", columnAddress.uploadColumn(columnId), imageUrl);
+  return service("post", columnAddress.uploadColumn(columnId), formData);
 };

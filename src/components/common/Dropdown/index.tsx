@@ -2,19 +2,22 @@ import React, { useRef, useState, useEffect, ReactNode } from "react";
 import Image from "next/image";
 import { useOnClickOutside, useToggle } from "usehooks-ts";
 import { Lists, Option } from "./Lists";
+import { FieldValue } from "react-hook-form";
 
-type OptionType = string | { [key: string]: string };
+// type OptionType = string | Record<string , string>;
 
 interface DropdownProps {
-  options: OptionType[];
-  renderOptions?: (option: OptionType) => ReactNode;
+  defaultIndex: number;
+  options: any[];
+  renderOptions?: (option: any) => ReactNode;
   filteringTerm?: string;
   autoComplete?: boolean;
+  onChange: (value: number) => void;
 }
 
-function Dropdown({ options, renderOptions, filteringTerm, autoComplete }: DropdownProps) {
+function Dropdown({ defaultIndex, options, renderOptions, filteringTerm, autoComplete, onChange }: DropdownProps) {
+  const [selectedIndex, setSelectedIndex] = useState(defaultIndex);
   const [inputValue, setInputValue] = useState("");
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [isInputMode, setIsInputMode] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null); //outsideClick ref
   const inputRef = useRef<HTMLInputElement>(null); // inputfocus ref
@@ -22,7 +25,7 @@ function Dropdown({ options, renderOptions, filteringTerm, autoComplete }: Dropd
   const [toggleValue, handleToggle, setToggleValue] = useToggle();
 
   const handleDivClick = () => {
-    setIsInputMode(true);
+    if (autoComplete) setIsInputMode(true);
     handleToggle();
   };
 
@@ -30,8 +33,14 @@ function Dropdown({ options, renderOptions, filteringTerm, autoComplete }: Dropd
     setInputValue(e.target.value);
   };
 
-  const handleOptionClick = (index: number) => {
-    setSelectedIndex(index);
+  const handleOptionClick = (selectedId: number) => {
+    const selectedOption = options.find((option) => option.id === selectedId);
+    const selectedIndex = options.findIndex((option) => option.id === selectedId);
+    setSelectedIndex(selectedIndex);
+    if (selectedOption) {
+      onChange(selectedId);
+    }
+
     setIsInputMode(false);
     setToggleValue(false);
   };
@@ -47,7 +56,7 @@ function Dropdown({ options, renderOptions, filteringTerm, autoComplete }: Dropd
     setInputValue("");
   };
 
-  const defaultRenderOptions = (option: OptionType) => {
+  const defaultRenderOptions = (option: any) => {
     return typeof option === "object" ? option[filteringTerm as keyof typeof option] : option;
   };
 
@@ -57,9 +66,9 @@ function Dropdown({ options, renderOptions, filteringTerm, autoComplete }: Dropd
     ? options.filter((option) => {
         const optionValue =
           typeof option === "object" && option !== null
-            ? option[filteringTerm as keyof typeof option]?.toString().toLowerCase()
-            : option.toString().toLowerCase();
-        return optionValue.includes(inputValue.toLowerCase());
+            ? option[filteringTerm as keyof typeof option]?.toString()
+            : option.toString();
+        return optionValue.includes(inputValue);
       })
     : options;
 
@@ -97,7 +106,7 @@ function Dropdown({ options, renderOptions, filteringTerm, autoComplete }: Dropd
       {toggleValue && (
         <Lists>
           {filteredOptions.map((option, index) => (
-            <Option key={index} onClick={() => handleOptionClick(index)} isSelected={selectedIndex === index}>
+            <Option key={index} onClick={() => handleOptionClick(option.id)} isSelected={selectedIndex === index}>
               {renderOption(option)}
             </Option>
           ))}

@@ -114,15 +114,14 @@ export function ChipColors({ selectColor, setSelectColor }: ChipColorsProps) {
 
   return (
     <div className="flex gap-10">
-      {COLORS.map((color, index) => (
-        <div className="relative flex items-center justify-center" key={index}>
+      {COLORS.map((color) => (
+        <div key={color.id} className="relative flex items-center justify-center cursor-pointer">
           {selectColor === color.option && (
             <div className="absolute tablet:size-24 size-22">
               <Image fill src="/images/done.png" alt="체크 아이콘 이미지" />
             </div>
           )}
           <div
-            key={color.id}
             className={`${color.bg} tablet:size-30 size-28 rounded-99`}
             onClick={() => setSelectColor(color.option)}
           />

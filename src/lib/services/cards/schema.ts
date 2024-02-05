@@ -8,7 +8,7 @@ export type CardServiceResponseDto = {
     profileImageUrl: string | null;
     nickname: string;
     id: number;
-  } | null;
+  };
   imageUrl: string | null;
   teamId: string;
   columnId: number;
@@ -19,7 +19,7 @@ export type CardServiceResponseDto = {
 export type CardServiceFindResponseDto = {
   cursorId: number | null;
   totalCount: number;
-  cards: CardServiceResponseDto;
+  cards: CardServiceResponseDto[];
 };
 
 export type CreateCardRequestDto = {

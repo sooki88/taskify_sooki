@@ -1,7 +1,13 @@
 import { createUrlWithQueryString } from "@/lib/util/createUrlWithQueryString";
 import { commentAddress } from "../address";
 import { HttpMethod, ServiceResponse, service } from "../axios";
-import { CommentServiceDto, CreateCommentRequestDto, FindCommentsRequestDto, UpdateCommentRequestDto } from "./schema";
+import {
+  CommentServiceDto,
+  CreateCommentRequestDto,
+  FindCommentsRequestDto,
+  FindCommentsResponseDto,
+  UpdateCommentRequestDto,
+} from "./schema";
 
 /**
  * 새로운 댓글을 생성하는 함수입니다.
@@ -18,7 +24,7 @@ export const createComment = (data: CreateCommentRequestDto): Promise<ServiceRes
  * @param {FindCommentsRequestDto} qs - 댓글 조회를 위한 쿼리 스트링 데이터
  * @returns {Promise<ServiceResponse<CommentServiceDto>>} 댓글 서비스 응답을 포함하는 프로미스
  */
-export const findComments = (qs: FindCommentsRequestDto): Promise<ServiceResponse<CommentServiceDto>> => {
+export const findComments = (qs: FindCommentsRequestDto): Promise<ServiceResponse<FindCommentsResponseDto>> => {
   return service("get", createUrlWithQueryString(commentAddress.comment, qs));
 };
 

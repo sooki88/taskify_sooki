@@ -47,7 +47,7 @@ export const invitationAddress = {
 
 export const memberAddress = {
   //get
-  member: (dashboardId: number) => `/members?dashboardId=${dashboardId}`,
+  member: `/members`,
   //delete
   memberId: (memberId: number) => `/members/${memberId}`,
 };

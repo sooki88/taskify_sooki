@@ -4,7 +4,7 @@ type AvatarType = "default" | "card" | "modal" | "dropdown" | "table";
 
 interface AvatarProps {
   nickname?: string;
-  profileImageUrl?: string;
+  profileImageUrl?: string | null;
   avatarType?: AvatarType;
 }
 

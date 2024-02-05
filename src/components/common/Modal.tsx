@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useFormContext, FieldValues } from "react-hook-form";
 import Button from "./Button/Button";
 import Popover from "./Popover";
-import { MODAL_POPOVER } from "@/lib/constants";
 
 interface ModalProps<T = void> {
   children: ReactNode;
@@ -13,14 +12,26 @@ interface ModalProps<T = void> {
   modalType?: "alert" | "create" | "update" | "delete" | "invite" | "success_profile" | "success_password";
   hasOptionsbutton?: boolean;
   useFormData?: boolean;
-  callback?: (data: FieldValues) => T;
+  cardId?: number;
+  callback?: (data: FieldValues) => Promise<T>;
   onClose: () => void;
   onDelete?: () => void;
 }
 
-function Modal({ children, title, modalType, hasOptionsbutton, useFormData, callback, onClose, onDelete }: ModalProps) {
+function Modal({
+  children,
+  title,
+  modalType,
+  hasOptionsbutton,
+  useFormData,
+  cardId,
+  callback,
+  onClose,
+  onDelete,
+}: ModalProps) {
   const formContext = useFormContext();
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
+  const [isActive, setIsActive] = useState(false);
 
   const buttonMapping: Record<string, string> = {
     alert: "확인",
@@ -37,16 +48,23 @@ function Modal({ children, title, modalType, hasOptionsbutton, useFormData, call
   const isUpdate = modalType === "update";
   const isDelete = modalType === "delete";
 
+  const watch = formContext.watch();
+
   const stopEventBubbling = (e: React.MouseEvent) => {
-    e.preventDefault();
     e.stopPropagation();
   };
 
-  const handleButtonClick = (data: FieldValues) => {
-    if (callback) {
-      callback(data);
+  const handleButtonClick = async (data: FieldValues) => {
+    if (typeof callback === "function") {
+      try {
+        await callback(data);
+        onClose();
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      onClose();
     }
-    onClose();
   };
 
   // CSR 환경에서만 접근
@@ -60,6 +78,14 @@ function Modal({ children, title, modalType, hasOptionsbutton, useFormData, call
       body.removeChild(modalRoot);
     };
   }, []);
+
+  useEffect(() => {
+    if (Object.values(watch).every((el) => el)) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [watch]);
 
   return (
     portalRoot &&
@@ -76,7 +102,7 @@ function Modal({ children, title, modalType, hasOptionsbutton, useFormData, call
             {/**모달 헤더 버튼 영역 */}
             {hasOptionsbutton && (
               <div className="flex items-center gap-15">
-                <Popover contents={MODAL_POPOVER}>
+                <Popover cardId={cardId}>
                   <Image src={"/images/kebab.png"} alt="kebab" width={28} height={28} />
                 </Popover>
                 <button onClick={onClose}>
@@ -107,12 +133,13 @@ function Modal({ children, title, modalType, hasOptionsbutton, useFormData, call
                     variant="filled"
                     type="submit"
                     buttonType="modal"
-                    onClick={formContext.handleSubmit(handleButtonClick)}>
+                    onClick={formContext.handleSubmit(handleButtonClick)}
+                    disabled={!isActive}>
                     {buttonMapping[modalType]}
                   </Button>
                 )}
                 {!hasOptionsbutton && !useFormData && (
-                  <Button variant="filled" buttonType="modal" onClick={handleButtonClick}>
+                  <Button variant="filled" buttonType="modal" onClick={handleButtonClick} disabled={!isActive}>
                     {buttonMapping[modalType]}
                   </Button>
                 )}
