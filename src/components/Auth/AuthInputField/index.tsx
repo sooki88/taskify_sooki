@@ -1,6 +1,6 @@
 import { Input, Label, ErrorMessage } from "./Elements";
 import { useState } from "react";
-
+import { Checkbox } from "@/components/ui/checkbox";
 interface AuthInputProps {
   labelName: string;
   id: string;
@@ -26,9 +26,11 @@ function AuthInputField({ labelName, id, type, placeholder, auth, ...props }: Au
 
 function AuthCheckBox({ ...props }) {
   return (
-    <div className="flex items-center mt-8">
-      <input className="w-20 h-20 mr-8 " id="TOS-checkbox" type="checkbox" name="TOS" {...props} />
-      <Label id="TOS-checkbox">이용약관에 동의합니다.</Label>
+    <div className="flex items-center mt-8 gap-8 ">
+      <Checkbox />
+      <Label id="TOS-checkbox" auth>
+        이용약관에 동의합니다.
+      </Label>
     </div>
   );
 }

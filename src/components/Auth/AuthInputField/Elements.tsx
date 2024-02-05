@@ -1,15 +1,19 @@
 import Image from "next/image";
-import { useState, MouseEvent } from "react";
-
+import { useState, MouseEvent, forwardRef, ForwardedRef } from "react";
 interface InputProps {
   id: string;
   type: string;
   placeholder: string;
   isError?: boolean;
   auth?: boolean;
+  autoComplete?: string;
+  onChange: any; // 타입 수정 예정
 }
 
-function Input({ id, type, placeholder, isError, auth, ...props }: InputProps) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { id, type, placeholder, isError, auth, autoComplete, ...props },
+  ref,
+) {
   const [inputType, setInputType] = useState(type);
 
   const handlePasswordVisible = (e: MouseEvent<HTMLButtonElement>) => {
@@ -32,20 +36,22 @@ function Input({ id, type, placeholder, isError, auth, ...props }: InputProps) {
         id={id}
         type={inputType}
         placeholder={placeholder}
+        autoComplete={autoComplete}
+        ref={ref}
         {...props}
       />
       {type === "password" && (
         <button className="absolute right-16 translate-y-13" onClick={handlePasswordVisible}>
           <div className={`relative ${AUTH_EYEIMG_STYLE}`}>
-            <Image fill src={eyeImage} alt="password toggle" />
+            <Image fill src={eyeImage} alt="password toggle" sizes="24px" />
           </div>
         </button>
       )}
     </div>
   );
-}
+});
 
-function Label({ children, id, auth }: any) {
+export function Label({ children, id, auth }: any) {
   const AUTH_TEXT = auth ? "" : "tablet:text-18 font-medium tablet:h-21 h-19";
 
   return (
@@ -55,8 +61,11 @@ function Label({ children, id, auth }: any) {
   );
 }
 
-function ErrorMessage({ children }: any) {
+export function ErrorMessage({ children }: any) {
   return <div className="text-red text-14">{children}</div>;
 }
 
-export { Input, Label, ErrorMessage };
+export function InputContainer({ auth, children }: any) {
+  const gap = auth ? "gap-8" : "gap-10";
+  return <div className={`flex flex-col w-full ${gap}`}>{children}</div>;
+}
