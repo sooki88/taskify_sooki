@@ -38,7 +38,7 @@ interface MembersProps {
 }
 
 interface DashboardHeaderProps {
-  myData: MyDataProps; // 로그인 되어있는 나의 정보
+  myData: MyDataProps | null | undefined; // 로그인 되어있는 나의 정보
   dashboardData?: DashboardDataProp;
   members?: MembersProps[];
 }
@@ -77,7 +77,9 @@ function DashboardHeader({ myData, dashboardData, members }: DashboardHeaderProp
           <div className="flex items-center gap-12 pc:gap-32 tablet:gap-24">
             {dashboardData && <AvatarStack list={members} />}
             {dashboardData && <div className="w-1 bg-gray-D9D9 tablet:h-38 h-34"></div>}
-            <ProfileLabel data={myData} />
+            <Link href="/mypage">
+              <ProfileLabel data={myData} />
+            </Link>
           </div>
         </div>
       </div>

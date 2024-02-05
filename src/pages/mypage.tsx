@@ -1,20 +1,64 @@
-import { AuthInputField } from "@/components/Auth/AuthInputField";
 import BackButton from "@/components/common/Button/BackButton";
 import DashboardHeader from "@/components/common/DashboardHeader";
 import SideMenu from "@/components/common/SideMenu";
-import { Mock_DashBoard, Mock_MyData } from "@/components/mypage/MockData";
-import ProfileImgInputField from "@/components/mypage/ProfileImgInputField";
+import PasswordChangeForm from "@/components/mypage/PasswordChangeForm";
+import ProfileChangeForm from "@/components/mypage/ProfileChangeForm";
 import BoardLayout from "@/layouts/board";
-import MyPageLayout from "@/layouts/board/mypage/MyPageLayout";
-import { userData } from "@/lib/mockData";
-import { useState } from "react";
+import MyPageFormLayout from "@/layouts/board/mypage/MyPageFormLayout";
+import { findDashboard } from "@/lib/services/dashboards";
+import { me } from "@/lib/services/users";
+import { useEffect, useState } from "react";
 
 function MyPage() {
-  const [myData, setMyData] = useState(userData);
-  const [dashboards, setDashboards] = useState(Mock_DashBoard);
+  const [dashboardlist, setDashboardList] = useState([]);
+  const [myData, setMyData] = useState({
+    email: "",
+    nickname: "",
+    profileImageUrl: "",
+  });
 
-  const sideMenu = <SideMenu dashboards={dashboards} />;
+  const sideMenu = <SideMenu dashboards={dashboardlist} />;
   const header = <DashboardHeader myData={myData} />;
+
+  const getMeData = async () => {
+    try {
+      const responseMe = await me("get");
+
+      if (responseMe.errorMessage) {
+        console.log(responseMe.errorMessage);
+      } else {
+        const { profileImageUrl, email, nickname } = responseMe.data;
+        setMyData({ profileImageUrl, email, nickname });
+      }
+    } catch (error) {
+      console.log("유저를 불러오는 데 실패했습니다.");
+    }
+  };
+
+  const getDashboardsData = async () => {
+    try {
+      const responseDashboards = await findDashboard({
+        navigationMethod: "pagination",
+        cursorId: 0,
+        page: 1,
+        size: 10,
+      });
+
+      if (responseDashboards.errorMessage) {
+        console.log(responseDashboards.errorMessage);
+      } else {
+        const { dashboards } = responseDashboards.data;
+        setDashboardList(dashboards);
+      }
+    } catch (error) {
+      console.log("대시보드 리스트를 불러오는 데 실패했습니다.");
+    }
+  };
+
+  useEffect(() => {
+    getMeData();
+    getDashboardsData();
+  }, []);
 
   return (
     <BoardLayout sideMenu={sideMenu} dashboardHeader={header}>
@@ -22,25 +66,12 @@ function MyPage() {
         <div className="flex items-center mt-8 tablet:h-44 tablet:mt-8 h-34 tablet:text-16 text-14">
           <BackButton />
         </div>
-        <MyPageLayout title="프로필" type="profile">
-          <div className="flex flex-col items-start gap-24 tablet:flex-row tablet:gap-16 tablet:items-center">
-            <ProfileImgInputField />
-            <div className="flex flex-col w-full gap-16 tablet:gap-20 grow tablet:mt-0">
-              <AuthInputField labelName="이메일" id="email" type="email" placeholder="이메일을 입력해 주세요" />
-              <AuthInputField labelName="닉네임" id="nickname" type="nickname" placeholder="닉네임을 입력해 주세요" />
-            </div>
-          </div>
-        </MyPageLayout>
-        <MyPageLayout title="비밀번호 변경" type="password" disabled>
-          <AuthInputField labelName="현재 비밀번호" id="password" type="password" placeholder="현재 비밀번호 입력" />
-          <AuthInputField labelName="새 비밀번호" id="newPassword" type="password" placeholder="현재 비밀번호 입력" />
-          <AuthInputField
-            labelName="새 비밀번호 확인"
-            id="newPasswordCheck"
-            type="password"
-            placeholder="새 비밀번호 입력"
-          />
-        </MyPageLayout>
+        <MyPageFormLayout title="프로필">
+          <ProfileChangeForm myData={myData} getMeData={getMeData} />
+        </MyPageFormLayout>
+        <MyPageFormLayout title="비밀번호 변경">
+          <PasswordChangeForm />
+        </MyPageFormLayout>
       </div>
     </BoardLayout>
   );
