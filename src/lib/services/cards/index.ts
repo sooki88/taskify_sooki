@@ -22,7 +22,7 @@ export const createCard = (data: CreateCardRequestDto): Promise<ServiceResponse<
  * @param {FindCardsRequestDto} [qs] - 카드 조회를 위한 선택적 쿼리 스트링 데이터
  * @returns {Promise<ServiceResponse<CardServiceFindResponseDto>>} 서비스 응답을 포함하는 프로미스
  */
-export const findCards = (qs?: FindCardsRequestDto): Promise<ServiceResponse<CardServiceFindResponseDto>> =>
+export const findCards = (qs: FindCardsRequestDto): Promise<ServiceResponse<CardServiceFindResponseDto>> =>
   service("get", createUrlWithQueryString(cardAddress.card, qs));
 
 /**

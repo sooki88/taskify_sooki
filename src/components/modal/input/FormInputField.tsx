@@ -61,13 +61,13 @@ function FormInputField({
         render={({ field }) =>
           textArea ? (
             <textarea
-              className={`${fieldClass} ${errorBorder} resize-none outline-none`}
+              className={`${fieldClass} ${errorBorder} resize-none outline-none focus:border-violet`}
               {...field}
               {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
             />
           ) : (
             <input
-              className={`${fieldClass} ${errorBorder} h-42 tablet:h-48 `}
+              className={`${fieldClass} ${errorBorder} h-42 tablet:h-48 focus:border-violet`}
               {...field}
               {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
             />

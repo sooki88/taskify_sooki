@@ -82,7 +82,7 @@ function CommentInput({ cardId, columnId }: CommentInputProps) {
       {commentList && commentList.length > 0 && (
         <div className="overflow-auto max-h-150 w-320 tablet:w-470">
           {commentList.map((comment, index) => (
-            <Comments key={index} comment={comment.content} onDelete={() => handleDelete(comment.id)} />
+            <Comments key={index} comment={comment} onDelete={() => handleDelete(comment.id)} />
           ))}
         </div>
       )}

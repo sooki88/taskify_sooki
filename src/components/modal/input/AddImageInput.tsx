@@ -1,9 +1,21 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
 
-function AddImageInput({ value, onChange }: { value?: string; onChange: Dispatch<SetStateAction<File | undefined>> }) {
-  const [addImages, setAddImages] = useState<File[]>([]);
-  const [selectedImage, setSelectedImage] = useState<File | string | null>(null);
+type ImageObject = {
+  url: string;
+  name: string;
+  type: string;
+};
+
+function AddImageInput({
+  value,
+  onChange,
+}: {
+  value?: string;
+  onChange: Dispatch<SetStateAction<File | ImageObject>>;
+}) {
+  const [addImages, setAddImages] = useState<(File | ImageObject)[]>([]);
+  const [selectedImage, setSelectedImage] = useState<File | ImageObject | null>(null);
 
   const handleImageUpload = () => {
     const imageInput = document.getElementById("imageInput") as HTMLInputElement;
@@ -24,7 +36,7 @@ function AddImageInput({ value, onChange }: { value?: string; onChange: Dispatch
     }
   };
 
-  const hanldeSelectedImage = (image: File) => {
+  const handleSelectedImage = (image: File | ImageObject) => {
     setSelectedImage(image);
     onChange(image);
   };
@@ -34,32 +46,61 @@ function AddImageInput({ value, onChange }: { value?: string; onChange: Dispatch
     setSelectedImage(null);
   };
 
+  function isFile(image: File | ImageObject): image is File {
+    return (image as File).size !== undefined;
+  }
+
+  useEffect(() => {
+    if (value) {
+      const imageObject = {
+        url: value,
+        name: "기존 이미지",
+        type: "image/jpeg",
+      };
+
+      setAddImages([imageObject]);
+    }
+  }, [value]);
   return (
     <div className="flex items-center gap-20">
       <input id="imageInput" type="file" accept="image/*" className="hidden" onChange={handleAddImage} />
-      <button onClick={handleImageUpload}>
-        <Image src={value || "/images/addimage.png"} alt="사진 추가" width={76} height={76} priority={true} />
-      </button>
-      {addImages.map((image, index) => (
-        <div key={index} className="relative">
-          <div onClick={() => hanldeSelectedImage(image)}>
-            <img
-              src={URL.createObjectURL(image)}
-              alt={`추가된 이미지 ${index}`}
-              width={76}
-              height={76}
-              className={`object-cover w-80 h-80 rounded-6 cursor-pointer ${selectedImage === image ? "border-2 border-purple" : ""}`}
-            />
+      <div className="relative">
+        <button onClick={handleImageUpload}>
+          <Image src={"/images/addimage.png"} alt="사진 추가" width={76} height={76} priority={true} />
+        </button>
+      </div>
+      {addImages.map((image, index) => {
+        let src: string;
+
+        if (isFile(image)) {
+          src = URL.createObjectURL(image);
+        } else {
+          src = image.url;
+        }
+
+        return (
+          <div key={index} className="relative">
+            <div onClick={() => handleSelectedImage(image)}>
+              <img
+                src={src}
+                alt={`추가된 이미지 ${index}`}
+                width={76}
+                height={76}
+                className={`object-cover w-80 h-80 rounded-6 cursor-pointer ${
+                  selectedImage === image ? "border-2 border-purple" : ""
+                }`}
+              />
+            </div>
+            {selectedImage === image && (
+              <button
+                className="absolute flex items-center justify-center p-1 font-semibold text-white rounded-full w-25 h-25 -top-5 bg-purple font-Pretendard text-13 -right-5"
+                onClick={() => handleDeleteImage(index)}>
+                X
+              </button>
+            )}
           </div>
-          {selectedImage === image && (
-            <button
-              className="absolute flex items-center justify-center p-1 font-semibold text-white rounded-full w-25 h-25 -top-5 bg-purple font-Pretendard text-13 -right-5"
-              onClick={() => handleDeleteImage(index)}>
-              X
-            </button>
-          )}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

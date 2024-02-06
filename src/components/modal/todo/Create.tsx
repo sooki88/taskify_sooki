@@ -8,11 +8,19 @@ import AddImageInput from "../input/AddImageInput";
 import FormInputField from "../input/FormInputField";
 import FormTagField from "../input/FormTagField";
 import { DashboardContext } from "@/pages/dashboard/[id]";
+import { DatePickerInput } from "../input/DatePickerInput";
+import { format } from "date-fns";
+
+type ImageObject = {
+  url: string;
+  name: string;
+  type: string;
+};
 
 interface CreateTodoModalProps<T = void> {
   onClose: () => void;
   callback?: (data: FieldValues) => Promise<T>;
-  setSelectedImage: Dispatch<SetStateAction<File | undefined>>;
+  setSelectedImage: Dispatch<SetStateAction<File | ImageObject>>;
 }
 
 function CreateTodoModal({ onClose, callback, setSelectedImage }: CreateTodoModalProps) {
@@ -47,7 +55,24 @@ function CreateTodoModal({ onClose, callback, setSelectedImage }: CreateTodoModa
           />
           <FormInputField labelName="title" labelTitle="제목" rules={rules} required />
           <FormInputField labelName="description" labelTitle="설명" rules={rules} textArea required />
-          <FormInputField labelName="dueDate" labelTitle="마감일" />
+          <Controller
+            name="dueDate"
+            control={methods.control}
+            render={({ field }) => (
+              <div className="flex flex-col">
+                <label className="text-16 tabelt:text-18" htmlFor="dueDate">
+                  마감일.
+                </label>
+                <DatePickerInput
+                  selected={field.value}
+                  onChange={(selectedValue?: Date) => {
+                    const formattedDate = format(selectedValue as Date, "yyyy-MM-dd HH:mm");
+                    field.onChange(formattedDate);
+                  }}
+                />
+              </div>
+            )}
+          />
           <FormTagField />
           <AddImageInput onChange={setSelectedImage} />
         </div>

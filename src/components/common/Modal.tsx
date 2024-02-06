@@ -31,7 +31,6 @@ function Modal({
 }: ModalProps) {
   const formContext = useFormContext();
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
-  const [isActive, setIsActive] = useState(false);
 
   const buttonMapping: Record<string, string> = {
     alert: "확인",
@@ -48,8 +47,7 @@ function Modal({
   const isUpdate = modalType === "update";
   const isDelete = modalType === "delete";
 
-  const watch = formContext && formContext.watch();
-
+  const isValid = formContext && formContext.formState.isValid;
   const stopEventBubbling = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
@@ -78,15 +76,6 @@ function Modal({
       body.removeChild(modalRoot);
     };
   }, []);
-
-  useEffect(() => {
-    if (formContext)
-      if (Object.values(watch).every((el) => el)) {
-        setIsActive(true);
-      } else {
-        setIsActive(false);
-      }
-  }, [watch]);
 
   return (
     portalRoot &&
@@ -135,7 +124,7 @@ function Modal({
                     type="submit"
                     buttonType="modal"
                     onClick={formContext.handleSubmit(handleButtonClick)}
-                    disabled={!isActive}>
+                    disabled={!isValid}>
                     {buttonMapping[modalType]}
                   </Button>
                 )}

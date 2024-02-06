@@ -1,13 +1,15 @@
 import { useState } from "react";
 import Avatar from "../common/Avatar";
+import { CommentServiceDto } from "@/lib/services/comments/schema";
+import { format } from "date-fns";
 
 interface CommentsProps {
-  comment?: string;
+  comment?: CommentServiceDto;
   onDelete?: () => void;
 }
 
 function Comments({ comment, onDelete }: CommentsProps) {
-  const [editingComment, setEditingComment] = useState(comment || "");
+  const [editingComment, setEditingComment] = useState(comment?.content || "");
   const [isEditing, setIsEditing] = useState(false);
 
   const handleDelete = () => {
@@ -25,17 +27,18 @@ function Comments({ comment, onDelete }: CommentsProps) {
   };
 
   const handleCancel = () => {
-    setEditingComment(comment || "");
+    setEditingComment(comment?.content || "");
     setIsEditing(false);
   };
-
   return (
     <div className="flex gap-10 mt-20 w-320 tablet:w-450">
       <Avatar />
       <div className="flex flex-col">
         <div className="flex items-center gap-8">
-          <span className="font-bold text-black font-Pretendard text-14">이름</span>
-          <span className="font-normal text-gray-9FA6 font-Pretendard text-12">2022.12.27 14:00</span>
+          <span className="font-bold text-black font-Pretendard text-14">{comment?.author.nickname}</span>
+          <span className="font-normal text-gray-9FA6 font-Pretendard text-12">
+            {format(comment?.createdAt as string, "yyyy-MM-dd HH:mm")}
+          </span>
         </div>
         {isEditing ? (
           <textarea
@@ -45,7 +48,7 @@ function Comments({ comment, onDelete }: CommentsProps) {
           />
         ) : (
           <div className="mt-6 font-normal text-black w-270 tablet:w-400 font-Pretendard text-12 tablet:text-14">
-            {comment}
+            {comment?.content}
           </div>
         )}
         <div className="flex gap-12 mt-12">

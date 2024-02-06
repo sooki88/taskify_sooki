@@ -12,12 +12,20 @@ import { MemberApplicationServiceResponseDto } from "@/lib/services/members/sche
 import AddImageInput from "../input/AddImageInput";
 import { CardServiceResponseDto } from "@/lib/services/cards/schema";
 import { ColumnServiceResponseDto } from "@/lib/services/columns/schema";
+import { DatePickerInput } from "../input/DatePickerInput";
+import { format } from "date-fns";
+
+type ImageObject = {
+  url: string;
+  name: string;
+  type: string;
+};
 
 interface UpdateTodoModalProps<T = void> {
   cardId?: number;
   onClose: () => void;
   callback: (data: FieldValues) => Promise<T>;
-  setSelectedImage: Dispatch<SetStateAction<File | undefined>>;
+  setSelectedImage: Dispatch<SetStateAction<File | ImageObject>>;
 }
 
 function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: UpdateTodoModalProps) {
@@ -106,7 +114,25 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
             textArea
             required
           />
-          <FormInputField labelName="dueDate" defaultValue={cardData.dueDate ?? undefined} labelTitle="마감일" />
+          <Controller
+            name="dueDate"
+            control={methods.control}
+            defaultValue={cardData.dueDate}
+            render={({ field }) => (
+              <div className="flex flex-col">
+                <label className="text-16 tabelt:text-18" htmlFor="dueDate">
+                  마감일.
+                </label>
+                <DatePickerInput
+                  selected={field.value}
+                  onChange={(selectedValue?: Date) => {
+                    const formattedDate = format(selectedValue as Date, "yyyy-MM-dd HH:mm");
+                    field.onChange(formattedDate);
+                  }}
+                />
+              </div>
+            )}
+          />
           <FormTagField defaultValue={cardData?.tags} />
           <AddImageInput value={cardData.imageUrl as string} onChange={setSelectedImage} />
         </div>

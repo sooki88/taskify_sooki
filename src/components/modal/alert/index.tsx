@@ -13,7 +13,7 @@ export type AlertType =
   | "passwordSameError"
   | "";
 
-interface AlertModalProps {
+interface AlertModalProps<T = void> {
   modalType: "alert" | "delete";
   alertType?: AlertType;
   callback?: (data: FieldValues) => Promise<T>;
