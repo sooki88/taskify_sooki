@@ -22,7 +22,7 @@ export const register = (data: CreateUserRequestDto): Promise<ServiceResponse<Us
  */
 export const me = (
   method: HttpMethod,
-  data: UpdateMyInfoRequestDto,
+  data?: UpdateMyInfoRequestDto,
 ): Promise<ServiceResponse<UserServiceResponseDto>> => {
   if (method === "put") {
     return service(method, userAddress.mypage, data);
@@ -36,8 +36,8 @@ export const me = (
 /**
  * 사용자의 이미지를 업로드하는 함수입니다.
  *
- * @param {string} imageUrl - 업로드할 이미지의 URL
+ * @param {string} formData - 업로드할 이미지의 URL
  * @returns {Promise<ServiceResponse<updateMyInfoResponseDto>>} 서비스 응답을 포함하는 프로미스
  */
-export const meUpload = (imageUrl: string): Promise<ServiceResponse<updateMyInfoResponseDto>> =>
-  service("post", userAddress.upload, imageUrl);
+export const meUpload = (formData: FormData): Promise<ServiceResponse<updateMyInfoResponseDto>> =>
+  service("post", userAddress.upload, formData);

@@ -12,9 +12,10 @@ function Avatar({ nickname, profileImageUrl, avatarType = "default" }: AvatarPro
   const initial = nickname?.charAt(0) || "";
 
   const backgroundStyle = {
-    background: profileImageUrl ? `url(${profileImageUrl})` : "orange",
+    backgroundImage: profileImageUrl ? `url(${profileImageUrl})` : "orange",
     backgroundSize: "cover",
     backgroundPosition: "center",
+    backgroundColor: profileImageUrl ? "transparent" : "orange",
   };
 
   const sizeClasses = {

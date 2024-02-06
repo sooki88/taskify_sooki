@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { me } from "@/lib/services/users";
 import TextInput from "./PasswordInput";
 import AlertModal from "../modal/alert";
+import { postProfileImageToServer } from "@/lib/util/postImageToServer";
+import { useToggle } from "usehooks-ts";
 
 export interface ProfileChangeFormProps {
   email: string;
@@ -24,7 +26,7 @@ function ProfileChangeForm({ myData, getMeData }: any) {
     shouldUnregister: false,
   });
 
-  const [errorMessage, setErrorMessage] = useState<null | string>(null);
+  const [alertValue, alertToggle, setAlertValue] = useToggle();
 
   const [modalProfileSuccess, setModalProfileSuccess] = useState(false);
 
@@ -35,24 +37,22 @@ function ProfileChangeForm({ myData, getMeData }: any) {
   }, [myData]);
 
   const onSubmit: SubmitHandler<ProfileChangeFormProps> = async (data) => {
-    let formData;
-
-    if (data.profileImageUrl === null) {
-      formData = { nickname: data.nickname, profileImageUrl: null };
-    } else {
-      formData = { nickname: data.nickname, profileImageUrl: data.profileImageUrl };
-    }
-
+    console.log(data.profileImageUrl);
     try {
-      const response = await me("put", formData);
-      if (response.errorMessage) {
-        setErrorMessage(response.errorMessage);
-      } else {
-        setValue("profileImageUrl", response.data.profileImageUrl);
-        setValue("nickname", response.data.nickname);
-        setModalProfileSuccess(true);
-        getMeData();
+      let formData = { nickname: data.nickname, profileImageUrl: data.profileImageUrl };
+
+      if (data.profileImageUrl instanceof File) {
+        const selectedImage = data.profileImageUrl;
+        const imageUrl = await postProfileImageToServer(selectedImage);
+        if (imageUrl) {
+          formData.profileImageUrl = imageUrl;
+        }
       }
+      const updateMe = await me("put", formData);
+      const newImgSrc = updateMe.data.profileImageUrl;
+      setValue("profileImageUrl", newImgSrc);
+      setAlertValue(true);
+      getMeData();
     } catch (error) {
       console.error("프로필을 변경하지 못했습니다!");
     }
@@ -60,9 +60,7 @@ function ProfileChangeForm({ myData, getMeData }: any) {
 
   return (
     <>
-      {modalProfileSuccess && (
-        <AlertModal modalType="alert" onClose={() => setModalProfileSuccess(false)} alertType="profileSuccess" />
-      )}
+      {alertValue && <AlertModal modalType="alert" onClose={alertToggle} alertType="profileSuccess" />}
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col tablet:gap-24 gap-16">
         <div className="flex flex-col items-start gap-24 tablet:flex-row tablet:gap-16 tablet:items-center">

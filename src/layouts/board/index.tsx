@@ -11,7 +11,7 @@ function BoardLayout({ sideMenu, dashboardHeader, children }: BoardLayoutProps) 
     <div className="grid grid-rows-[60px_minmax(300px,_1fr)] tablet:grid-rows-[70px_minmax(900px,_1fr)] grid-cols-[67px_minmax(auto,_1fr)] tablet:grid-cols-[160px_minmax(auto,_1fr)] pc:grid-cols-[300px_minmax(auto,_1fr)] min-h-screen bg-gray-FAFA">
       <div className="row-span-2">{sideMenu}</div>
       <div className="col-span-1">{dashboardHeader}</div>
-      <div className="col-span-1 pb-80">{children}</div>
+      <div className="col-span-1">{children}</div>
     </div>
   );
 }

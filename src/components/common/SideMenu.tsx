@@ -39,7 +39,12 @@ function DashboardItem({ id, title, createdByMe, color }: DashboardItemProps) {
           <span className="font-medium pc:text-18 tablet:text-16 line-clamp-1">{title}</span>
           {createdByMe && (
             <div className="relative h-12 pc:h-14 pc:w-17 w-15 shrink-0">
-              <Image fill src="/images/crown.png" alt="내가 만든 대시보드 표시 왕관 아이콘 이미지" />
+              <Image
+                fill
+                src="/images/crown.png"
+                alt="내가 만든 대시보드 표시 왕관 아이콘 이미지"
+                sizes="(max-width: 744px) 100vw, (max-width: 1199px) 50vw, 25vw"
+              />
             </div>
           )}
         </>
@@ -54,7 +59,7 @@ function SideMenu({ dashboards }: SideMenuProps) {
   const tabletOrLarge = width >= 744;
 
   return (
-    <div className="sticky top-0 left-0 bottom-0 flex flex-col h-screen gap-3 px-12 py-20 bg-white pc:w-300 tablet:w-160 w-67 border-r-1 border-gray-D9D9 z-sticky">
+    <div className="fixed top-0 left-0 bottom-0 flex flex-col h-screen gap-3 px-12 py-20 bg-white pc:w-300 tablet:w-160 w-67 border-r-1 border-gray-D9D9 z-sticky">
       <Link href="/">
         <div className="relative ml-12 tablet:w-109 tablet:h-33 w-23 h-27 tablet:mb-42 mb-27">
           <Image

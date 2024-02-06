@@ -62,7 +62,7 @@ function MyPage() {
 
   return (
     <BoardLayout sideMenu={sideMenu} dashboardHeader={header}>
-      <div className="flex flex-col tablet:pl-20 gap-12 pl-12">
+      <div className="min-h-screen flex flex-col tablet:pl-20 gap-12 pl-12 pb-40">
         <div className="flex items-center mt-8 tablet:h-44 tablet:mt-8 h-34 tablet:text-16 text-14">
           <BackButton />
         </div>
@@ -75,13 +75,6 @@ function MyPage() {
       </div>
     </BoardLayout>
   );
-}
-
-{
-  /* <MyPageForm type="profile">
-<ProfileInputField type="profile" title="프로필" />
-<ProfileInputField type="password" title="비밀번호변경" />
-</MyPageForm> */
 }
 
 export default MyPage;
