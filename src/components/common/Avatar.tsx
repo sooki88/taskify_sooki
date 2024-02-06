@@ -30,7 +30,7 @@ function Avatar({ nickname, profileImageUrl, avatarType = "default" }: AvatarPro
 
   return (
     <div
-      className={`flex items-center justify-center text-white border-2 border-white rounded-full ${avatarStyle}`}
+      className={`flex items-center shrink-0 justify-center text-white border-2 border-white rounded-full ${avatarStyle}`}
       style={backgroundStyle}>
       <span className="text-12 tablet:text-16">{initial}</span>
     </div>

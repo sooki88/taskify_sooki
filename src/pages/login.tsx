@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useToggle } from "usehooks-ts";
@@ -34,26 +35,31 @@ export default function Login() {
       const response = await login(data);
       if (response.data) {
         const accessToken = response.data?.accessToken;
-        localStorage.setItem("accessToken", accessToken);
+        document.cookie = `accessToken=${accessToken}`;
         router.push("/mydashboard");
         return;
       }
       if (response.errorMessage) {
         switch (response.errorMessage) {
           case "존재하지 않는 유저입니다.":
-            setAlertType("userNotFound");
-            setAlertValue(true);
+            handleAlert("userNotFound");
             break;
           case "비밀번호가 일치하지 않습니다.":
-            setAlertType("passwordMismatch");
-            setAlertValue(true);
+            handleAlert("passwordMismatch");
+            break;
+          case "Internal Server Error":
+            handleAlert("serverError");
             break;
         }
       }
     } catch (error) {
-      setAlertType("serverError");
-      setAlertValue(true);
+      handleAlert("serverError");
     }
+  };
+
+  const handleAlert = (type: AlertType) => {
+    setAlertType(type);
+    setAlertValue(true);
   };
 
   return (
@@ -67,4 +73,20 @@ export default function Login() {
       {alertValue && <AlertModal modalType="alert" alertType={alertType} onClose={() => setAlertValue(false)} />}
     </>
   );
+}
+
+export function getServerSideProps(context: GetServerSidePropsContext) {
+  const cookieValue = context.req.headers.cookie || "";
+
+  if (cookieValue) {
+    return {
+      redirect: {
+        destination: "/mydashboard",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 }

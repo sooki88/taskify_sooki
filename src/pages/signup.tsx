@@ -1,5 +1,6 @@
 import { useToggle } from "usehooks-ts";
 import { useState } from "react";
+import { GetServerSidePropsContext } from "next";
 import { useForm, useWatch } from "react-hook-form";
 import { useRouter } from "next/router";
 import AuthLayout from "@/layouts/auth";
@@ -12,10 +13,12 @@ import PasswordCheckField from "@/components/Auth/PasswordCheckField";
 import { register } from "@/lib/services/users";
 import { CreateUserRequestDto } from "@/lib/services/users/schema";
 import AlertModal, { AlertType } from "@/components/modal/alert";
+import { login } from "@/lib/services/auth";
 
 export default function SignUp() {
   const [alertValue, alertToggle, setAlertValue] = useToggle();
   const [alertType, setAlertType] = useState<AlertType>("");
+  const router = useRouter();
 
   const SIGN_UP_FORM = {
     email: "",
@@ -32,22 +35,31 @@ export default function SignUp() {
     trigger,
   } = useForm({ defaultValues: SIGN_UP_FORM, mode: "onTouched" });
 
-  const router = useRouter();
-
   const onSubmit = async (data: CreateUserRequestDto) => {
+    const { email, nickname, password } = data;
+    const signUpForm = { email, nickname, password };
+    const loginForm = { email, password };
+
     try {
-      const response = await register(data);
+      const response = await register(signUpForm);
       if (response.data) {
-        router.push("/login");
-        return;
+        const res = await login(loginForm);
+        const accessToken = res.data?.accessToken;
+        document.cookie = `accessToken=${accessToken}`;
+        router.push("/mydashboard");
       }
       if (response.errorMessage) {
-        setAlertType("emailInUse");
-        setAlertValue(true);
+        switch (response.errorMessage) {
+          case "이미 사용중인 이메일입니다.":
+            handleAlert("emailInUse");
+            break;
+          case "Internal Server Error":
+            handleAlert("serverError");
+            break;
+        }
       }
     } catch (error) {
-      setAlertType("serverError");
-      setAlertValue(true);
+      handleAlert("serverError");
     }
   };
 
@@ -57,6 +69,11 @@ export default function SignUp() {
     if (touchedFields.passwordCheck) {
       trigger("passwordCheck");
     }
+  };
+
+  const handleAlert = (type: AlertType) => {
+    setAlertType(type);
+    setAlertValue(true);
   };
 
   return (
@@ -78,4 +95,20 @@ export default function SignUp() {
       {alertValue && <AlertModal modalType="alert" alertType={alertType} onClose={() => setAlertValue(false)} />}
     </>
   );
+}
+
+export function getServerSideProps(context: GetServerSidePropsContext) {
+  const cookieValue = context.req.headers.cookie || "";
+
+  if (cookieValue) {
+    return {
+      redirect: {
+        destination: "/mydashboard",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 }

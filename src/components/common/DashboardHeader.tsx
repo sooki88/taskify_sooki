@@ -8,12 +8,12 @@ import InviteModal from "../modal/invite";
 import IconButton from "./Button/IconButton";
 
 interface MyDataProps {
-  id: number;
+  id?: number;
   email: string;
   nickname: string;
   profileImageUrl: string | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface DashboardDataProp {

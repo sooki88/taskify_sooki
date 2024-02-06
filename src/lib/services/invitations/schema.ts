@@ -7,7 +7,7 @@ export type UpdateInvitationRequestDto = {
   inviteAccepted: boolean;
 };
 
-export type InvitaionServiceResponseDto = {
+export type InvitationServiceResponseDto = {
   cursorId: number;
   invitations: Array<{
     id: number;

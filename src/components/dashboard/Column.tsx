@@ -7,7 +7,7 @@ import { createCard, findCards } from "@/lib/services/cards";
 import { CardServiceFindResponseDto, CreateCardRequestDto } from "@/lib/services/cards/schema";
 import { UpdateColumn } from "../modal/column";
 import Card from "@/components/dashboard/Card";
-import AddColumnButton from "./AddColumnButton";
+import AddCardButton from "./AddCardButton";
 import { ChipNum } from "../common/Chips";
 import { CreateTodo } from "../modal/todo";
 import { useTrigger } from "../contexts/TriggerContext";
@@ -79,7 +79,7 @@ function Column({ title, columnId }: ColumnProps) {
         </button>
       </div>
       <div className="flex flex-col gap-16">
-        <AddColumnButton onClick={todoToggle} />
+        <AddCardButton onClick={todoToggle} />
         {cards?.map((card) => <Card key={card.id} cardData={card} cardTitle={title} columnId={columnId} />)}
       </div>
       {columnUpdateValue && (

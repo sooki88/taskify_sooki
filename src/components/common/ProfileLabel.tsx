@@ -25,7 +25,7 @@ function ProfileLabel({ data, avatarType = "default" }: ProfileLabelProps) {
   return (
     <div className={`flex items-center ${labelGaps[avatarType]}`}>
       <Avatar nickname={data?.nickname} profileImageUrl={data?.profileImageUrl} avatarType={avatarType} />
-      <span className={`${labelSize} text-black-3332 ${labelType}`}>{data?.nickname}</span>
+      <span className={`${labelSize} shrink-0 text-black-3332 ${labelType}`}>{data?.nickname}</span>
     </div>
   );
 }

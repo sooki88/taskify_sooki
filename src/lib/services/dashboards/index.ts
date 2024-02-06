@@ -1,7 +1,7 @@
 import { createUrlWithQueryString } from "@/lib/util/createUrlWithQueryString";
 import { dashboardAddress } from "../address";
 import { HttpMethod, ServiceResponse, service } from "../axios";
-import { CreateDashboardInvitationRequestDto, InvitaionServiceResponseDto } from "../invitations/schema";
+import { CreateDashboardInvitationRequestDto, InvitationServiceResponseDto } from "../invitations/schema";
 import {
   DashboardApplicationServiceResponseDto,
   DashboardRequestDto,
@@ -38,7 +38,7 @@ export const findDashboard = (qs?: FindDashboardsRequestDto): Promise<ServiceRes
  * @param {DashboardRequestDto} data - 대시보드 업데이트를 위한 데이터
  * @returns {Promise<ServiceResponse<DashboardApplicationServiceResponseDto>>} 서비스 응답을 포함하는 프로미스
  */
-export const dashboard = (method: HttpMethod, dashboardId: number, data: DashboardRequestDto) => {
+export const dashboard = (method: HttpMethod, dashboardId: number, data?: DashboardRequestDto) => {
   switch (method) {
     case "get":
       return service(method, dashboardAddress.dashboardId(dashboardId)) as Promise<
@@ -58,12 +58,12 @@ export const dashboard = (method: HttpMethod, dashboardId: number, data: Dashboa
  *
  * @param {number} dashboardId - 초대를 생성할 대시보드 ID
  * @param {CreateDashboardInvitationRequestDto} data - 대시보드 초대 생성을 위한 데이터
- * @returns {Promise<ServiceResponse<InvitaionServiceResponseDto>>} 서비스 응답을 포함하는 프로미스
+ * @returns {Promise<ServiceResponse<InvitationServiceResponseDto>>} 서비스 응답을 포함하는 프로미스
  */
 export const createInvitationDashboard = (
   dashboardId: number,
   data: CreateDashboardInvitationRequestDto,
-): Promise<ServiceResponse<InvitaionServiceResponseDto>> =>
+): Promise<ServiceResponse<InvitationServiceResponseDto>> =>
   service("post", dashboardAddress.inviteboard(dashboardId), data);
 
 /**
@@ -71,12 +71,12 @@ export const createInvitationDashboard = (
  *
  * @param {number} dashboardId - 초대를 조회할 대시보드 ID
  * @param {FIndDashboardInvitationsRequestDto} qs - 대시보드 초대 조회를 위한 쿼리 스트링 데이터
- * @returns {Promise<ServiceResponse<InvitaionServiceResponseDto>>} 초대 서비스 응답을 포함하는 프로미스
+ * @returns {Promise<ServiceResponse<InvitationServiceResponseDto>>} 초대 서비스 응답을 포함하는 프로미스
  */
 export const findInvitationDashboard = (
   dashboardId: number,
   qs: FIndDashboardInvitationsRequestDto,
-): Promise<ServiceResponse<InvitaionServiceResponseDto>> =>
+): Promise<ServiceResponse<InvitationServiceResponseDto>> =>
   service("get", createUrlWithQueryString(dashboardAddress.inviteboard(dashboardId), qs));
 
 /**

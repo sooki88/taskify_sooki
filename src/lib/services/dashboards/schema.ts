@@ -22,10 +22,10 @@ export type DashboardApplicationServiceResponseDto = Array<{
   userId: number;
 }>;
 
-export type NavigationMethodstring = "infiniteScroll" | "pagination";
+export type NavigationMethodString = "infiniteScroll" | "pagination";
 
 export type FindDashboardsRequestDto = {
-  navigationMethod: NavigationMethodstring;
+  navigationMethod: NavigationMethodString;
   cursorId?: number | null;
   page?: number;
   size?: number;
@@ -34,5 +34,5 @@ export type FindDashboardsRequestDto = {
 export type FindDashboardsResponseDto = {
   cursorId: number | null;
   totalCount: number;
-  dashboards: DashboardApplicationServiceResponseDto;
+  dashboards: DashboardApplicationServiceResponseDto[];
 };
