@@ -8,25 +8,28 @@ export type UpdateInvitationRequestDto = {
 };
 
 export type InvitaionServiceResponseDto = {
-  id: number;
-  inviter: {
-    nickname: string;
-    email: string;
+  cursorId: number;
+  invitations: Array<{
     id: number;
-  };
-  teamId: string;
-  dashboard: {
-    title: string;
-    id: number;
-  };
-  invitee: {
-    nickname: string;
-    email: string;
-    id: number;
-  };
-  inviteAccepted: boolean | null;
-  createdAt: string;
-  updatedAt: string;
+    inviter: {
+      nickname: string;
+      email: string;
+      id: number;
+    };
+    teamId: string;
+    dashboard: {
+      title: string;
+      id: number;
+    };
+    invitee: {
+      nickname: string;
+      email: string;
+      id: number;
+    };
+    inviteAccepted: boolean | null;
+    createdAt: string;
+    updatedAt: string;
+  }>;
 };
 
 export type CreateDashboardInvitationRequestDto = {

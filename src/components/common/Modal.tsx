@@ -48,7 +48,7 @@ function Modal({
   const isUpdate = modalType === "update";
   const isDelete = modalType === "delete";
 
-  const watch = formContext.watch();
+  const watch = formContext && formContext.watch();
 
   const stopEventBubbling = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -80,11 +80,12 @@ function Modal({
   }, []);
 
   useEffect(() => {
-    if (Object.values(watch).every((el) => el)) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
+    if (formContext)
+      if (Object.values(watch).every((el) => el)) {
+        setIsActive(true);
+      } else {
+        setIsActive(false);
+      }
   }, [watch]);
 
   return (
@@ -139,7 +140,7 @@ function Modal({
                   </Button>
                 )}
                 {!hasOptionsbutton && !useFormData && (
-                  <Button variant="filled" buttonType="modal" onClick={handleButtonClick} disabled={!isActive}>
+                  <Button variant="filled" buttonType="modal" onClick={handleButtonClick}>
                     {buttonMapping[modalType]}
                   </Button>
                 )}

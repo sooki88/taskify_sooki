@@ -11,6 +11,7 @@ interface DashboardItemProps {
   updatedAt: string;
   createdByMe: boolean;
   userId: number;
+  tabletOrLarge?: boolean;
 }
 
 interface SideMenuProps {

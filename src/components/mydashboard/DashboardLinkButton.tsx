@@ -18,7 +18,7 @@ function DashboardLinkButton({ id, title, color, createdByMe }: DashboardLinkBut
 
   return (
     <div
-      className="flex items-center justify-between px-20 bg-white border border-gray-D9D9 rounded-8 h-58 tablet:h-68 grow"
+      className="flex items-center justify-between px-20 bg-white border hover:border-violet border-gray-D9D9 rounded-8 h-58 tablet:h-68 grow cursor-pointer"
       onClick={() => handleClick(id)}>
       <div className="flex items-center gap-12 pc:gap-16">
         <p className={`w-8 h-8 rounded-full ${dashboardColor}`}></p>

@@ -12,7 +12,7 @@ export type FIndDashboardInvitationsRequestDto = {
   size?: number;
 };
 
-export type DashboardApplicationServiceResponseDto = {
+export type DashboardApplicationServiceResponseDto = Array<{
   id: number;
   title: string;
   color: string;
@@ -20,15 +20,15 @@ export type DashboardApplicationServiceResponseDto = {
   updatedAt: string;
   createdByMe: boolean;
   userId: number;
-};
+}>;
 
-export type NavigationMethodstring = ["infiniteScroll", "pagination"];
+export type NavigationMethodstring = "infiniteScroll" | "pagination";
 
 export type FindDashboardsRequestDto = {
   navigationMethod: NavigationMethodstring;
-  cursorId: number;
-  page: number;
-  size: number;
+  cursorId?: number | null;
+  page?: number;
+  size?: number;
 };
 
 export type FindDashboardsResponseDto = {
