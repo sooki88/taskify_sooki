@@ -6,7 +6,8 @@ interface AvatarsProps {
   list: any[];
 }
 
-function AvatarStack({ list }: AvatarsProps) {
+// list에 기본값 [] 설정해야 동작함
+function AvatarStack({ list = [] }: AvatarsProps) {
   const { width } = useWindowSize();
   const tabletOrLarge = width >= 1199;
 
