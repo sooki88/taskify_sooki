@@ -37,7 +37,7 @@ function TaskModal({ taskData, onClose }: TaskModalProps) {
               <Image src="/images/bar.png" alt="바 이미지" className="w-1 h-20" width={1} height={20} />
               <div className="flex flex-wrap gap-y-6">
                 {taskData?.tags.map((tag: string, index: number) => (
-                  <ChipCard key={index} tag={tag} index={index} short />
+                  <ChipCard key={index} tag={tag} index={index} tagsLength={taskData.tags.length} short />
                 ))}
               </div>
             </div>

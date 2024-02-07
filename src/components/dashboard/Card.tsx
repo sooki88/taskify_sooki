@@ -24,11 +24,11 @@ const Card = ({ cardData }: CardProps) => {
           <Image fill src={cardData.imageUrl} alt="카드 이미지" style={{ objectFit: "cover" }} />
         </div>
       )}
-      <div className="flex flex-wrap w-full pc:flex-col tablet:flex-row tablet:gap-y-10 gap-y-6">
+      <div className="flex flex-wrap w-full pc:flex-col tablet:flex-row tablet:gap-y-10 gap-y-6 items-end tablet:items-stretch">
         <h2 className="w-full font-medium tablet:text-16 text-14 text-black-3332 tablet:h-19 h-17">{cardData.title}</h2>
-        <div className={`flex items-center mr-16 tablet:w-auto w-[26rem] ${noTagsClassName}`}>
+        <div className={`flex flex-wrap gap-y-6 items-center mr-16 tablet:w-auto w-[26rem] ${noTagsClassName}`}>
           {cardData.tags.map((tag, index) => (
-            <ChipCard key={index} tag={tag} index={index} short />
+            <ChipCard key={index} tag={tag} index={index} tagsLength={cardData.tags.length} short />
           ))}
         </div>
         <div className="flex items-center justify-between grow">
