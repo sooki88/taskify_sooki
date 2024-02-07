@@ -1,13 +1,13 @@
 import { ReactNode, useRef, useState } from "react";
 import { useOnClickOutside, useToggle } from "usehooks-ts";
+import { FieldValues } from "react-hook-form";
 import Contents from "./Contents";
 import { UpdateTodo } from "@/components/modal/todo";
 import AlertModal from "@/components/modal/alert";
-import { FieldValues } from "react-hook-form";
 import { card } from "@/lib/services/cards";
-import { useTrigger } from "@/components/contexts/TriggerContext";
 import { postImageToServer } from "@/lib/util/postImageToServer";
 import { UpdateCardRequestDto } from "@/lib/services/cards/schema";
+import { useCardList } from "@/components/dashboard/Column";
 
 export interface PopoverContent {
   title: string;
@@ -24,8 +24,8 @@ function Popover({ children, cardId }: PopoverProps) {
   const [selectedImage, setSelectedImage] = useState<File>();
   const [updateValue, updateToggle, setUpdateValue] = useToggle();
   const [deleteValue, deleteToggle, setDeleteValue] = useToggle();
-  const { toggleTrigger } = useTrigger();
   const popoverRef = useRef<HTMLDivElement>(null);
+  const { setCardList } = useCardList();
 
   const MODAL_POPOVER = [
     {
@@ -39,7 +39,7 @@ function Popover({ children, cardId }: PopoverProps) {
     setPopoverOpen((prev) => !prev);
   };
 
-  const handleUpdate = async (data: FieldValues) => {
+  const cardUpdate = async (data: FieldValues) => {
     try {
       const { assignee, ...rest } = data;
       let formData: UpdateCardRequestDto = {
@@ -52,17 +52,28 @@ function Popover({ children, cardId }: PopoverProps) {
           formData.imageUrl = imageUrl;
         }
       }
-      await card("put", cardId as number, formData);
-      toggleTrigger();
+      const response = await card("put", cardId as number, formData);
+      if (response.data) {
+        setCardList((prevState) => ({
+          ...prevState,
+          cards: prevState.cards.map((card) => (card.id === cardId ? { ...card, ...(response.data as any) } : card)),
+        }));
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleDelete = async () => {
-    if (cardId) {
-      await card("delete", cardId);
-      toggleTrigger();
+  const cardDelete = async () => {
+    try {
+      await card("delete", cardId as number);
+      setCardList((prevState) => ({
+        ...prevState,
+        cards: prevState.cards.filter((card) => card.id !== cardId),
+        totalCount: prevState.totalCount - 1,
+      }));
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -84,10 +95,10 @@ function Popover({ children, cardId }: PopoverProps) {
           cardId={cardId}
           setSelectedImage={setSelectedImage}
           onClose={() => setUpdateValue(false)}
-          callback={handleUpdate}
+          callback={cardUpdate}
         />
       )}
-      {deleteValue && <AlertModal modalType="delete" onClose={() => setDeleteValue(false)} callback={handleDelete} />}
+      {deleteValue && <AlertModal modalType="delete" onClose={() => setDeleteValue(false)} callback={cardDelete} />}
     </div>
   );
 }

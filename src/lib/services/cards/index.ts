@@ -23,7 +23,7 @@ export const createCard = (data: CreateCardRequestDto): Promise<ServiceResponse<
  * @returns {Promise<ServiceResponse<CardServiceFindResponseDto>>} 서비스 응답을 포함하는 프로미스
  */
 export const findCards = (qs: FindCardsRequestDto): Promise<ServiceResponse<CardServiceFindResponseDto>> =>
-  service("get", createUrlWithQueryString(cardAddress.card, qs));
+  service("get", createUrlWithQueryString(cardAddress.card, qs as any));
 
 /**
  * 카드에 대한 다양한 작업을 수행하는 함수입니다. HTTP 메소드에 따라 다른 작업을 수행합니다.

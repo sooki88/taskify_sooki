@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { createInvitationDashboard } from "@/lib/services/dashboards";
 import Modal from "@/components/common/Modal";
-import FormInputField from "../input/FormInputField";
+import { FormInputField } from "../input";
 
 interface InviteModalProps {
   onClose: () => void;

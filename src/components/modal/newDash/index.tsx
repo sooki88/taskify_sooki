@@ -4,7 +4,7 @@ import Modal from "@/components/common/Modal";
 import { ChipColors } from "@/components/common/Chips";
 import { createDashboard } from "@/lib/services/dashboards";
 import { useRouter } from "next/router";
-import FormInputField from "../input/FormInputField";
+import { FormInputField } from "../input";
 
 function NewDashModal({ onClose }: { onClose: () => void }) {
   const router = useRouter();
@@ -16,7 +16,7 @@ function NewDashModal({ onClose }: { onClose: () => void }) {
       title,
       color: methods.getValues("color"),
     };
-    const response = await createDashboard(form);
+    const response = (await createDashboard(form)) as any;
 
     if (response.errorMessage) {
       methods.setError("color", { type: "noColor", message: response.errorMessage });

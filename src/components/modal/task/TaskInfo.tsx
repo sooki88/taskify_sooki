@@ -1,5 +1,4 @@
 import ProfileLabel from "@/components/common/ProfileLabel";
-import { formatDate } from "@/lib/util/formatDate";
 
 interface ProfileData {
   profileImageUrl: string | null;
@@ -25,7 +24,9 @@ function TaskInfo({ data, dueDate }: TaskInfoProps) {
         <span className="font-semibold leading-normal text-black font-Pretendard text-10 tablet:leading-5 tablet:text-12">
           마감일
         </span>
-        <div className="font-normal text-black font-Pretendard text-14">{formatDate(dueDate as string)}</div>
+        <div className="font-normal text-black font-Pretendard text-14">
+          {dueDate ? (dueDate as string) : "마감기한 없음"}
+        </div>
       </div>
     </div>
   );

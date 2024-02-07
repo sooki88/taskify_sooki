@@ -1,31 +1,22 @@
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Controller, FieldValues, FormProvider, useForm } from "react-hook-form";
-import Modal from "@/components/common/Modal";
-import FormInputField from "../input/FormInputField";
+import { format } from "date-fns";
 import { card } from "@/lib/services/cards";
-import FormTagField from "../input/FormTagField";
+import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
+import { ColumnServiceResponseDto } from "@/lib/services/columns/schema";
+import { CardServiceResponseDto } from "@/lib/services/cards/schema";
+import { DashboardContext } from "@/pages/dashboard/[id]";
+import Modal from "@/components/common/Modal";
 import Dropdown from "@/components/common/Dropdown";
 import ProfileLabel from "@/components/common/ProfileLabel";
-import { DashboardContext } from "@/pages/dashboard/[id]";
 import { ChipProgress } from "@/components/common/Chips";
-import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
-import AddImageInput from "../input/AddImageInput";
-import { CardServiceResponseDto } from "@/lib/services/cards/schema";
-import { ColumnServiceResponseDto } from "@/lib/services/columns/schema";
-import { DatePickerInput } from "../input/DatePickerInput";
-import { format } from "date-fns";
-
-type ImageObject = {
-  url: string;
-  name: string;
-  type: string;
-};
+import { AddImageInputField, DatePickerInputField, FormInputField, FormTagInputField } from "../input";
 
 interface UpdateTodoModalProps<T = void> {
   cardId?: number;
   onClose: () => void;
   callback: (data: FieldValues) => Promise<T>;
-  setSelectedImage: Dispatch<SetStateAction<File | ImageObject>>;
+  setSelectedImage: any;
 }
 
 function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: UpdateTodoModalProps) {
@@ -83,7 +74,6 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
                 );
               }}
             />
-
             <Controller
               name="assignee.id"
               control={methods.control}
@@ -94,7 +84,12 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
                   <Dropdown
                     options={memberList}
                     renderOptions={renderOptionNickName}
-                    onChange={(selectedValue) => field.onChange(selectedValue)}
+                    onChange={(selectedId) => {
+                      const selectedMember = memberList.find((member) => member.id === selectedId);
+                      if (selectedMember) {
+                        field.onChange(selectedMember.userId);
+                      }
+                    }}
                     defaultIndex={memberList.findIndex(
                       (option: MemberApplicationServiceResponseDto) => option.userId === field.value,
                     )}
@@ -121,10 +116,10 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
             render={({ field }) => (
               <div className="flex flex-col">
                 <label className="text-16 tabelt:text-18" htmlFor="dueDate">
-                  마감일.
+                  마감일
                 </label>
-                <DatePickerInput
-                  selected={field.value}
+                <DatePickerInputField
+                  selected={field.value as any}
                   onChange={(selectedValue?: Date) => {
                     const formattedDate = format(selectedValue as Date, "yyyy-MM-dd HH:mm");
                     field.onChange(formattedDate);
@@ -133,8 +128,8 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
               </div>
             )}
           />
-          <FormTagField defaultValue={cardData?.tags} />
-          <AddImageInput value={cardData.imageUrl as string} onChange={setSelectedImage} />
+          <FormTagInputField defaultValue={cardData?.tags} />
+          <AddImageInputField value={cardData.imageUrl as string} onChange={setSelectedImage} />
         </div>
       </Modal>
     </FormProvider>

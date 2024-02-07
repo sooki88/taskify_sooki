@@ -29,7 +29,7 @@ export const findColumns = (
   qs?: FindColumnsRequestDto,
   config: AxiosRequestConfig = {},
 ): Promise<ServiceResponse<ResponsePayload_ColumnServiceResponseDto>> =>
-  service("get", createUrlWithQueryString(columnAddress.column, qs), undefined, config);
+  service("get", createUrlWithQueryString(columnAddress.column, qs as any), undefined, config);
 
 /**
  * 컬럼에 대한 다양한 작업을 수행하는 함수입니다. HTTP 메소드에 따라 다른 작업을 수행합니다.

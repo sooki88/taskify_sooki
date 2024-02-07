@@ -1,15 +1,12 @@
 import { Dispatch, SetStateAction, useContext } from "react";
 import { Controller, FieldValues, FormProvider, useForm } from "react-hook-form";
+import { format } from "date-fns";
+import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
+import { DashboardContext } from "@/pages/dashboard/[id]";
 import Modal from "@/components/common/Modal";
 import Dropdown from "@/components/common/Dropdown";
 import ProfileLabel from "@/components/common/ProfileLabel";
-import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
-import AddImageInput from "../input/AddImageInput";
-import FormInputField from "../input/FormInputField";
-import FormTagField from "../input/FormTagField";
-import { DashboardContext } from "@/pages/dashboard/[id]";
-import { DatePickerInput } from "../input/DatePickerInput";
-import { format } from "date-fns";
+import { AddImageInputField, DatePickerInputField, FormInputField, FormTagInputField } from "../input";
 
 type ImageObject = {
   url: string;
@@ -20,7 +17,7 @@ type ImageObject = {
 interface CreateTodoModalProps<T = void> {
   onClose: () => void;
   callback?: (data: FieldValues) => Promise<T>;
-  setSelectedImage: Dispatch<SetStateAction<File | ImageObject>>;
+  setSelectedImage: Dispatch<SetStateAction<File | ImageObject>> | any;
 }
 
 function CreateTodoModal({ onClose, callback, setSelectedImage }: CreateTodoModalProps) {
@@ -44,10 +41,13 @@ function CreateTodoModal({ onClose, callback, setSelectedImage }: CreateTodoModa
               <Dropdown
                 options={memberList}
                 renderOptions={renderOptionNickName}
-                onChange={(selectedValue) => field.onChange(selectedValue)}
-                defaultIndex={memberList.findIndex(
-                  (member: MemberApplicationServiceResponseDto) => member.userId === field.value,
-                )}
+                onChange={(selectedId) => {
+                  const selectedMember = memberList.find((member) => member.id === selectedId);
+                  if (selectedMember) {
+                    field.onChange(selectedMember.userId);
+                  }
+                }}
+                defaultIndex={memberList.findIndex((member) => member.userId === field.value)}
                 filteringTerm="nickname"
                 autoComplete
               />
@@ -61,9 +61,9 @@ function CreateTodoModal({ onClose, callback, setSelectedImage }: CreateTodoModa
             render={({ field }) => (
               <div className="flex flex-col">
                 <label className="text-16 tabelt:text-18" htmlFor="dueDate">
-                  마감일.
+                  마감일
                 </label>
-                <DatePickerInput
+                <DatePickerInputField
                   selected={field.value}
                   onChange={(selectedValue?: Date) => {
                     const formattedDate = format(selectedValue as Date, "yyyy-MM-dd HH:mm");
@@ -73,8 +73,8 @@ function CreateTodoModal({ onClose, callback, setSelectedImage }: CreateTodoModa
               </div>
             )}
           />
-          <FormTagField />
-          <AddImageInput onChange={setSelectedImage} />
+          <FormTagInputField />
+          <AddImageInputField onChange={setSelectedImage} />
         </div>
       </Modal>
     </FormProvider>

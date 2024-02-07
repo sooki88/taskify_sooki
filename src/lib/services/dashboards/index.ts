@@ -28,7 +28,7 @@ export const createDashboard = (
  * @returns {Promise<ServiceResponse<FindDashboardsResponseDto>>} 서비스 응답을 포함하는 프로미스
  */
 export const findDashboard = (qs?: FindDashboardsRequestDto): Promise<ServiceResponse<FindDashboardsResponseDto>> =>
-  service("get", createUrlWithQueryString(dashboardAddress.dashboard, qs));
+  service("get", createUrlWithQueryString(dashboardAddress.dashboard, qs as any));
 
 /**
  * 대시보드에 대한 다양한 작업을 수행하는 함수입니다. HTTP 메소드에 따라 다른 작업을 수행합니다.

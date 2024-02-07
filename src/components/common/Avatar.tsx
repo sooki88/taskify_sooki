@@ -9,14 +9,17 @@ interface AvatarProps {
 }
 
 function Avatar({ nickname, profileImageUrl, avatarType = "default" }: AvatarProps) {
-  const initial = nickname?.charAt(0) || "";
+  const initial = profileImageUrl ? "" : nickname?.charAt(0);
 
-  const backgroundStyle = {
-    backgroundImage: profileImageUrl ? `url(${profileImageUrl})` : "orange",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundColor: profileImageUrl ? "transparent" : "orange",
-  };
+  const backgroundStyle = profileImageUrl
+    ? {
+        backgroundImage: `url(${profileImageUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }
+    : {
+        backgroundColor: "orange",
+      };
 
   const sizeClasses = {
     default: "w-34 h-34 text-14 tablet:w-38 tablet:h-38 tablet:text-16 font-semibold",

@@ -6,7 +6,6 @@ import { findColumns } from "@/lib/services/columns";
 import { memberList } from "@/lib/services/members";
 import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
 import Column from "@/components/dashboard/Column";
-import { UpdateTriggerProvider } from "@/components/contexts/TriggerContext";
 import { createContext } from "react";
 import SideMenu from "@/components/common/SideMenu";
 import DashboardHeader from "@/components/common/DashboardHeader";
@@ -30,6 +29,7 @@ export const DashboardContext = createContext<DashboardProps>({
 });
 
 export default function Dashboard({ members, columns }: DashboardProps) {
+  const [columnsData, setColumnsData] = useState(columns);
   const [dashboardList, setDashboardList] = useState<FindDashboardsResponseDto>({
     cursorId: null,
     totalCount: 0,
@@ -71,22 +71,20 @@ export default function Dashboard({ members, columns }: DashboardProps) {
   }, [id]);
 
   return (
-    <UpdateTriggerProvider>
-      <DashboardContext.Provider value={{ members, columns }}>
-        <BoardLayout sideMenu={sideMenu} dashboardHeader={header}>
-          <div className="flex flex-col pc:flex-row">
-            {columns?.map((column) => {
-              return (
-                <div key={column.id}>
-                  <Column title={column.title} columnId={column.id} />
-                </div>
-              );
-            })}
-          </div>
-          <AddColumnButton />
-        </BoardLayout>
-      </DashboardContext.Provider>
-    </UpdateTriggerProvider>
+    <DashboardContext.Provider value={{ members, columns }}>
+      <BoardLayout sideMenu={sideMenu} dashboardHeader={header}>
+        <div className="flex flex-col pc:flex-row">
+          {columnsData?.map((column) => {
+            return (
+              <div key={column.id}>
+                <Column column={column} updateColumns={setColumnsData} />
+              </div>
+            );
+          })}
+        </div>
+        <AddColumnButton />
+      </BoardLayout>
+    </DashboardContext.Provider>
   );
 }
 

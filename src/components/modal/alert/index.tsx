@@ -34,7 +34,7 @@ function AlertModal({ modalType, callback, onClose, alertType }: AlertModalProps
 
   const text = {
     alert: alertType && `${alertMessage[alertType]}`,
-    delete: "컬럼의 모든 카드가 삭제됩니다.",
+    delete: "해당 카드가 삭제됩니다.",
   };
 
   return (

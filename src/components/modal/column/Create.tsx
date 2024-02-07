@@ -2,7 +2,7 @@ import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import Modal from "@/components/common/Modal";
 import { useRouter } from "next/router";
 import { createColumn, findColumns } from "@/lib/services/columns";
-import FormInputField from "../input/FormInputField";
+import { FormInputField } from "../input";
 
 function CreateColumnModal({ onClose }: { onClose: () => void }) {
   const methods = useForm();

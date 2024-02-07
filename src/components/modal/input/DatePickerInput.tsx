@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 
-export function DatePickerInput({
+function DatePickerInput({
   selected,
   onChange,
 }: {
@@ -41,3 +41,5 @@ export function DatePickerInput({
     </Popover>
   );
 }
+
+export default DatePickerInput;

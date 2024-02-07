@@ -48,7 +48,7 @@ function FormInputField({
   const errorBorder = errors[labelName] ? "border-red" : "border-gray-D9D9";
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-10">
       <label className="text-16 tablet:text-18" htmlFor={labelName}>
         {labelTitle}
         {required && <span className="text-violet">*</span>}

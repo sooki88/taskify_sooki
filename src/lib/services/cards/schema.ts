@@ -3,7 +3,7 @@ export type CardServiceResponseDto = {
   title: string;
   description: string;
   tags: string[];
-  dueDate: Date | undefined;
+  dueDate: Date | string | undefined;
   assignee: {
     profileImageUrl: string | null;
     nickname: string;

@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Comments from "../Comments";
 import { useRouter } from "next/router";
-import { createComment, findComments } from "@/lib/services/comments";
+import { createComment, findComments, comment } from "@/lib/services/comments";
 import { CommentServiceDto, FindCommentsResponseDto } from "@/lib/services/comments/schema";
 import Button from "@/components/common/Button/Button";
 
@@ -11,38 +11,32 @@ interface CommentInputProps {
 }
 
 function CommentInput({ cardId, columnId }: CommentInputProps) {
-  const [comment, setComment] = useState<string>("");
+  const [currentComment, setCurrentComment] = useState<string>("");
   const [commentList, setCommentList] = useState<CommentServiceDto[]>([]);
   const {
     query: { id },
   } = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value);
+    setCurrentComment(e.target.value);
   };
 
-  const handleSubmit = async () => {
-    if (comment.trim() !== "") {
+  const saveComment = async () => {
+    if (currentComment.trim() !== "") {
       const form = {
-        content: comment,
+        content: currentComment,
         cardId,
         columnId,
         dashboardId: Number(id),
       };
       try {
         const response = await createComment(form);
-        console.log("comment", response);
-        setComment("");
+        setCommentList((prevState: any) => [...prevState, response.data]);
+        setCurrentComment("");
       } catch (error) {
         console.error(error);
       }
     }
-  };
-
-  const handleDelete = (id: number) => {
-    console.log(id);
-    const updatedComments = commentList.filter((_, index) => index !== id);
-    setCommentList(updatedComments);
   };
 
   useEffect(() => {
@@ -60,7 +54,7 @@ function CommentInput({ cardId, columnId }: CommentInputProps) {
       }
     };
     fetch();
-  }, [cardId, handleSubmit]);
+  }, [cardId]);
 
   return (
     <>
@@ -70,19 +64,19 @@ function CommentInput({ cardId, columnId }: CommentInputProps) {
           <textarea
             className="h-full outline-none resize-none w-200 tablet:w-330 text-12"
             placeholder="댓글 작성하기"
-            value={comment}
+            value={currentComment}
             onChange={handleChange}></textarea>
         </div>
         <div className="absolute bottom-15 right-15">
-          <Button variant="ghost" buttonType="comment" onClick={handleSubmit}>
+          <Button variant="ghost" buttonType="comment" onClick={saveComment}>
             입력
           </Button>
         </div>
       </div>
       {commentList && commentList.length > 0 && (
-        <div className="overflow-auto max-h-150 w-320 tablet:w-470">
-          {commentList.map((comment, index) => (
-            <Comments key={index} comment={comment} onDelete={() => handleDelete(comment.id)} />
+        <div className="overflow-auto max-h-150">
+          {commentList.map((comment) => (
+            <Comments key={comment.id} comment={comment} updateCommentList={setCommentList} />
           ))}
         </div>
       )}

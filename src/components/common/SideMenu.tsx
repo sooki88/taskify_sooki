@@ -17,7 +17,7 @@ interface DashboardItemProps {
 }
 
 interface SideMenuProps {
-  dashboards?: DashboardApplicationServiceResponseDto[];
+  dashboards?: any[];
 }
 // interface SideMenuProps {
 //   dashboards?: DashboardItemProps[];

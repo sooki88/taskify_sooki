@@ -12,9 +12,10 @@ type ColumnData = {
 
 interface UpdateColumnProps {
   columnData: ColumnData;
+  updateColumns: any;
   onClose: () => void;
 }
-function UpdateColumnModal({ columnData: { title, columnId }, onClose }: UpdateColumnProps) {
+function UpdateColumnModal({ columnData: { title, columnId }, updateColumns, onClose }: UpdateColumnProps) {
   const methods = useForm();
   const [deleteValue, deleteToggle, setDeleteValue] = useToggle();
 
@@ -23,15 +24,22 @@ function UpdateColumnModal({ columnData: { title, columnId }, onClose }: UpdateC
       const form = {
         title,
       };
-      await column("put", columnId, form);
+      const response = (await column("put", columnId, form)) as any;
+      if (response.data) {
+        updateColumns((prevState: any) =>
+          prevState.map((column: any) => (column.id === columnId ? { ...column, title: response.data.title } : column)),
+        );
+      }
     } catch (e) {
-      Promise.reject(new Error("maxColumns"));
+      console.log(e);
+      Promise.reject();
     }
   };
 
   const callbackDelete = async () => {
     try {
       await column("delete", columnId);
+      updateColumns((prevState: any) => prevState.filter((column: any) => column.id !== columnId));
     } catch (e) {
       Promise.reject();
     }
