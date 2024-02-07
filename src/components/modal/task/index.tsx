@@ -33,9 +33,11 @@ function TaskModal({ cardTitle, cardId, taskData, onClose }: TaskModalProps) {
             <div className="flex gap-20">
               <ChipProgress columnTitle={cardTitle} />
               <Image src="/images/bar.png" alt="바 이미지" className="w-1 h-20" width={1} height={20} />
-              {taskData.tags.map((tag: string, index: number) => (
-                <ChipCard key={index} tag={tag} index={index} short />
-              ))}
+              <div className="flex flex-wrap gap-y-6">
+                {taskData.tags.map((tag: string, index: number) => (
+                  <ChipCard key={index} tag={tag} index={index} short tagsLength={taskData.tags.length} />
+                ))}
+              </div>
             </div>
             <div className="h-auto font-normal text-black font-Pretendard text-14 rounded-6">
               {taskData.description}

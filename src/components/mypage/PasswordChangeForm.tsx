@@ -3,8 +3,12 @@ import Button from "../common/Button/Button";
 import { useEffect, useState } from "react";
 import { changePassword } from "@/lib/services/auth";
 import TextInput from "./PasswordInput";
-import AlertModal from "../modal/alert";
+import AlertModal, { AlertType } from "../modal/alert";
 import { useToggle } from "usehooks-ts";
+
+interface MessageToType {
+  [key: string]: AlertType;
+}
 
 interface PasswordFormInput {
   password: string;
@@ -25,10 +29,10 @@ function PasswordChangeForm() {
   });
 
   const [alertValue, alertToggle, setAlertValue] = useToggle();
-  const [alertType, setAlertType] = useState("");
+  const [alertType, setAlertType] = useState<AlertType>("");
   const [isPasswordMatchError, setIsPasswordMatchError] = useState(false);
 
-  const messageToType = {
+  const messageToType: MessageToType = {
     "기존 비밀번호와 동일합니다.": "passwordSameError",
     "현재 비밀번호가 틀렸습니다.": "incorrectPassword",
   };

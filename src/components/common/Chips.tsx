@@ -18,7 +18,12 @@ export function ChipAdd() {
   return (
     <div className="flex items-center justify-center size-20 tablet:size-22 bg-violet-F1EF rounded-4">
       <div className="relative size-16">
-        <Image fill src="/images/add.png" alt="더하기 아이콘 이미지" />
+        <Image
+          fill
+          src="/images/add.png"
+          alt="더하기 아이콘 이미지"
+          sizes="(max-width: 744px) 100vw, (max-width: 1199px) 50vw, 25vw"
+        />
       </div>
     </div>
   );
@@ -31,7 +36,7 @@ interface ChipProgressProps {
 
 export function ChipProgress({ columnTitle }: ChipProgressProps) {
   return (
-    <div className="inline-flex items-center justify-start h-20 gap-6 px-8 py-4 tablet:h-22 rounded-11 bg-violet-F1EF">
+    <div className="inline-flex items-center justify-start h-20 gap-6 px-8 py-4 tablet:h-22 rounded-11 bg-violet-F1EF shrink-0">
       <div className="relative inline-block size-6">
         <Image fill src="/images/ellipse.png" alt="원 아이콘 이미지" />
       </div>
@@ -46,13 +51,15 @@ interface ChipCardProps {
   tag: string;
   index: number;
   short?: boolean;
+  tagsLength?: number;
 }
 
 interface DefaultChipCardProps {
   children: React.ReactNode;
 }
 
-export function ChipCard({ tag, index, short }: ChipCardProps) {
+export function ChipCard({ tag, index, short, tagsLength }: ChipCardProps) {
+  const extraCount = Number(tagsLength) - 3;
   let colors = { bg: "", text: "" };
 
   switch (index % 4) {
@@ -71,7 +78,7 @@ export function ChipCard({ tag, index, short }: ChipCardProps) {
 
   const DefaultChipCard = ({ children }: DefaultChipCardProps) => (
     <div
-      className={`inline-flex flex-row justify-center ${colors.bg} items-center tablet:h-22 h-20 rounded-4 px-6 py-4 mr-6`}>
+      className={`flex flex-row justify-center ${colors.bg} items-center tablet:h-22 h-20 rounded-4 px-6 py-4 mr-6 shrink-0`}>
       <span className={`tablet:text-12 text-10 ${colors.text} font-normal`}>{children}</span>
     </div>
   );
@@ -83,9 +90,9 @@ export function ChipCard({ tag, index, short }: ChipCardProps) {
           {index < 3 && <DefaultChipCard>{tag}</DefaultChipCard>}
           {index === 3 && (
             <div
-              className={`inline-flex flex-row justify-center ${colors.bg} items-center tablet:h-22 h-20 rounded-4 px-6 py-4 mr-6 bg-gray-9FA6`}>
+              className={`flex flex-row justify-center ${colors.bg} items-center tablet:h-22 h-20 rounded-4 px-6 py-4 mr-6 bg-gray-9FA6 shrink-0`}>
               <span className={`tablet:text-12 text-10 text-white ${colors.text} font-normal`}>
-                그 외 {index - 1}개
+                그 외 {extraCount}개
               </span>
             </div>
           )}

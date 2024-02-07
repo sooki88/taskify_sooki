@@ -7,6 +7,7 @@ import TextInput from "./PasswordInput";
 import AlertModal from "../modal/alert";
 import { postProfileImageToServer } from "@/lib/util/postImageToServer";
 import { useToggle } from "usehooks-ts";
+import { UpdateMyInfoRequestDto } from "@/lib/services/users/schema";
 
 export interface ProfileChangeFormProps {
   email: string;
@@ -14,21 +15,18 @@ export interface ProfileChangeFormProps {
   profileImageUrl: string | undefined | Blob;
 }
 
-function ProfileChangeForm({ myData, getMeData }: any) {
+function ProfileChangeForm({ myData, setMyData }: any) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     getValues,
-    watch,
   } = useForm<ProfileChangeFormProps>({
     shouldUnregister: false,
   });
 
   const [alertValue, alertToggle, setAlertValue] = useToggle();
-
-  const [modalProfileSuccess, setModalProfileSuccess] = useState(false);
 
   useEffect(() => {
     setValue("email", myData?.email);
@@ -37,9 +35,8 @@ function ProfileChangeForm({ myData, getMeData }: any) {
   }, [myData]);
 
   const onSubmit: SubmitHandler<ProfileChangeFormProps> = async (data) => {
-    console.log(data.profileImageUrl);
     try {
-      let formData = { nickname: data.nickname, profileImageUrl: data.profileImageUrl };
+      let formData: UpdateMyInfoRequestDto = { nickname: data.nickname, profileImageUrl: null };
 
       if (data.profileImageUrl instanceof File) {
         const selectedImage = data.profileImageUrl;
@@ -47,12 +44,15 @@ function ProfileChangeForm({ myData, getMeData }: any) {
         if (imageUrl) {
           formData.profileImageUrl = imageUrl;
         }
+      } else if (typeof data.profileImageUrl === "string") {
+        formData.profileImageUrl = data.profileImageUrl;
       }
+
       const updateMe = await me("put", formData);
-      const newImgSrc = updateMe.data.profileImageUrl;
-      setValue("profileImageUrl", newImgSrc);
+      const { nickname, profileImageUrl }: any = updateMe.data;
+      setMyData((prev: any) => ({ ...prev, nickname, profileImageUrl }));
+      setValue("profileImageUrl", profileImageUrl);
       setAlertValue(true);
-      getMeData();
     } catch (error) {
       console.error("프로필을 변경하지 못했습니다!");
     }

@@ -23,13 +23,8 @@ function MyPage() {
   const getMeData = async () => {
     try {
       const responseMe = await me("get");
-
-      if (responseMe.errorMessage) {
-        console.log(responseMe.errorMessage);
-      } else {
-        const { profileImageUrl, email, nickname } = responseMe.data;
-        setMyData({ profileImageUrl, email, nickname });
-      }
+      const { profileImageUrl, email, nickname }: any = responseMe.data;
+      setMyData({ profileImageUrl, email, nickname });
     } catch (error) {
       console.log("유저를 불러오는 데 실패했습니다.");
     }
@@ -47,7 +42,7 @@ function MyPage() {
       if (responseDashboards.errorMessage) {
         console.log(responseDashboards.errorMessage);
       } else {
-        const { dashboards } = responseDashboards.data;
+        const { dashboards }: any = responseDashboards.data;
         setDashboardList(dashboards);
       }
     } catch (error) {
@@ -62,12 +57,12 @@ function MyPage() {
 
   return (
     <BoardLayout sideMenu={sideMenu} dashboardHeader={header}>
-      <div className="min-h-screen flex flex-col tablet:pl-20 gap-12 pl-12 pb-40">
+      <div className="min-h-screen flex flex-col tablet:pl-20 gap-12 px-12 pb-40">
         <div className="flex items-center mt-8 tablet:h-44 tablet:mt-8 h-34 tablet:text-16 text-14">
           <BackButton />
         </div>
         <MyPageFormLayout title="프로필">
-          <ProfileChangeForm myData={myData} getMeData={getMeData} />
+          <ProfileChangeForm myData={myData} setMyData={setMyData} />
         </MyPageFormLayout>
         <MyPageFormLayout title="비밀번호 변경">
           <PasswordChangeForm />
