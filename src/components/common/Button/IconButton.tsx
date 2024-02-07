@@ -61,7 +61,7 @@ function IconButton({ variant = "default", type, onClick }: IconButtonProps) {
   const { width, height } = imageSize(variant);
 
   return (
-    <button className={`flex items-center justify-center flex-shrink-0 ${buttonStyle(variant)}`}>
+    <button className={`flex items-center justify-center flex-shrink-0 ${buttonStyle(variant)}`} onClick={onClick}>
       <div className={`${imageContainerStyle(variant)}`}>
         <Image src={imageSrc(variant, type)} alt={altText} width={width} height={height} />
       </div>

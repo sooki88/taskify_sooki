@@ -2,20 +2,13 @@ import Image from "next/image";
 import AvatarStack from "./AvatarStack";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import ProfileLabel from "./ProfileLabel";
-import { useState } from "react";
 import InviteModal from "../modal/invite";
 import IconButton from "./Button/IconButton";
-
-interface MyDataProps {
-  id?: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
+import { UserServiceResponseDto } from "@/lib/services/auth/schema";
+import { me } from "@/lib/services/users";
+import ProfilePopover from "./Popover/Profile";
 interface DashboardDataProp {
   id: number;
   title: string;
@@ -25,7 +18,6 @@ interface DashboardDataProp {
   updatedAt: string;
   createdByMe: boolean;
 }
-
 interface MembersProps {
   id: number;
   userId: number;
@@ -38,28 +30,43 @@ interface MembersProps {
 }
 
 interface DashboardHeaderProps {
-  myData: MyDataProps | null | undefined; // 로그인 되어있는 나의 정보
   dashboardData?: DashboardDataProp;
   members?: MembersProps[];
 }
 
-function DashboardHeader({ myData, dashboardData, members }: DashboardHeaderProps) {
+function DashboardHeader({ dashboardData, members }: DashboardHeaderProps) {
   const router = useRouter();
   const path = router.pathname;
   const PATH_TITLE: any = {
     "/mydashboard": "내 대시보드",
     "/mypage": "계정관리",
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [myData, setMyData] = useState<UserServiceResponseDto>({} as UserServiceResponseDto);
+  const [toggleRotate, setToggleRotate] = useState(false);
 
   // 내가 만든 대시보드인지 확인하기
   const ownerIsMe = dashboardData?.createdByMe;
-  // ProfileLabel에 전달할 나의 데이터
-  const data = { name: myData?.nickname, src: myData?.profileImageUrl };
+
+  const handleInviteDashBoard = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleClick = () => {
+    setToggleRotate((prevRotate) => !prevRotate);
+  };
+
+  const getMeData = async () => {
+    const res = await me("get");
+    setMyData(res.data as UserServiceResponseDto);
+  };
+
+  useEffect(() => {
+    getMeData();
+  }, []);
 
   return (
     <>
-      {isModalOpen && <InviteModal onClose={() => setIsModalOpen(false)} />}
       <div className="fixed top-0 left-0 right-0 flex items-center justify-end pr-12 bg-white pc:justify-between tablet:h-70 h-60 border-b-1 border-gray-D9D9 pc:pl-340 pl-0 pc:pr-80 tablet:pr-40 z-[300]">
         <div className="items-center hidden gap-8 font-bold pc:flex text-20 text-black-3332">
           {dashboardData ? dashboardData.title : PATH_TITLE[path]}
@@ -71,15 +78,25 @@ function DashboardHeader({ myData, dashboardData, members }: DashboardHeaderProp
               <Link href={`/dashboard/${dashboardData?.id}/edit`}>
                 <IconButton variant="ghost" type="setting" />
               </Link>
-              <IconButton variant="ghost" type="invite" onClick={() => setIsModalOpen(true)} />
+              <IconButton variant="ghost" type="invite" onClick={handleInviteDashBoard} />
             </div>
           )}
+          {isModalOpen && <InviteModal onClose={() => setIsModalOpen(false)} />}
           <div className="flex items-center gap-12 pc:gap-32 tablet:gap-24">
             {dashboardData && <AvatarStack list={members} />}
-            {dashboardData && <div className="w-1 bg-gray-D9D9 tablet:h-38 h-34"></div>}
-            <Link href="/mypage">
-              <ProfileLabel data={myData} />
-            </Link>
+            {dashboardData && <div className="w-1 bg-gray-D9D9 tablet:h-38 h-34" />}
+            <ProfilePopover>
+              <div className="flex gap-5 items-center" onClick={handleClick}>
+                <ProfileLabel data={myData} />
+                <Image
+                  className={`transform ${toggleRotate ? "rotate-180" : "rotate-0"}`}
+                  width={26}
+                  height={26}
+                  src="/images/arrow_drop_down.png"
+                  alt="토글 버튼"
+                />
+              </div>
+            </ProfilePopover>
           </div>
         </div>
       </div>

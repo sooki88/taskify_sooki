@@ -8,9 +8,11 @@ export default function Landing() {
   const router = useRouter();
 
   useEffect(() => {
-    const isLogIn = localStorage.getItem("accessToken") !== null;
+    const cookieString = document.cookie;
+    const cookies = cookieString.split(";");
+    const accessTokenCookie = cookies.find((cookie) => cookie.trim().startsWith("accessToken="));
 
-    if (isLogIn) {
+    if (accessTokenCookie) {
       router.push("/mydashboard");
     }
   }, []);
