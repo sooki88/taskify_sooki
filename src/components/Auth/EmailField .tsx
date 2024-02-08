@@ -1,4 +1,4 @@
-import { Label, Input, ErrorMessage, InputContainer } from "./AuthInputField/Elements";
+import { Label, Input, ErrorMessage, InputContainer } from "./Elements";
 import { Controller } from "react-hook-form";
 
 const EMAIL_REG = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
@@ -14,7 +14,7 @@ function EmailField({ control, errors, name }: any) {
 
   return (
     <InputContainer auth>
-      <Label id={name} auth>
+      <Label htmlFor={name} auth>
         이메일
       </Label>
       <Controller

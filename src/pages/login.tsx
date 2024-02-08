@@ -2,7 +2,6 @@ import { useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { useToggle } from "usehooks-ts";
 import AuthLayout from "@/layouts/auth";
 import AuthForm from "@/layouts/auth/Form";
 import EmailField from "@/components/Auth/EmailField ";
@@ -16,7 +15,7 @@ interface LoginForm {
 }
 
 export default function Login() {
-  const [alertValue, alertToggle, setAlertValue] = useToggle();
+  const [alertValue, setAlertValue] = useState(false);
   const [alertType, setAlertType] = useState<AlertType>("");
   const LOGIN_FORM = {
     email: "",

@@ -11,10 +11,11 @@ import Card from "@/components/dashboard/Card";
 import AddCardButton from "./AddCardButton";
 import { ChipNum } from "../common/Chips";
 import { CreateTodo } from "../modal/todo";
+import { ColumnServiceResponseDto } from "@/lib/services/columns/schema";
 
 interface ColumnProps {
   column: any;
-  updateColumns: any;
+  updateColumns: Dispatch<SetStateAction<ColumnServiceResponseDto[]>>;
 }
 
 interface ContextType {

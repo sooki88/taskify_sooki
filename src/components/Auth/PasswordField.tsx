@@ -1,4 +1,4 @@
-import { Label, Input, ErrorMessage, InputContainer } from "./AuthInputField/Elements";
+import { Label, Input, ErrorMessage, InputContainer } from "./Elements";
 import { Controller } from "react-hook-form";
 
 function PasswordField({ control, errors, name, triggerPasswordCheck }: any) {
@@ -12,7 +12,7 @@ function PasswordField({ control, errors, name, triggerPasswordCheck }: any) {
 
   return (
     <InputContainer auth>
-      <Label id="password" auth>
+      <Label htmlFor="password" auth>
         비밀번호
       </Label>
       <Controller

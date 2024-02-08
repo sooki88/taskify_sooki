@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import ProfileLabel from "./ProfileLabel";
 import InviteModal from "../modal/invite";
 import IconButton from "./Button/IconButton";
+import { DashboardApplicationServiceResponseDto } from "@/lib/services/dashboards/schema";
 import { UserServiceResponseDto } from "@/lib/services/auth/schema";
 import { me } from "@/lib/services/users";
 import ProfilePopover from "./Popover/Profile";
@@ -30,7 +31,7 @@ interface MembersProps {
 }
 
 interface DashboardHeaderProps {
-  dashboardData?: DashboardDataProp;
+  dashboardData?: DashboardApplicationServiceResponseDto;
   members?: MembersProps[];
 }
 

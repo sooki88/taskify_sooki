@@ -3,8 +3,15 @@ import Modal from "@/components/common/Modal";
 import { useRouter } from "next/router";
 import { createColumn, findColumns } from "@/lib/services/columns";
 import { FormInputField } from "../input";
+import { Dispatch, SetStateAction } from "react";
+import { ColumnServiceResponseDto } from "@/lib/services/columns/schema";
 
-function CreateColumnModal({ onClose }: { onClose: () => void }) {
+interface CreateColumnModalProps {
+  onClose: () => void;
+  updateColumns: Dispatch<SetStateAction<ColumnServiceResponseDto[]>>;
+}
+
+function CreateColumnModal({ onClose, updateColumns }: CreateColumnModalProps) {
   const methods = useForm();
   const router = useRouter();
 
@@ -19,7 +26,13 @@ function CreateColumnModal({ onClose }: { onClose: () => void }) {
         dashboardId: dashboardId,
       };
       const { data: columns } = await findColumns({ dashboardId });
-      const { errorMessage } = await createColumn(form);
+      const { data: newColumn, errorMessage } = await createColumn(form);
+
+      if (newColumn) {
+        updateColumns((prevColumns) => [...prevColumns, newColumn]);
+        onClose();
+      }
+
       if (errorMessage && columns?.data?.length === 10) {
         methods.setError("title", { type: "maxColumns", message: errorMessage });
         return Promise.reject(new Error("maxColumns"));

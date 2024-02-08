@@ -1,17 +1,17 @@
-import { Label, Input, ErrorMessage, InputContainer } from "./AuthInputField/Elements";
+import { Label, Input, ErrorMessage, InputContainer } from "./Elements";
 import { Controller } from "react-hook-form";
 
 function NameField({ control, errors, name }: any) {
   const rules = {
     required: "닉네임을 입력해주세요.",
     maxLength: {
-      value: 10,
-      message: "열 자 이하로 작성해주세요.",
+      value: 8,
+      message: "8자 이하로 작성해주세요.",
     },
   };
   return (
     <InputContainer auth>
-      <Label id={name} auth>
+      <Label htmlFor={name} auth>
         닉네임
       </Label>
       <Controller

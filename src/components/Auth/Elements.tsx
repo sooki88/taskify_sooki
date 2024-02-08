@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState, MouseEvent, forwardRef, ForwardedRef } from "react";
+import { useState, MouseEvent, forwardRef } from "react";
 interface InputProps {
   id: string;
   type: string;
@@ -41,7 +41,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         {...props}
       />
       {type === "password" && (
-        <button className="absolute right-16 translate-y-13" onClick={handlePasswordVisible}>
+        <button className="absolute right-16 translate-y-13" type="button" onClick={handlePasswordVisible}>
           <div className={`relative ${AUTH_EYEIMG_STYLE}`}>
             <Image fill src={eyeImage} alt="password toggle" sizes="24px" />
           </div>
@@ -51,11 +51,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   );
 });
 
-export function Label({ children, id, auth }: any) {
+export function Label({ children, htmlFor, auth }: any) {
   const AUTH_TEXT = auth ? "" : "tablet:text-18 font-medium tablet:h-21 h-19";
 
   return (
-    <label className={`text-black-3332 text-16 ${AUTH_TEXT}`} htmlFor={id}>
+    <label className={`text-black-3332 text-16 ${AUTH_TEXT}`} htmlFor={htmlFor}>
       {children}
     </label>
   );

@@ -1,4 +1,3 @@
-import { useToggle } from "usehooks-ts";
 import { useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { useForm, useWatch } from "react-hook-form";
@@ -16,7 +15,7 @@ import AlertModal, { AlertType } from "@/components/modal/alert";
 import { login } from "@/lib/services/auth";
 
 export default function SignUp() {
-  const [alertValue, alertToggle, setAlertValue] = useToggle();
+  const [alertValue, setAlertValue] = useState(false);
   const [alertType, setAlertType] = useState<AlertType>("");
   const router = useRouter();
 

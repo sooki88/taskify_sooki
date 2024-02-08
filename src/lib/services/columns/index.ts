@@ -26,10 +26,9 @@ export const createColumn = (data: CreateColumnRequestDto): Promise<ServiceRespo
  * @returns {Promise<ServiceResponse<ResponsePayload_ColumnServiceResponseDto>>} 컬럼 서비스 응답을 포함하는 프로미스
  */
 export const findColumns = (
-  qs?: FindColumnsRequestDto,
-  config: AxiosRequestConfig = {},
+  qs: FindColumnsRequestDto,
 ): Promise<ServiceResponse<ResponsePayload_ColumnServiceResponseDto>> =>
-  service("get", createUrlWithQueryString(columnAddress.column, qs as any), undefined, config);
+  service("get", createUrlWithQueryString(columnAddress.column, qs as any));
 
 /**
  * 컬럼에 대한 다양한 작업을 수행하는 함수입니다. HTTP 메소드에 따라 다른 작업을 수행합니다.

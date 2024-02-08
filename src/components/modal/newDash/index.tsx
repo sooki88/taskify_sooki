@@ -25,7 +25,7 @@ function NewDashModal({ onClose }: { onClose: () => void }) {
       setErrorMessage(message);
       return Promise.reject(new Error());
     } else {
-      router.push(`dashboard/${response.data?.id}`);
+      router.push(`/dashboard/${response.data?.id}`);
     }
   };
 

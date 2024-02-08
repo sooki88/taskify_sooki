@@ -20,9 +20,9 @@ interface assignee {
 
 function TaskModal({ taskData, onClose }: TaskModalProps) {
   const methods = useForm();
-  const { columns } = useContext(DashboardContext);
+  const { columnsData } = useContext(DashboardContext);
 
-  const column = columns.find((column) => column.id === taskData.columnId);
+  const column = columnsData.find((column) => column.id === taskData.columnId);
 
   return (
     <FormProvider {...methods}>

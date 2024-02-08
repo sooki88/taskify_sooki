@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "./AuthInputField/Elements";
+import { Label } from "./Elements";
 import { Controller } from "react-hook-form";
 
 function AuthCheckbox({ name, control }: any) {
