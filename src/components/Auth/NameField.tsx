@@ -1,7 +1,12 @@
+import { SignUpType } from "@/pages/signup";
 import { Label, Input, ErrorMessage, InputContainer } from "./Elements";
-import { Controller } from "react-hook-form";
+import { Control, Controller, FieldErrors } from "react-hook-form";
 
-function NameField({ control, errors, name }: any) {
+interface NameFieldProps extends SignUpType {
+  name: "nickname";
+}
+
+function NameField({ control, errors, name }: NameFieldProps) {
   const rules = {
     required: "닉네임을 입력해주세요.",
     maxLength: {

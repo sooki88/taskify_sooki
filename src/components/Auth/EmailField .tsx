@@ -1,9 +1,18 @@
 import { Label, Input, ErrorMessage, InputContainer } from "./Elements";
-import { Controller } from "react-hook-form";
+import { Control, Controller, FieldErrors, FieldValues, Path } from "react-hook-form";
+interface EmailFieldProps<TFormInput extends FieldValues = FieldValues> {
+  name: Path<TFormInput>;
+  control: Control<TFormInput>;
+  errors: FieldErrors<TFormInput>;
+}
 
 const EMAIL_REG = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
-function EmailField({ control, errors, name }: any) {
+function EmailField<TFormInput extends FieldValues = FieldValues>({
+  control,
+  errors,
+  name,
+}: EmailFieldProps<TFormInput>) {
   const rules = {
     required: "이메일을 입력해주세요.",
     pattern: {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { GetServerSidePropsContext } from "next";
-import { useForm, useWatch } from "react-hook-form";
+import { Control, FieldErrors, useForm, useWatch } from "react-hook-form";
 import { useRouter } from "next/router";
 import AuthLayout from "@/layouts/auth";
 import AuthForm from "@/layouts/auth/Form";
@@ -13,6 +13,19 @@ import { register } from "@/lib/services/users";
 import { CreateUserRequestDto } from "@/lib/services/users/schema";
 import AlertModal, { AlertType } from "@/components/modal/alert";
 import { login } from "@/lib/services/auth";
+
+export interface SignUpForm {
+  email: string;
+  nickname: string;
+  password: string;
+  passwordCheck: string;
+  agreeCheck: boolean;
+}
+
+export interface SignUpType {
+  control: Control<SignUpForm>;
+  errors: FieldErrors<SignUpForm>;
+}
 
 export default function SignUp() {
   const [alertValue, setAlertValue] = useState(false);
@@ -32,7 +45,7 @@ export default function SignUp() {
     handleSubmit,
     formState: { errors, isValid, isDirty, touchedFields },
     trigger,
-  } = useForm({ defaultValues: SIGN_UP_FORM, mode: "onTouched" });
+  } = useForm<SignUpForm>({ defaultValues: SIGN_UP_FORM, mode: "onTouched" });
 
   const onSubmit = async (data: CreateUserRequestDto) => {
     const { email, nickname, password } = data;
@@ -79,9 +92,9 @@ export default function SignUp() {
     <>
       <AuthLayout type="signUp">
         <AuthForm onSubmit={handleSubmit(onSubmit)} type="signUp" disabled={!isDirty || !isValid}>
-          <EmailField name="email" control={control} errors={errors} />
+          <EmailField<SignUpForm> name="email" control={control} errors={errors} />
           <NameField name="nickname" control={control} errors={errors} />
-          <PasswordField
+          <PasswordField<SignUpForm>
             name="password"
             control={control}
             errors={errors}

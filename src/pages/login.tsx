@@ -25,7 +25,7 @@ export default function Login() {
     control,
     handleSubmit,
     formState: { errors, isValid, isDirty },
-  } = useForm({ defaultValues: LOGIN_FORM, mode: "onTouched" });
+  } = useForm<LoginForm>({ defaultValues: LOGIN_FORM, mode: "onTouched" });
 
   const router = useRouter();
 
@@ -65,8 +65,8 @@ export default function Login() {
     <>
       <AuthLayout type="logIn">
         <AuthForm onSubmit={handleSubmit(onSubmit)} type="logIn" disabled={!isDirty || !isValid}>
-          <EmailField name="email" control={control} errors={errors} />
-          <PasswordField name="password" control={control} errors={errors} />
+          <EmailField<LoginForm> name="email" control={control} errors={errors} />
+          <PasswordField<LoginForm> name="password" control={control} errors={errors} />
         </AuthForm>
       </AuthLayout>
       {alertValue && <AlertModal modalType="alert" alertType={alertType} onClose={() => setAlertValue(false)} />}

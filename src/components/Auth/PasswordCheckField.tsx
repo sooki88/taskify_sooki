@@ -1,7 +1,13 @@
+import { SignUpType } from "@/pages/signup";
 import { Label, Input, ErrorMessage, InputContainer } from "./Elements";
 import { Controller } from "react-hook-form";
 
-function PasswordCheckField({ control, errors, name, password }: any) {
+interface PasswordCheckFieldProps extends SignUpType {
+  name: "passwordCheck";
+  password: string;
+}
+
+function PasswordCheckField({ control, errors, name, password }: PasswordCheckFieldProps) {
   const rules = {
     required: "비밀번호를 확인해 주세요",
     validate: {

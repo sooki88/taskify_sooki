@@ -1,7 +1,19 @@
 import { Label, Input, ErrorMessage, InputContainer } from "./Elements";
-import { Controller } from "react-hook-form";
+import { Control, Controller, FieldErrors, FieldValues, Path } from "react-hook-form";
 
-function PasswordField({ control, errors, name, triggerPasswordCheck }: any) {
+interface PasswordFieldProps<TFormInput extends FieldValues = FieldValues> {
+  name: Path<TFormInput>;
+  control: Control<TFormInput>;
+  errors: FieldErrors<TFormInput>;
+  triggerPasswordCheck?: () => void;
+}
+
+function PasswordField<TFormInput extends FieldValues = FieldValues>({
+  control,
+  errors,
+  name,
+  triggerPasswordCheck,
+}: PasswordFieldProps<TFormInput>) {
   const rules = {
     required: "비밀번호를 입력해 주세요",
     minLength: {

@@ -1,8 +1,14 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "./Elements";
-import { Controller } from "react-hook-form";
+import { Controller, Control } from "react-hook-form";
+import { SignUpForm } from "@/pages/signup";
 
-function AuthCheckbox({ name, control }: any) {
+interface AuthCheckboxProps {
+  name: "agreeCheck";
+  control: Control<SignUpForm>;
+}
+
+function AuthCheckbox({ name, control }: AuthCheckboxProps) {
   const rules = {
     required: true,
   };
