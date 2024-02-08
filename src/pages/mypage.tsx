@@ -1,11 +1,14 @@
 import BackButton from "@/components/common/Button/BackButton";
 import DashboardHeader from "@/components/common/DashboardHeader";
 import SideMenu from "@/components/common/SideMenu";
+import AlertModal from "@/components/modal/alert";
 import PasswordChangeForm from "@/components/mypage/PasswordChangeForm";
 import ProfileChangeForm from "@/components/mypage/ProfileChangeForm";
 import BoardLayout from "@/layouts/board";
 import MyPageFormLayout from "@/layouts/board/mypage/MyPageFormLayout";
 import { findDashboard } from "@/lib/services/dashboards";
+import { FindDashboardsRequestDto } from "@/lib/services/dashboards/schema";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface myDataProps {
@@ -15,32 +18,37 @@ interface myDataProps {
 }
 
 function MyPage() {
+  const [alertValue, setAlertValue] = useState(false);
   const [dashboardlist, setDashboardList] = useState([]);
   const sideMenu = <SideMenu dashboards={dashboardlist} />;
   const header = <DashboardHeader />;
-
-  const getDashboardsData = async () => {
-    try {
-      const responseDashboards = await findDashboard({
-        navigationMethod: "pagination",
-        cursorId: 0,
-        page: 1,
-        size: 10,
-      });
-
-      if (responseDashboards.errorMessage) {
-        console.log(responseDashboards.errorMessage);
-      } else {
-        const { dashboards }: any = responseDashboards.data;
-        setDashboardList(dashboards);
-      }
-    } catch (error) {
-      console.log("대시보드 리스트를 불러오는 데 실패했습니다.");
-    }
-  };
+  const router = useRouter();
 
   useEffect(() => {
-    getDashboardsData();
+    const cookieString = document.cookie;
+    const cookies = cookieString.split(";");
+    const accessTokenCookie = cookies.find((cookie) => cookie.trim().startsWith("accessToken="));
+
+    if (!accessTokenCookie) {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+
+    const getDashboards = async () => {
+      try {
+        const qs: FindDashboardsRequestDto = {
+          navigationMethod: "pagination",
+          size: 999,
+        };
+        const res = (await findDashboard(qs)).data as any;
+        setDashboardList(res.dashboards);
+      } catch (error) {
+        setAlertValue(true);
+        console.error("대시보드를 불러오는 데 실패했습니다.");
+      }
+    };
+
+    getDashboards();
   }, []);
 
   return (
@@ -56,6 +64,7 @@ function MyPage() {
           <PasswordChangeForm />
         </MyPageFormLayout>
       </div>
+      {alertValue && <AlertModal modalType="alert" alertType="serverError" onClose={() => setAlertValue(false)} />}
     </BoardLayout>
   );
 }

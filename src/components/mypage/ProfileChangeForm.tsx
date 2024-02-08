@@ -13,19 +13,19 @@ import { useMyData } from "@/layouts/board";
 export interface ProfileChangeFormProps {
   email: string;
   nickname: string;
-  profileImageUrl: string | undefined | Blob;
+  profileImageUrl: string | undefined | Blob | null;
 }
 
 function ProfileChangeForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, isDirty },
+    formState: { errors, isValid },
     setValue,
     getValues,
   } = useForm<ProfileChangeFormProps>({
     shouldUnregister: false,
-    mode: "onBlur",
+    mode: "all",
   });
 
   const { myData, setMyData } = useMyData();
@@ -108,7 +108,7 @@ function ProfileChangeForm() {
           </div>
         </div>
         <div className="flex justify-end tablet:text-14 text-12">
-          <Button variant="filled_4" buttonType="comment" type="submit" disabled={!isValid}>
+          <Button variant="filled_4" buttonType="comment" type="submit">
             저장
           </Button>
         </div>

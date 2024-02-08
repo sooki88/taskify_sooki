@@ -19,9 +19,6 @@ interface DashboardItemProps {
 interface SideMenuProps {
   dashboards?: DashboardApplicationServiceResponseDto[];
 }
-// interface SideMenuProps {
-//   dashboards?: DashboardItemProps[];
-// }
 
 // 사이드 메뉴 안에 있는 대시보드 버튼 하나
 function DashboardItem({ id, title, createdByMe, color }: DashboardItemProps) {
@@ -86,7 +83,9 @@ function SideMenu({ dashboards }: SideMenuProps) {
           <span className="font-semibold text-12 text-gray-7874 tablet:inline-block mobile:hidden">Dash Boards</span>
           <Image src="/images/add_box_gray.png" alt="대시보드 추가 버튼 이미지" width={20} height={20} />
         </div>
-        {dashboards?.map((dashboard) => <DashboardItem key={dashboard.id} {...dashboard} />)}
+        <div className="overflow-auto">
+          {dashboards?.map((dashboard) => <DashboardItem key={dashboard.id} {...dashboard} />)}
+        </div>
       </div>
     </>
   );
