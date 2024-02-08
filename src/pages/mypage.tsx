@@ -6,29 +6,18 @@ import ProfileChangeForm from "@/components/mypage/ProfileChangeForm";
 import BoardLayout from "@/layouts/board";
 import MyPageFormLayout from "@/layouts/board/mypage/MyPageFormLayout";
 import { findDashboard } from "@/lib/services/dashboards";
-import { me } from "@/lib/services/users";
 import { useEffect, useState } from "react";
+
+interface myDataProps {
+  email: string;
+  nickname: string;
+  profileImageUrl: any;
+}
 
 function MyPage() {
   const [dashboardlist, setDashboardList] = useState([]);
-  const [myData, setMyData] = useState({
-    email: "",
-    nickname: "",
-    profileImageUrl: "",
-  });
-
   const sideMenu = <SideMenu dashboards={dashboardlist} />;
-  const header = <DashboardHeader myData={myData} />;
-
-  const getMeData = async () => {
-    try {
-      const responseMe = await me("get");
-      const { profileImageUrl, email, nickname }: any = responseMe.data;
-      setMyData({ profileImageUrl, email, nickname });
-    } catch (error) {
-      console.log("유저를 불러오는 데 실패했습니다.");
-    }
-  };
+  const header = <DashboardHeader />;
 
   const getDashboardsData = async () => {
     try {
@@ -51,7 +40,6 @@ function MyPage() {
   };
 
   useEffect(() => {
-    getMeData();
     getDashboardsData();
   }, []);
 
@@ -62,7 +50,7 @@ function MyPage() {
           <BackButton />
         </div>
         <MyPageFormLayout title="프로필">
-          <ProfileChangeForm myData={myData} setMyData={setMyData} />
+          <ProfileChangeForm />
         </MyPageFormLayout>
         <MyPageFormLayout title="비밀번호 변경">
           <PasswordChangeForm />
