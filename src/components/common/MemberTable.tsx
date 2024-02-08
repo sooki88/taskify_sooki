@@ -4,13 +4,13 @@ import ProfileLabel from "../common/ProfileLabel";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { deleteMember, memberList } from "@/lib/services/members";
-import { MemberListResponseDto } from "@/lib/services/members/schema";
+import { MemberApplicationServiceResponseDto, MemberListResponseDto } from "@/lib/services/members/schema";
 import Image from "next/image";
 
 function MemberTable() {
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState<MemberApplicationServiceResponseDto[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1); // 초기값 1로 설정
+  const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
   const dashboardId = router.query?.id;
 
@@ -29,7 +29,7 @@ function MemberTable() {
 
   useEffect(() => {
     getMembers();
-  }, [dashboardId, currentPage]); // currentPage를 의존성 배열에 추가
+  }, [dashboardId, currentPage]);
 
   const handleDeleteMember = async (memberId: number) => {
     try {

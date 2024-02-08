@@ -49,7 +49,7 @@ export const useDashboardData = () => {
         const meResponse = await me("get");
         setMyData(meResponse.data as UserServiceResponseDto);
 
-        const qs = { navigationMethod: "pagination", cursorId: 0, page: 1, size: 10 };
+        const qs = { navigationMethod: "pagination", cursorId: 0, page: 1, size: 999 };
         const dashboardsResponse = await findDashboard(qs);
         setDashboardList(dashboardsResponse.data as FindDashboardsResponseDto);
       } catch (error) {

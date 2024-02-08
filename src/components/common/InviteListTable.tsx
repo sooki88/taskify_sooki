@@ -16,6 +16,10 @@ interface Invitee {
   email: string;
 }
 
+interface DashboardInvitationsResponse {
+  invitations: Invitation[];
+}
+
 function InviteListTable() {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const router = useRouter();
@@ -35,6 +39,15 @@ function InviteListTable() {
   const [totalPages, setTotalPages] = useState<number>(10);
 
   useEffect(() => {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split(";");
+    const accessTokenCookie = cookies.find((cookie) => cookie.trim().startsWith("accessToken="));
+
+    if (!accessTokenCookie) {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+
     getInvitations();
   }, [currentPage, dashboardId]);
 
@@ -42,9 +55,9 @@ function InviteListTable() {
   const getInvitations = async () => {
     if (typeof dashboardId === "string") {
       try {
-        const qs = { dashboardId: Number(dashboardId) };
-        const invitationData = (await findInvitationDashboard(Number(dashboardId), qs))
-          .data as FIndDashboardInvitationsRequestDto;
+        const qs: FIndDashboardInvitationsRequestDto = {};
+        const response = await findInvitationDashboard(Number(dashboardId), qs);
+        const invitationData = response.data as DashboardInvitationsResponse | null | undefined;
         if (invitationData && invitationData.invitations) {
           // 전체 페이지 수 계산
           const totalPageCount = Math.ceil(invitationData.invitations.length / 5);
@@ -89,7 +102,14 @@ function InviteListTable() {
           <IconButton variant="filled" type="invite" onClick={handleInviteDashBoard} />
         </div>
       </div>
-      {isModalOpen && <InviteModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <InviteModal
+          onClose={() => {
+            setIsModalOpen(false);
+            getInvitations();
+          }}
+        />
+      )}
       <div>
         {invitations.slice((currentPage - 1) * 5, currentPage * 5).map((invitation) => (
           <div

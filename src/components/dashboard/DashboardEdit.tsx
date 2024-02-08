@@ -2,7 +2,6 @@ import { useEffect, useContext } from "react";
 import Button from "@/components/common/Button/Button";
 import { useForm, Controller } from "react-hook-form";
 import { ChipColors } from "@/components/common/Chips";
-import { useDashboardData } from "@/hooks/useDashboardData";
 import { DashboardContext } from "@/pages/dashboard/[id]/edit";
 import { Input } from "@/components/Auth/Elements";
 import { dashboard } from "@/lib/services/dashboards";
@@ -12,8 +11,8 @@ export default function DashboardEdit() {
 
   const onSubmit = async (data: any) => {
     try {
-      const response = await dashboard("put", dashboardData.id, data);
-      setDashboardData(response.data);
+      const response = await dashboard("put", dashboardData.id, data as any)!;
+      setDashboardData(response.data as any);
     } catch (error) {
       console.error("대시보드 업데이트 실패:", error);
     }
@@ -48,7 +47,11 @@ export default function DashboardEdit() {
         />
       </div>
       <p className="text-16 tablet:text-18 font-medium pb-10">대시보드 이름</p>
-      <Controller name="title" control={control} render={({ field }) => <Input {...field} id="title" />} />
+      <Controller
+        name="title"
+        control={control}
+        render={({ field }) => <Input type={""} placeholder={""} {...field} id="title" />}
+      />
       <div className="flex justify-end pt-16 tablet:pt-24 pb-20 tablet:pb-28">
         <Button type="submit" variant="filled_4" buttonType="comment">
           변경
