@@ -9,6 +9,8 @@ import Image from "next/image";
 
 function MemberTable() {
   const [members, setMembers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1); // 초기값 1로 설정
   const router = useRouter();
   const dashboardId = router.query?.id;
 
@@ -16,13 +18,18 @@ function MemberTable() {
     if (typeof dashboardId === "string") {
       const qs = { dashboardId: Number(dashboardId) };
       const memberData = (await memberList(qs)).data as MemberListResponseDto;
-      if (memberData) setMembers(memberData.members);
+      if (memberData) {
+        setMembers(memberData.members);
+        // Member는 4명씩 끊어 보여줌
+        const pages = Math.ceil(memberData.members.length / 4);
+        setTotalPages(pages);
+      }
     }
   };
 
   useEffect(() => {
     getMembers();
-  }, [dashboardId]);
+  }, [dashboardId, currentPage]); // currentPage를 의존성 배열에 추가
 
   const handleDeleteMember = async (memberId: number) => {
     try {
@@ -38,12 +45,11 @@ function MemberTable() {
       <div className="flex items-center justify-between pt-22 px-20 tablet:px-28 tablet:pt-26">
         <p className="text-20 font-bold tablet:text-24">구성원</p>
         <div className="flex items-center gap-x-12">
-          <p className="text-12 font-normal tablet:text-14">1 페이지 중 1</p>
-          <PaginationButton />
+          <PaginationButton currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
         </div>
       </div>
       <p className="text-gray-9FA6 text-14 pt-18 px-20 tablet:text-16 tablet:px-28">이름</p>
-      {members.map((member) => (
+      {members.slice((currentPage - 1) * 4, currentPage * 4).map((member) => (
         <div
           className="flex items-center justify-between py-12 border-b-1 border-gray-EEEE px-20 tablet:px-28"
           key={member.id}>

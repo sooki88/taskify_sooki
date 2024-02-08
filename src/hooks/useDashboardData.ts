@@ -6,14 +6,34 @@ import { DashboardApplicationServiceResponseDto, FindDashboardsResponseDto } fro
 import { UserServiceResponseDto } from "@/lib/services/auth/schema";
 
 export const useDashboardData = () => {
-  const [dashboardData, setDashboardData] = useState<DashboardApplicationServiceResponseDto>(
-    {} as DashboardApplicationServiceResponseDto,
-  );
+  const [dashboardData, setDashboardData] = useState<DashboardApplicationServiceResponseDto>({});
   const [dashboardList, setDashboardList] = useState<FindDashboardsResponseDto>({
     cursorId: null,
     totalCount: 0,
     dashboards: [],
   });
+
+  // 대시보드 목록 업데이트
+  const updateDashboardData = async (updatedData: DashboardApplicationServiceResponseDto) => {
+    try {
+      setDashboardData(updatedData);
+
+      const updatedDashboardList = dashboardList.dashboards.map((dashboard) => {
+        if (dashboard.id === updatedData.id) {
+          return updatedData;
+        }
+        return dashboard;
+      });
+
+      setDashboardList({
+        ...dashboardList,
+        dashboards: updatedDashboardList,
+      });
+    } catch (error) {
+      console.error("대시보드 데이터 업데이트 실패:", error);
+    }
+  };
+
   const [myData, setMyData] = useState<UserServiceResponseDto>({} as UserServiceResponseDto);
   const router = useRouter();
   const { id } = router.query;
@@ -40,5 +60,5 @@ export const useDashboardData = () => {
     getData();
   }, [id]);
 
-  return { dashboardData, dashboardList, myData };
+  return { dashboardData, updateDashboardData, setDashboardData, dashboardList, myData };
 };
