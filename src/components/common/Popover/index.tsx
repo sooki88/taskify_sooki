@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useContext, useRef, useState } from "react";
 import { useOnClickOutside, useToggle } from "usehooks-ts";
 import { FieldValues } from "react-hook-form";
 import Contents from "./Contents";
@@ -8,6 +8,8 @@ import { card } from "@/lib/services/cards";
 import { postImageToServer } from "@/lib/util/postImageToServer";
 import { UpdateCardRequestDto } from "@/lib/services/cards/schema";
 import { useCardList } from "@/components/dashboard/Column";
+import { DashboardContext } from "@/pages/dashboard/[id]";
+import { useTrigger } from "@/contexts/TriggerContext";
 
 export interface PopoverContent {
   title: string;
@@ -26,6 +28,7 @@ function Popover({ children, cardId }: PopoverProps) {
   const [deleteValue, deleteToggle, setDeleteValue] = useToggle();
   const popoverRef = useRef<HTMLDivElement>(null);
   const { setCardList } = useCardList();
+  const { toggleTrigger } = useTrigger();
 
   const MODAL_POPOVER = [
     {
@@ -59,6 +62,7 @@ function Popover({ children, cardId }: PopoverProps) {
           cards: prevState.cards.map((card) => (card.id === cardId ? { ...card, ...(response.data as any) } : card)),
         }));
       }
+      toggleTrigger();
     } catch (error) {
       console.error(error);
     }
@@ -98,7 +102,9 @@ function Popover({ children, cardId }: PopoverProps) {
           callback={cardUpdate}
         />
       )}
-      {deleteValue && <AlertModal modalType="delete" onClose={() => setDeleteValue(false)} callback={cardDelete} />}
+      {deleteValue && (
+        <AlertModal modalType="delete" deleteType="card" onClose={() => setDeleteValue(false)} callback={cardDelete} />
+      )}
     </div>
   );
 }

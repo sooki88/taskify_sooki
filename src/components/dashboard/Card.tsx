@@ -5,6 +5,7 @@ import { CardServiceResponseDto } from "@/lib/services/cards/schema";
 import { ChipCard } from "../common/Chips";
 import Avatar from "../common/Avatar";
 import TaskModal from "../modal/task";
+import { formatDate } from "date-fns";
 
 interface CardProps {
   cardData: CardServiceResponseDto;
@@ -37,7 +38,7 @@ const Card = ({ cardData }: CardProps) => {
               <Image fill src="/images/calendar.png" alt="달력 아이콘 이미지" />
             </div>
             <p className="font-medium tablet:text-12 text-10 text-gray-7874">
-              {!cardData.dueDate ? "마감기한 없음" : (cardData.dueDate as string)}
+              {!cardData.dueDate ? "마감기한 없음" : formatDate(cardData.dueDate, "yyyy-MM-dd")}
             </p>
           </div>
           <Avatar nickname={nickname} profileImageUrl={profileImageUrl} avatarType="card" />

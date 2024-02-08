@@ -12,6 +12,7 @@ import AddCardButton from "./AddCardButton";
 import { ChipNum } from "../common/Chips";
 import { CreateTodo } from "../modal/todo";
 import { ColumnServiceResponseDto } from "@/lib/services/columns/schema";
+import { useTrigger } from "@/contexts/TriggerContext";
 
 interface ColumnProps {
   column: any;
@@ -38,6 +39,7 @@ function Column({ column, updateColumns }: ColumnProps) {
 
   const [columnUpdateModal, columnUpdateToggle, setColumnUpdateModal] = useToggle();
   const [todoModal, todoToggle, setTodoMdodal] = useToggle();
+  const { isTriggered } = useTrigger();
 
   const {
     query: { id },
@@ -78,7 +80,7 @@ function Column({ column, updateColumns }: ColumnProps) {
       setCardList(response?.data as CardServiceFindResponseDto);
     };
     fetchData();
-  }, [column.id]);
+  }, [column.id, isTriggered]);
 
   return (
     <CardContext.Provider value={{ cardList, setCardList }}>

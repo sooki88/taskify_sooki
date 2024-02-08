@@ -104,11 +104,11 @@ function Modal({
           {/* 모달 푸터 영역 */}
           {modalType && (
             <footer
-              className={`flex flex-col item-end tablet:flex-row tablet:justify-between ${useFormData ? `mt-28 tablet:mt-32` : ""}`}>
+              className={`flex flex-col tablet:flex-row tablet:justify-between ${useFormData ? `mt-28 tablet:mt-32` : ""}`}>
               {onDelete && isUpdate && (
-                <span className="underline cursor-pointer text-nowrap text-gray-9FA6" onClick={onDelete}>
-                  삭제하기
-                </span>
+                <div className="flex items-end underline cursor-pointer text-nowrap text-gray-9FA6" onClick={onDelete}>
+                  <span>삭제하기</span>
+                </div>
               )}
               <div className="flex justify-center w-full gap-12 tablet:justify-end">
                 {!isAlert && (

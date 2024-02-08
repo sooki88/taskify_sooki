@@ -35,7 +35,6 @@ function BoardLayout({ sideMenu, dashboardHeader, children }: BoardLayoutProps) 
     fetchMyData();
   }, []);
 
-  console.log(myData);
   return (
     <MyDataContext.Provider value={{ myData, setMyData }}>
       <div className="grid grid-rows-[60px_1fr] tablet:grid-rows-[70px_1fr] grid-cols-[67px_minmax(auto,_1fr)] tablet:grid-cols-[160px_minmax(auto,_1fr)] pc:grid-cols-[300px_minmax(auto,_1fr)] min-h-screen bg-gray-FAFA">

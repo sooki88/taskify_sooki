@@ -29,7 +29,7 @@ function TaskModal({ taskData, onClose }: TaskModalProps) {
       <Modal title={taskData?.title} onClose={onClose} cardId={taskData.id} hasOptionsbutton>
         <div className="flex flex-col gap-24 tablet:flex-row w-327 tablet:w-680 pc:w-680">
           <div className="flex w-full m-auto tablet:hidden">
-            <TaskInfo data={taskData?.assignee as assignee} dueDate={taskData?.dueDate as string} />
+            <TaskInfo data={taskData?.assignee as assignee} dueDate={taskData?.dueDate} />
           </div>
           <div className="flex flex-col w-full gap-16 tablet:gap-20 tablet:w-450">
             <div className="flex gap-20">
@@ -48,7 +48,7 @@ function TaskModal({ taskData, onClose }: TaskModalProps) {
             <CommentInput cardId={taskData.id} columnId={taskData?.columnId as number} />
           </div>
           <div className="hidden tablet:w-180 pc:w-200 tablet:flex tablet:justify-end">
-            <TaskInfo data={taskData?.assignee as assignee} dueDate={taskData?.dueDate as string} />
+            <TaskInfo data={taskData?.assignee as assignee} dueDate={taskData?.dueDate} />
           </div>
         </div>
       </Modal>

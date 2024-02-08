@@ -52,7 +52,7 @@ function Comments({ comment: commentData, updateCommentList }: CommentsProps) {
         <div className="flex items-center gap-8">
           <span className="font-bold text-black font-Pretendard text-14">{commentData?.author.nickname}</span>
           <span className="font-normal text-gray-9FA6 font-Pretendard text-12">
-            {formatDate(commentData?.createdAt as string, true)}
+            {formatDate(commentData?.createdAt as string)}
           </span>
         </div>
         {isEditing ? (

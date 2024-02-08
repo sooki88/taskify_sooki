@@ -114,8 +114,8 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
             control={methods.control}
             defaultValue={cardData.dueDate}
             render={({ field }) => (
-              <div className="flex flex-col">
-                <label className="text-16 tabelt:text-18" htmlFor="dueDate">
+              <div className="flex flex-col gap-10">
+                <label className="text-16 tablet:text-18" htmlFor="dueDate">
                   마감일
                 </label>
                 <DatePickerInputField

@@ -28,7 +28,7 @@ function DatePickerInput({
           <CalendarIcon className="mr-2 size-20 tabelt:size-22 text-gray-9FA6" />
           {selected ? (
             <div className="w-full flex justify-between items-center">
-              <span className="text-14 tablet:text-16 text-gray-9FA6">{format(selected, "yyyy-MM-dd HH:mm")}</span>
+              <span className="text-14 tablet:text-16 text-gray-9FA6">{format(selected, "yyyy-MM-dd")}</span>
             </div>
           ) : (
             <span className="text-14 tablet:text-16 text-gray-9FA6">날짜를 선택해 주세요.</span>

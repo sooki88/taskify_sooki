@@ -16,11 +16,12 @@ export type AlertType =
 interface AlertModalProps<T = void> {
   modalType: "alert" | "delete";
   alertType?: AlertType;
+  deleteType?: "card" | "column";
   callback?: (data: FieldValues) => Promise<T>;
   onClose: () => void;
 }
 
-function AlertModal({ modalType, callback, onClose, alertType }: AlertModalProps) {
+function AlertModal({ modalType, callback, onClose, alertType, deleteType }: AlertModalProps) {
   const alertMessage = {
     passwordMismatch: "비밀번호가 일치하지 않습니다.",
     emailInUse: "이미 사용중인 이메일입니다.",
@@ -32,9 +33,14 @@ function AlertModal({ modalType, callback, onClose, alertType }: AlertModalProps
     passwordSameError: "현재 비밀번호와 새 비밀번호가 동일합니다.",
   };
 
+  const deleteMessage = {
+    card: "해당 카드를 삭제합니다.",
+    column: "컬럼의 모든 카드가 삭제됩니다.",
+  };
+
   const text = {
     alert: alertType && `${alertMessage[alertType]}`,
-    delete: "해당 카드가 삭제됩니다.",
+    delete: deleteType && `${deleteMessage[deleteType]}`,
   };
 
   return (

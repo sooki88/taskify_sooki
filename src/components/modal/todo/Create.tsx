@@ -59,7 +59,7 @@ function CreateTodoModal({ onClose, callback, setSelectedImage }: CreateTodoModa
             name="dueDate"
             control={methods.control}
             render={({ field }) => (
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-10">
                 <label className="text-16 tabelt:text-18" htmlFor="dueDate">
                   마감일
                 </label>

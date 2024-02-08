@@ -1,4 +1,5 @@
 import ProfileLabel from "@/components/common/ProfileLabel";
+import { formatDate } from "date-fns";
 
 interface ProfileData {
   profileImageUrl: string | null;
@@ -8,7 +9,7 @@ interface ProfileData {
 
 interface TaskInfoProps {
   data: ProfileData;
-  dueDate: string | Date;
+  dueDate: Date;
 }
 
 function TaskInfo({ data, dueDate }: TaskInfoProps) {
@@ -25,7 +26,7 @@ function TaskInfo({ data, dueDate }: TaskInfoProps) {
           마감일
         </span>
         <div className="font-normal text-black font-Pretendard text-14">
-          {dueDate ? (dueDate as string) : "마감기한 없음"}
+          {dueDate ? formatDate(dueDate, "yyyy-MM-dd") : "마감기한 없음"}
         </div>
       </div>
     </div>

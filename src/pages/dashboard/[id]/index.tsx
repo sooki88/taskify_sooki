@@ -1,21 +1,24 @@
+import { useEffect, useState, createContext, SetStateAction } from "react";
 import { GetServerSidePropsContext } from "next";
-import { useEffect, useState } from "react";
-import { ColumnServiceResponseDto, FindColumnsRequestDto } from "@/lib/services/columns/schema";
+import { useRouter } from "next/router";
 import { extractTokenFromCookie } from "@/lib/util/extractTokenFromCookie";
 import { findColumns } from "@/lib/services/columns";
+import { ColumnServiceResponseDto, FindColumnsRequestDto } from "@/lib/services/columns/schema";
 import { memberList } from "@/lib/services/members";
 import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
-import Column from "@/components/dashboard/Column";
-import { createContext } from "react";
-import SideMenu from "@/components/common/SideMenu";
-import DashboardHeader from "@/components/common/DashboardHeader";
-import BoardLayout from "@/layouts/board";
-import AddColumnButton from "@/components/dashboard/AddColumnButton";
 import { dashboard, findDashboard } from "@/lib/services/dashboards";
-import { FindDashboardsResponseDto } from "@/lib/services/dashboards/schema";
-import { useRouter } from "next/router";
-import { FindDashboardsRequestDto, DashboardApplicationServiceResponseDto } from "@/lib/services/dashboards/schema";
+import {
+  FindDashboardsResponseDto,
+  FindDashboardsRequestDto,
+  DashboardApplicationServiceResponseDto,
+} from "@/lib/services/dashboards/schema";
+import DashboardHeader from "@/components/common/DashboardHeader";
+import SideMenu from "@/components/common/SideMenu";
+import BoardLayout from "@/layouts/board";
+import Column from "@/components/dashboard/Column";
+import AddColumnButton from "@/components/dashboard/AddColumnButton";
 import AlertModal from "@/components/modal/alert";
+import { UpdateTriggerProvider } from "@/contexts/TriggerContext";
 
 type DashboardProps = {
   members: MemberApplicationServiceResponseDto[];
@@ -101,21 +104,23 @@ export default function Dashboard({ members }: DashboardProps) {
   }, [id]);
 
   return (
-    <DashboardContext.Provider value={{ members, columnsData }}>
-      <BoardLayout sideMenu={sideMenu} dashboardHeader={header}>
-        <div className="flex flex-col pc:flex-row">
-          {columnsData?.map((column) => {
-            return (
-              <div key={column.id}>
-                <Column column={column} updateColumns={setColumnsData} />
-              </div>
-            );
-          })}
-        </div>
-        <AddColumnButton updateColumns={setColumnsData} />
-      </BoardLayout>
-      {alertValue && <AlertModal modalType="alert" alertType="serverError" onClose={() => setAlertValue(false)} />}
-    </DashboardContext.Provider>
+    <UpdateTriggerProvider>
+      <DashboardContext.Provider value={{ members, columnsData }}>
+        <BoardLayout sideMenu={sideMenu} dashboardHeader={header}>
+          <div className="flex flex-col pc:flex-row">
+            {columnsData?.map((column) => {
+              return (
+                <div key={column.id}>
+                  <Column column={column} updateColumns={setColumnsData} />
+                </div>
+              );
+            })}
+          </div>
+          <AddColumnButton updateColumns={setColumnsData} />
+        </BoardLayout>
+        {alertValue && <AlertModal modalType="alert" alertType="serverError" onClose={() => setAlertValue(false)} />}
+      </DashboardContext.Provider>
+    </UpdateTriggerProvider>
   );
 }
 

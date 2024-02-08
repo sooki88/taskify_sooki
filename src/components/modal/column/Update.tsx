@@ -61,6 +61,7 @@ function UpdateColumnModal({ columnData: { title, columnId }, updateColumns, onC
       {deleteValue && (
         <AlertModal
           modalType="delete"
+          deleteType="column"
           onClose={() => {
             setDeleteValue(false);
           }}

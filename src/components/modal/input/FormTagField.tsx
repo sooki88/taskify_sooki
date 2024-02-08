@@ -47,7 +47,7 @@ function FormTagField({ defaultValue }: { defaultValue?: string[] }) {
       render={({ field }) => {
         const { value } = field;
         return (
-          <div>
+          <div className="flex flex-col gap-10">
             <label className="text-16 tablet:text-18">태그</label>
             <div
               className={`flex gap-2 p-2 border-gray-300 border-1 rounded-6 px-16 border-gray-D9D9 h-42 tablet:h-48 overflow-x-auto ${isFocus}`}>
