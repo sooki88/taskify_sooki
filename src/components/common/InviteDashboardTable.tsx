@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from "react";
-import Button from "../common/Button/Button";
+import { useState, useEffect } from "react";
+import Button from "./Button/Button";
 import SearchBar from "./SearchBar";
 import Image from "next/image";
 import { invitation, responseInvitation } from "@/lib/services/invitations";
@@ -15,7 +15,11 @@ interface Invitation {
   };
 }
 
-function InviteDashTable() {
+interface InviteDashboardTableProp {
+  getDashboards: () => Promise<void>;
+}
+
+function InviteDashboardTable({ getDashboards }: InviteDashboardTableProp) {
   const [invitedDashBoards, setInvitedDashBoards] = useState<Invitation[]>([]);
   const [searchResult, setSearchResult] = useState<Invitation[]>([]);
 
@@ -35,11 +39,10 @@ function InviteDashTable() {
   const getResponseInvitation = async (invitationId: number, inviteAccepted: boolean): Promise<void> => {
     try {
       const res = (await responseInvitation(invitationId, inviteAccepted)).data as any;
-      // const res = (await findDashboard(qs)).data as any;
-      console.log(res);
       setSearchResult((prevSearchResult: Invitation[]) =>
         prevSearchResult.filter((invitation) => invitation.id !== invitationId),
       );
+      getDashboards();
     } catch (error) {
       console.error(error);
     }
@@ -114,4 +117,4 @@ function InviteDashTable() {
   );
 }
 
-export default InviteDashTable;
+export default InviteDashboardTable;

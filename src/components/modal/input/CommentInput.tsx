@@ -74,7 +74,7 @@ function CommentInput({ cardId, columnId }: CommentInputProps) {
         </div>
       </div>
       {commentList && commentList.length > 0 && (
-        <div className="overflow-auto max-h-150">
+        <div className="overflow-auto overflow-x-hidden max-h-150">
           {commentList.map((comment) => (
             <Comments key={comment.id} comment={comment} updateCommentList={setCommentList} />
           ))}

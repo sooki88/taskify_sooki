@@ -57,12 +57,12 @@ function Comments({ comment: commentData, updateCommentList }: CommentsProps) {
         </div>
         {isEditing ? (
           <textarea
-            className="p-16 mt-6 font-normal leading-normal outline-none resize-none text-12 tablet:text-14 border-1 w-270 tablet:w-400 h-70 tablet:h-110 rounded-6 border-gray-D9D9 focus:border-violet placeholder:text-gray-9FA6 font-Pretendard"
+            className="p-16 mt-6 font-normal leading-normal outline-none resize-none text-12 tablet:text-14 border-1 w-230 tablet:w-350 h-70 tablet:h-110 rounded-6 border-gray-D9D9 focus:border-violet placeholder:text-gray-9FA6 font-Pretendard"
             value={editingComment}
             onChange={(e) => setEditingComment(e.target.value)}
           />
         ) : (
-          <div className="mt-6 font-normal text-black w-270 tablet:w-400 font-Pretendard text-12 tablet:text-14">
+          <div className="mt-6 font-normal text-black w-250 tablet:w-370 font-Pretendard text-12 tablet:text-14">
             {commentData?.content}
           </div>
         )}

@@ -1,8 +1,7 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import Contents from "./Contents";
 import { useRouter } from "next/router";
-import { me } from "@/lib/services/users";
 
 export interface PopoverContent {
   title: string;

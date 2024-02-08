@@ -26,7 +26,7 @@ function AlertModal({ modalType, callback, onClose, alertType, deleteType }: Ale
     passwordMismatch: "비밀번호가 일치하지 않습니다.",
     emailInUse: "이미 사용중인 이메일입니다.",
     userNotFound: "존재하지 않는 유저입니다.",
-    serverError: "서버 처리중 에러가 발생했습니다. 잠시 후 다시 시도해주세요.",
+    serverError: "서버 처리 중 에러가 발생했습니다. 잠시 후 다시 시도해주세요.",
     profileSuccess: "프로필을 저장하였습니다.",
     passwordSuccess: "비밀번호가 변경되었습니다.",
     incorrectPassword: "현재 비밀번호가 틀렸습니다.",
