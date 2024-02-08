@@ -22,7 +22,7 @@ interface UpdateTodoModalProps<T = void> {
 function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: UpdateTodoModalProps) {
   const [cardData, setCardData] = useState<CardServiceResponseDto | undefined>(undefined);
   const methods = useForm({ defaultValues: cardData });
-  const { columns, members: memberList } = useContext(DashboardContext);
+  const { columnsData, members: memberList } = useContext(DashboardContext);
 
   const rules = { required: "빈 값은 안됨." };
 
@@ -65,10 +65,10 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
                   <div className="flex flex-col gap-10">
                     <label className="text-16 tablet:text-18">상태</label>
                     <Dropdown
-                      options={columns}
+                      options={columnsData}
                       renderOptions={renderOptionPrograss}
                       onChange={(selectedValue) => field.onChange(selectedValue)}
-                      defaultIndex={columns.findIndex((option) => option.id === field.value)}
+                      defaultIndex={columnsData.findIndex((option) => option.id === field.value)}
                     />
                   </div>
                 );

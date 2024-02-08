@@ -60,7 +60,7 @@ export default function MyDashboard() {
     };
 
     getDashboards();
-  }, [dashboards]);
+  }, []);
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;

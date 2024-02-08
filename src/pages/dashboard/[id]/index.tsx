@@ -47,13 +47,22 @@ export default function Dashboard({ members }: DashboardProps) {
   const sideMenu = <SideMenu dashboards={dashboards} />;
   const header = <DashboardHeader dashboardData={dashboardData} members={members} />;
 
-  console.log(columnsData);
   const {
     query: { id },
   } = useRouter();
+  const router = useRouter();
   const dashboardId = Number(id);
 
   useEffect(() => {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split(";");
+    const accessTokenCookie = cookies.find((cookie) => cookie.trim().startsWith("accessToken="));
+
+    if (!accessTokenCookie) {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+
     const getDashboard = async () => {
       const response = await dashboard("get", dashboardId);
       setDashboardData(response?.data as DashboardApplicationServiceResponseDto);
@@ -74,7 +83,7 @@ export default function Dashboard({ members }: DashboardProps) {
     };
 
     const getDashboardsData = async () => {
-      const qs: FindDashboardsRequestDto = { navigationMethod: "pagination", cursorId: 0, page: 1, size: 10 };
+      const qs: FindDashboardsRequestDto = { navigationMethod: "pagination", size: 999 };
       const response = await findDashboard(qs);
       if (response.data) {
         setDashboardList(response.data as FindDashboardsResponseDto);
