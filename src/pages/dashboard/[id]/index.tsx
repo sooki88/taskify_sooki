@@ -106,7 +106,7 @@ export default function Dashboard({ members }: DashboardProps) {
   return (
     <UpdateTriggerProvider>
       <DashboardContext.Provider value={{ members, columnsData }}>
-        <BoardLayout sideMenu={sideMenu} dashboardHeader={header}>
+        <BoardLayout sideMenu={sideMenu} dashboardHeader={header} scrollBtn>
           <div className="flex flex-col pc:flex-row">
             {columnsData?.map((column) => {
               return (
