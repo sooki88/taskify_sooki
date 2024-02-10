@@ -7,12 +7,19 @@ import { Input } from "@/components/Auth/Elements";
 import { dashboard } from "@/lib/services/dashboards";
 
 export default function DashboardEdit() {
-  const { dashboardData, setDashboardData } = useContext(DashboardContext);
+  const { dashboardData, setDashboardData, setDashboardList } = useContext(DashboardContext);
 
   const onSubmit = async (data: any) => {
     try {
       const response = await dashboard("put", dashboardData.id, data as any)!;
       setDashboardData(response.data as any);
+      // 사이드 메뉴 데이터 바꾸기
+      setDashboardList((prev: any) => ({
+        ...prev,
+        dashboards: prev.dashboards.map((dashboard: any) =>
+          dashboard.id === dashboardData.id ? { ...data } : dashboard,
+        ),
+      }));
     } catch (error) {
       console.error("대시보드 업데이트 실패:", error);
     }

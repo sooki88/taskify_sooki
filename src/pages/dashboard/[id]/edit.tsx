@@ -15,13 +15,14 @@ import { memberList } from "@/lib/services/members";
 import { extractTokenFromCookie } from "@/lib/util/extractTokenFromCookie";
 import { GetServerSidePropsContext } from "next";
 import { DashboardApplicationServiceResponseDto } from "@/lib/services/dashboards/schema";
-import React from "react";
+import React, { useState } from "react";
 
 type DashboardContextType = {
   members: MemberApplicationServiceResponseDto[];
   columns: ColumnServiceResponseDto[];
   dashboardData: DashboardApplicationServiceResponseDto;
   setDashboardData: (data: DashboardApplicationServiceResponseDto) => void;
+  setDashboardList: any;
 };
 
 export const DashboardContext = React.createContext<DashboardContextType>({
@@ -29,10 +30,12 @@ export const DashboardContext = React.createContext<DashboardContextType>({
   columns: [],
   dashboardData: {} as DashboardApplicationServiceResponseDto,
   setDashboardData: () => {},
+  setDashboardList: () => {},
 });
 
 export default function Edit({ members, columns }: DashboardContextType) {
-  const { dashboardData, dashboardList, setDashboardData } = useDashboardData();
+  const [memberList, setMemberList] = useState(members);
+  const { dashboardData, dashboardList, setDashboardData, setDashboardList } = useDashboardData();
   const router = useRouter();
   const dashboardId = router.query.id;
 
@@ -47,15 +50,15 @@ export default function Edit({ members, columns }: DashboardContextType) {
   };
 
   return (
-    <DashboardContext.Provider value={{ members, columns, dashboardData, setDashboardData }}>
+    <DashboardContext.Provider value={{ members, columns, dashboardData, setDashboardData, setDashboardList }}>
       <BoardLayout
         sideMenu={<SideMenu dashboards={dashboardList.dashboards} />}
-        dashboardHeader={<DashboardHeader dashboardData={dashboardData} members={members} />}>
+        dashboardHeader={<DashboardHeader dashboardData={dashboardData} members={memberList} />}>
         <div className="px-12 pt-16 pb-56 tablet:px-20 tablet:pt-20 pc:w-620">
           <BackButton />
           <div className="flex flex-col gap-y-12 pt-21 pb-40 tablet:pb-48">
             <DashboardEdit />
-            <MemberTable />
+            <MemberTable setMemberList={setMemberList} />
             <InviteListTable />
           </div>
           <DeleteDashButton onClick={() => handleDeleteDashboard()} />
@@ -92,7 +95,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         members: members?.members || [],
-        columns: [],
       },
     };
   } catch (error) {
@@ -100,7 +102,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         members: [],
-        columns: [],
       },
     };
   }

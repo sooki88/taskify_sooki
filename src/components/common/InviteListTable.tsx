@@ -32,8 +32,6 @@ function InviteListTable() {
     setIsModalOpen(true);
   };
 
-  useEffect(() => {}, [isModalOpen]);
-
   // 페이지네이션 관련 코드
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(10);
@@ -59,7 +57,6 @@ function InviteListTable() {
         const response = await findInvitationDashboard(Number(dashboardId), qs);
         const invitationData = response.data as DashboardInvitationsResponse | null | undefined;
         if (invitationData && invitationData.invitations) {
-          // 전체 페이지 수 계산
           const totalPageCount = Math.ceil(invitationData.invitations.length / 5);
           setTotalPages(totalPageCount);
           setInvitations(invitationData.invitations);
