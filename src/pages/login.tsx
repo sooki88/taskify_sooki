@@ -80,6 +80,7 @@ export function getServerSideProps(context: GetServerSidePropsContext) {
   const token = extractTokenFromCookie(cookieValue);
 
   if (token) {
+
     return {
       redirect: {
         destination: "/mydashboard",

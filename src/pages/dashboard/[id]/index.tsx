@@ -118,6 +118,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 
   const cookieValue = context.req.headers.cookie || "";
+
   const token = extractTokenFromCookie(cookieValue);
 
   if (!token) {
@@ -128,7 +129,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

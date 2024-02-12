@@ -15,6 +15,7 @@ import PasswordCheckField from "@/components/Auth/PasswordCheckField";
 import AlertModal, { AlertType } from "@/components/modal/alert";
 import { extractTokenFromCookie } from "@/lib/util/extractTokenFromCookie";
 
+
 export interface SignUpForm {
   email: string;
   nickname: string;
