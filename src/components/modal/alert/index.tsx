@@ -11,17 +11,21 @@ export type AlertType =
   | "passwordSuccess"
   | "incorrectPassword"
   | "passwordSameError"
+  | "passwordEmpty"
+  | "inputNewPassword"
+  | "successToChangedashboard"
   | "";
 
 interface AlertModalProps<T = void> {
   modalType: "alert" | "delete";
   alertType?: AlertType;
   deleteType?: "card" | "column";
+  errorMessage?: string;
   callback?: (data: FieldValues) => Promise<T>;
   onClose: () => void;
 }
 
-function AlertModal({ modalType, callback, onClose, alertType, deleteType }: AlertModalProps) {
+function AlertModal({ errorMessage, modalType, callback, onClose, alertType, deleteType }: AlertModalProps) {
   const alertMessage = {
     passwordMismatch: "비밀번호가 일치하지 않습니다.",
     emailInUse: "이미 사용중인 이메일입니다.",
@@ -31,6 +35,9 @@ function AlertModal({ modalType, callback, onClose, alertType, deleteType }: Ale
     passwordSuccess: "비밀번호가 변경되었습니다.",
     incorrectPassword: "현재 비밀번호가 틀렸습니다.",
     passwordSameError: "현재 비밀번호와 새 비밀번호가 동일합니다.",
+    passwordEmpty: "비밀번호를 입력해 주세요.",
+    inputNewPassword: "새 비밀번호를 입력해주세요",
+    successToChangedashboard: "대시보드 설정이 변경되었습니다.",
   };
 
   const deleteMessage = {
@@ -46,8 +53,8 @@ function AlertModal({ modalType, callback, onClose, alertType, deleteType }: Ale
   return (
     <>
       <Modal modalType={modalType} onClose={onClose} callback={callback}>
-        <div className="flex items-center justify-center h-full">
-          <span>{text[modalType]}</span>
+        <div className="flex items-center justify-center min-h-90">
+          <span>{errorMessage || text[modalType]}</span>
         </div>
       </Modal>
     </>

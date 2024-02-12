@@ -20,6 +20,6 @@ export const memberList = (
  * 특정 멤버를 삭제하는 함수입니다.
  *
  * @param {number} memberId - 삭제할 멤버의 ID
- * @returns {Promise<ServiceResponse<any>>} 서비스 응답을 포함하는 프로미스
+ * @returns {Promise<ServiceResponse<void>>} 서비스 응답을 포함하는 프로미스
  */
 export const deleteMember = (memberId: number) => service("delete", memberAddress.memberId(memberId));

@@ -8,7 +8,6 @@ import {
   ResponsePayload_ColumnServiceResponseDto,
   UpdateColumnRequestDto,
 } from "./schema";
-import { AxiosRequestConfig } from "axios";
 
 /**
  * 새로운 컬럼을 생성하는 함수입니다.
@@ -28,7 +27,7 @@ export const createColumn = (data: CreateColumnRequestDto): Promise<ServiceRespo
 export const findColumns = (
   qs: FindColumnsRequestDto,
 ): Promise<ServiceResponse<ResponsePayload_ColumnServiceResponseDto>> =>
-  service("get", createUrlWithQueryString(columnAddress.column, qs as any));
+  service("get", createUrlWithQueryString(columnAddress.column, qs));
 
 /**
  * 컬럼에 대한 다양한 작업을 수행하는 함수입니다. HTTP 메소드에 따라 다른 작업을 수행합니다.
@@ -36,10 +35,14 @@ export const findColumns = (
  * @param {HttpMethod} method - 사용할 HTTP 메소드
  * @param {number} columnId - 작업 대상 컬럼 ID
  * @param {UpdateColumnRequestDto} [data] - 컬럼 업데이트를 위한 선택적 데이터
- * @returns {Promise<ServiceResponse<ColumnServiceResponseDto>>} 서비스 응답을 포함하는 프로미스
+ * @returns {Promise<ServiceResponse<ColumnServiceResponseDto[]>>} 서비스 응답을 포함하는 프로미스
  * @throws {Error} 유효하지 않은 HTTP 메소드가 제공될 경우 오류를 발생시킵니다.
  */
-export const column = (method: HttpMethod, columnId: number, data?: UpdateColumnRequestDto) => {
+export const column = (
+  method: HttpMethod,
+  columnId: number,
+  data?: UpdateColumnRequestDto,
+): Promise<ServiceResponse<ColumnServiceResponseDto>> => {
   switch (method) {
     case "delete":
       return service(method, columnAddress.columnId(columnId));

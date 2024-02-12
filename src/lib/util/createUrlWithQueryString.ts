@@ -1,4 +1,4 @@
-export function createUrlWithQueryString(baseURL: string, qs?: Record<string, string>): string {
+export function createUrlWithQueryString(baseURL: string, qs?: Record<string, unknown>): string {
   if (!qs) {
     return baseURL;
   }

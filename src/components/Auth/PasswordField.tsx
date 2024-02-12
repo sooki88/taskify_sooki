@@ -36,8 +36,8 @@ function PasswordField<TFormInput extends FieldValues = FieldValues>({
             id={name}
             type={name}
             {...field}
-            onChange={async (values: string) => {
-              await field.onChange(values);
+            onChange={(values) => {
+              field.onChange(values);
               if (triggerPasswordCheck) return triggerPasswordCheck();
             }}
             placeholder="비밀번호를 입력해 주세요"
@@ -47,7 +47,7 @@ function PasswordField<TFormInput extends FieldValues = FieldValues>({
           />
         )}
       />
-      {errors[name] && <ErrorMessage>{errors[name]?.message}</ErrorMessage>}
+      {errors[name] && <ErrorMessage>{errors[name]?.message as string}</ErrorMessage>}
     </InputContainer>
   );
 }

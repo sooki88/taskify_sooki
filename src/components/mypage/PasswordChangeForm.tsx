@@ -1,20 +1,13 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import Button from "../common/Button/Button";
+import { FieldError, FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import Button from "../common/Button";
 import { useState } from "react";
 import { changePassword } from "@/lib/services/auth";
-import TextInput from "./PasswordInput";
 import AlertModal, { AlertType } from "../modal/alert";
 import { useToggle } from "usehooks-ts";
+import TextInput from "./TextInput";
 
 interface MessageToType {
   [key: string]: AlertType;
-}
-
-interface PasswordFormInput {
-  username: string;
-  password: string;
-  newPassword: string;
-  newPasswordConfirm: string;
 }
 
 function PasswordChangeForm() {
@@ -23,7 +16,7 @@ function PasswordChangeForm() {
     handleSubmit,
     formState: { errors, isValid },
     reset,
-  } = useForm<PasswordFormInput>({
+  } = useForm<FieldValues>({
     shouldUnregister: false,
     mode: "onTouched", // onTouched보다 onBlur가 좋다고 생각합니다. figma도 focusout으로 되어있습니다.
   });
@@ -36,7 +29,7 @@ function PasswordChangeForm() {
     "현재 비밀번호가 틀렸습니다.": "incorrectPassword",
   };
 
-  const onSubmit: SubmitHandler<PasswordFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const newPasswordData = {
         password: data.password,
@@ -66,54 +59,43 @@ function PasswordChangeForm() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col tablet:gap-24 gap-16">
         <TextInput
-          type="text"
-          id="username"
-          register={register("username")}
-          placeholder="사용자 이름 입력"
-          labelTitle="사용자 이름 // DOM 에러로 추가"
-          hidden
-          disabled={true}
-        />
-        <TextInput
           type="password"
           id="password"
-          register={{
-            ...register("password", {
-              required: "비밀번호를 입력해 주세요.",
-            }),
+          register={register}
+          validation={{
+            required: "현재 비밀번호를 입력해주세요.",
+            minLength: {
+              value: 8,
+              message: "비밀번호는 최소 8자 이상이어야 합니다.",
+            },
           }}
           placeholder="현재 비밀번호 입력"
           labelTitle="현재 비밀번호"
-          errors={errors}
+          errors={errors["password"] as FieldError}
         />
         <TextInput
           type="password"
           id="newPassword"
-          register={{
-            ...register("newPassword", {
-              required: "새 비밀번호를 입력해 주세요.",
-              minLength: { value: 8, message: "새 비밀번호는 8자 이상 입력해주세요." },
-              // deps: ["newPasswordConfirm"],
-            }),
+          register={register}
+          validation={{
+            required: "비밀번호를 입력해 주세요.",
           }}
           placeholder="새 비밀번호 입력"
           labelTitle="새 비밀번호"
-          errors={errors}
+          errors={errors["newPassword"] as FieldError}
         />
         <TextInput
           type="password"
           id="newPasswordConfirm"
-          register={{
-            ...register("newPasswordConfirm", {
-              // required: "새 비밀번호를 입력해 주세요.",
-              validate: (value, formValues) => {
-                if (value !== formValues.newPassword) return "비밀번호가 일치하지 않아요.";
-              },
-            }),
+          register={register}
+          validation={{
+            validate: (value, formValues) => {
+              if (value !== formValues.newPassword) return "비밀번호가 일치하지 않아요.";
+            },
           }}
           placeholder="새 비밀번호 입력"
           labelTitle="새 비밀번호 확인"
-          errors={errors}
+          errors={errors["newPasswordConfirm"] as FieldError}
         />
         <div className="flex justify-end tablet:text-14 text-12">
           <Button variant="filled_4" buttonType="comment" type="submit" disabled={!isValid}>

@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { GetServerSidePropsContext } from "next";
-import { Control, FieldErrors, useForm, useWatch } from "react-hook-form";
 import { useRouter } from "next/router";
+import { Control, FieldErrors, useForm, useWatch } from "react-hook-form";
+import { register } from "@/lib/services/users";
+import { CreateUserRequestDto } from "@/lib/services/users/schema";
+import { login } from "@/lib/services/auth";
 import AuthLayout from "@/layouts/auth";
 import AuthForm from "@/layouts/auth/Form";
 import AuthCheckbox from "@/components/Auth/AuthCheckbox";
-import EmailField from "@/components/Auth/EmailField ";
 import NameField from "@/components/Auth/NameField";
+import EmailField from "@/components/Auth/EmailField";
 import PasswordField from "@/components/Auth/PasswordField";
 import PasswordCheckField from "@/components/Auth/PasswordCheckField";
-import { register } from "@/lib/services/users";
-import { CreateUserRequestDto } from "@/lib/services/users/schema";
 import AlertModal, { AlertType } from "@/components/modal/alert";
-import { login } from "@/lib/services/auth";
 
 export interface SignUpForm {
   email: string;

@@ -16,7 +16,7 @@ function NewDashModal({ onClose }: { onClose: () => void }) {
       title,
       color: methods.getValues("color"),
     };
-    const response = (await createDashboard(form)) as any;
+    const response = await createDashboard(form);
 
     if (response.errorMessage) {
       methods.setError("color", { type: "noColor", message: response.errorMessage });
@@ -31,30 +31,30 @@ function NewDashModal({ onClose }: { onClose: () => void }) {
 
   return (
     <FormProvider {...methods}>
-      <Modal title="새로운 대시보드" modalType={"create"} onClose={onClose} callback={callback} useFormData>
-        <div className="mb-28">
+      <Modal title="새로운 대시보드" modalType={"create"} onClose={onClose} callback={callback} isFormData>
+        <div className="flex flex-col w-full gap-28">
           <FormInputField
             labelName="title"
             labelTitle="대시보드 이름"
             rules={{ required: "대시보드 이름을 작성해 주세요." }}
           />
+          <Controller
+            control={methods.control}
+            defaultValue={"#7ac555"}
+            name="color"
+            render={({ field }) => (
+              <>
+                <ChipColors
+                  selectColor={field.value}
+                  setSelectColor={(newValue) => {
+                    field.onChange(newValue);
+                  }}
+                />
+                {methods.formState.errors.color?.message && <span className="text-red mt-10 block">{}</span>}
+              </>
+            )}
+          />
         </div>
-        <Controller
-          control={methods.control}
-          defaultValue={"#7ac555"}
-          name="color"
-          render={({ field }) => (
-            <>
-              <ChipColors
-                selectColor={field.value}
-                setSelectColor={(newValue) => {
-                  field.onChange(newValue);
-                }}
-              />
-              {methods.formState.errors.color?.message && <span className="text-red mt-10 block">{}</span>}
-            </>
-          )}
-        />
       </Modal>
     </FormProvider>
   );

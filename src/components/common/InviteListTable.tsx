@@ -1,11 +1,12 @@
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/router";
+import { findInvitationDashboard, deleteInvitationDashboard } from "@/lib/services/dashboards";
+import { FIndDashboardInvitationsRequestDto } from "@/lib/services/dashboards/schema";
 import InviteModal from "../modal/invite";
-import Button from "./Button/Button";
+import Button from "./Button";
 import IconButton from "./Button/IconButton";
 import PaginationButton from "./Button/PaginationButton";
-import { findInvitationDashboard, deleteInvitationDashboard } from "@/lib/services/dashboards";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { FIndDashboardInvitationsRequestDto } from "@/lib/services/dashboards/schema";
+import { checkLogin } from "@/lib/util/checkLogin";
 
 interface Invitation {
   id: number;
@@ -22,35 +23,21 @@ interface DashboardInvitationsResponse {
 
 function InviteListTable() {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
-  const router = useRouter();
-  const dashboardId = router.query?.id;
-
   // 모달 열기 관련 코드
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  // 페이지네이션 관련 코드
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(10);
+
+  const router = useRouter();
+  const dashboardId = router.query?.id;
 
   const handleInviteDashBoard = () => {
     setIsModalOpen(true);
   };
 
-  // 페이지네이션 관련 코드
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(10);
-
-  useEffect(() => {
-    const cookieString = document.cookie;
-    const cookies = cookieString.split(";");
-    const accessTokenCookie = cookies.find((cookie) => cookie.trim().startsWith("accessToken="));
-
-    if (!accessTokenCookie) {
-      alert("로그인이 필요합니다.");
-      router.push("/login");
-    }
-
-    getInvitations();
-  }, [currentPage, dashboardId]);
-
   // 초대 목록 조회
-  const getInvitations = async () => {
+  const getInvitations = useCallback(async () => {
     if (typeof dashboardId === "string") {
       try {
         const qs: FIndDashboardInvitationsRequestDto = {};
@@ -65,7 +52,7 @@ function InviteListTable() {
         console.error("초대 목록 조회 실패:", error);
       }
     }
-  };
+  }, [dashboardId]);
 
   // 초대 취소
   const handleCancelInvitation = async (invitationId: number) => {
@@ -77,10 +64,10 @@ function InviteListTable() {
     }
   };
 
-  // 컴포넌트 마운트 시 초대 목록 가져오기
   useEffect(() => {
+    if (!checkLogin(router)) return;
     getInvitations();
-  }, [dashboardId]);
+  }, [getInvitations, router]);
 
   return (
     <div className="bg-white rounded-8 pb-8">

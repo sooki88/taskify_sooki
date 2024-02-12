@@ -16,10 +16,6 @@ interface DashboardItemProps {
   tabletOrLarge?: boolean;
 }
 
-interface SideMenuProps {
-  dashboards?: DashboardApplicationServiceResponseDto[];
-}
-
 // 사이드 메뉴 안에 있는 대시보드 버튼 하나
 function DashboardItem({ id, title, createdByMe, color }: DashboardItemProps) {
   const { width } = useWindowSize();
@@ -45,7 +41,7 @@ function DashboardItem({ id, title, createdByMe, color }: DashboardItemProps) {
                 fill
                 src="/images/crown.png"
                 alt="내가 만든 대시보드 표시 왕관 아이콘 이미지"
-                sizes="(max-width: 744px) 100vw, (max-width: 1199px) 50vw, 25vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </div>
           )}
@@ -56,14 +52,14 @@ function DashboardItem({ id, title, createdByMe, color }: DashboardItemProps) {
 }
 
 // 사이드메뉴 전체
-function SideMenu({ dashboards }: SideMenuProps) {
+function SideMenu({ dashboardList }: { dashboardList: DashboardApplicationServiceResponseDto[] }) {
   const { width } = useWindowSize();
   const tabletOrLarge = width >= 744;
-  const [newDashValue, newDashToggel, setNewDashValue] = useToggle();
+  const [newDashValue, newDashToggle, setNewDashValue] = useToggle();
 
   return (
     <>
-      {newDashValue && <NewDashModal onClose={newDashToggel} />}
+      {newDashValue && <NewDashModal onClose={newDashToggle} />}
       <div className="fixed top-0 left-0 bottom-0 flex flex-col h-screen gap-3 px-12 py-20 bg-white pc:w-300 tablet:w-160 w-67 border-r-1 border-gray-D9D9 z-sticky">
         <Link href="/">
           <div className="relative ml-12 tablet:w-109 tablet:h-33 w-23 h-27 tablet:mb-42 mb-27">
@@ -84,7 +80,9 @@ function SideMenu({ dashboards }: SideMenuProps) {
           <Image src="/images/add_box_gray.png" alt="대시보드 추가 버튼 이미지" width={20} height={20} />
         </div>
         <div className="overflow-auto">
-          {dashboards?.map((dashboard) => <DashboardItem key={dashboard.id} {...dashboard} />)}
+          {dashboardList?.map((dashboard: DashboardApplicationServiceResponseDto) => (
+            <DashboardItem key={dashboard.id} {...dashboard} />
+          ))}
         </div>
       </div>
     </>

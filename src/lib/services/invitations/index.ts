@@ -9,7 +9,7 @@ import { FindInvitationsRequestDto, InvitationServiceResponseDto } from "./schem
  * @param {FindInvitationsRequestDto} qs - 초대장 조회를 위한 쿼리 스트링 데이터
  * @returns {Promise<ServiceResponse<InvitationServiceResponseDto>>} 초대장 서비스 응답을 포함하는 프로미스
  */
-export const invitation = (qs: FindInvitationsRequestDto): Promise<ServiceResponse<InvitaionServiceResponseDto>> =>
+export const invitation = (qs: FindInvitationsRequestDto): Promise<ServiceResponse<InvitationServiceResponseDto>> =>
   service("get", createUrlWithQueryString(invitationAddress.invitation, qs));
 
 /**

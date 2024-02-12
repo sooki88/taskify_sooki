@@ -1,9 +1,9 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Comments from "../Comments";
 import { useRouter } from "next/router";
-import { createComment, findComments, comment } from "@/lib/services/comments";
+import { createComment, findComments } from "@/lib/services/comments";
 import { CommentServiceDto, FindCommentsResponseDto } from "@/lib/services/comments/schema";
-import Button from "@/components/common/Button/Button";
+import Button from "@/components/common/Button";
 
 interface CommentInputProps {
   cardId: number;
@@ -31,7 +31,7 @@ function CommentInput({ cardId, columnId }: CommentInputProps) {
       };
       try {
         const response = await createComment(form);
-        setCommentList((prevState: any) => [...prevState, response.data]);
+        setCommentList((prevState: CommentServiceDto[]) => [...prevState, response.data as CommentServiceDto]);
         setCurrentComment("");
       } catch (error) {
         console.error(error);

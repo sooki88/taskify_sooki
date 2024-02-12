@@ -1,70 +1,92 @@
+import React, { useEffect, useState } from "react";
+import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
+import Head from "next/head";
+import { memberList } from "@/lib/services/members";
+import { dashboard } from "@/lib/services/dashboards";
+import { extractTokenFromCookie } from "@/lib/util/extractTokenFromCookie";
+import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
+import { DashboardApplicationServiceResponseDto, DashboardRequestDto } from "@/lib/services/dashboards/schema";
+import { useDashboards } from "@/hooks/useDashboard";
+import BoardLayout from "@/layouts/board";
 import BackButton from "@/components/common/Button/BackButton";
 import DeleteDashButton from "@/components/common/Button/DeleteDashButton";
 import InviteListTable from "@/components/common/InviteListTable";
 import MemberTable from "@/components/common/MemberTable";
-import SideMenu from "@/components/common/SideMenu";
 import DashboardHeader from "@/components/common/DashboardHeader";
-import BoardLayout from "@/layouts/board";
-import { dashboard } from "@/lib/services/dashboards";
-import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
-import { ColumnServiceResponseDto } from "@/lib/services/columns/schema";
-import { useDashboardData } from "@/hooks/useDashboardData";
 import DashboardEdit from "@/components/dashboard/DashboardEdit";
-import { memberList } from "@/lib/services/members";
-import { extractTokenFromCookie } from "@/lib/util/extractTokenFromCookie";
-import { GetServerSidePropsContext } from "next";
-import { DashboardApplicationServiceResponseDto } from "@/lib/services/dashboards/schema";
-import React, { useState } from "react";
 
-type DashboardContextType = {
+interface DashbordProps {
   members: MemberApplicationServiceResponseDto[];
-  columns: ColumnServiceResponseDto[];
+}
+
+interface DashboardContextType {
   dashboardData: DashboardApplicationServiceResponseDto;
   setDashboardData: (data: DashboardApplicationServiceResponseDto) => void;
-  setDashboardList: any;
-};
+  updateDashboardList: (data: DashboardRequestDto, id: number) => void;
+}
 
-export const DashboardContext = React.createContext<DashboardContextType>({
-  members: [],
-  columns: [],
+export const EditDashboardContext = React.createContext<DashboardContextType>({
   dashboardData: {} as DashboardApplicationServiceResponseDto,
   setDashboardData: () => {},
-  setDashboardList: () => {},
+  updateDashboardList: () => {},
 });
 
-export default function Edit({ members, columns }: DashboardContextType) {
+export default function Edit({ members }: DashbordProps) {
   const [memberList, setMemberList] = useState(members);
-  const { dashboardData, dashboardList, setDashboardData, setDashboardList } = useDashboardData();
+  const [dashboardData, setDashboardData] = useState<DashboardApplicationServiceResponseDto>(
+    {} as DashboardApplicationServiceResponseDto,
+  );
   const router = useRouter();
+
+  const { dashboardList, updateDashboardList } = useDashboards();
   const dashboardId = router.query.id;
 
   // 대시보드 삭제
   const handleDeleteDashboard = async () => {
     try {
       await dashboard("delete", Number(dashboardId));
-      router.push("/mydashboard"); // 대시보드 삭제 시 mydashboard 페이지로 이동
+      router.push("/mydashboard");
     } catch (error) {
       console.error("대시보드 삭제 실패:", error);
     }
   };
 
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const dashboardResponse = await dashboard("get", Number(dashboardId));
+        setDashboardData(dashboardResponse?.data as DashboardApplicationServiceResponseDto);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetch();
+  }, [dashboardId]);
+
+  const header = <DashboardHeader dashboardData={dashboardData} members={memberList} />;
+
   return (
-    <DashboardContext.Provider value={{ members, columns, dashboardData, setDashboardData, setDashboardList }}>
-      <BoardLayout
-        sideMenu={<SideMenu dashboards={dashboardList.dashboards} />}
-        dashboardHeader={<DashboardHeader dashboardData={dashboardData} members={memberList} />}>
+    <EditDashboardContext.Provider value={{ dashboardData, setDashboardData, updateDashboardList }}>
+      <Head>
+        <title>{`${dashboardData.title} - 설정`}</title>
+      </Head>
+      <BoardLayout dashboardList={dashboardList} dashboardHeader={header}>
         <div className="px-12 pt-16 pb-56 tablet:px-20 tablet:pt-20 pc:w-620">
           <BackButton />
           <div className="flex flex-col gap-y-12 pt-21 pb-40 tablet:pb-48">
-            <DashboardEdit />
+            <DashboardEdit
+              dashboardData={dashboardData}
+              setDashboardData={setDashboardData}
+              updateDashboardList={updateDashboardList}
+            />
             <MemberTable setMemberList={setMemberList} />
             <InviteListTable />
           </div>
           <DeleteDashButton onClick={() => handleDeleteDashboard()} />
         </div>
       </BoardLayout>
-    </DashboardContext.Provider>
+    </EditDashboardContext.Provider>
   );
 }
 

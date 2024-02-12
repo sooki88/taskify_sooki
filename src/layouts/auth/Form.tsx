@@ -1,13 +1,12 @@
-import Button from "@/components/common/Button/Button";
+import Button from "@/components/common/Button";
 import { AuthType } from ".";
 import { ReactNode } from "react";
 import { AUTH_MAPPING } from "@/lib/constants";
-import { AuthType } from ".";
 interface AuthFormProps {
   type: AuthType;
   children: ReactNode;
   disabled?: boolean;
-  onSubmit: any; // 수정예정
+  onSubmit: () => void;
 }
 
 function AuthForm({ type, children, disabled, onSubmit }: AuthFormProps) {

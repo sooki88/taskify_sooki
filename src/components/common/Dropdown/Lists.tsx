@@ -14,7 +14,7 @@ interface ListsProps {
 function Option({ children, isSelected, onClick }: OptionProps) {
   return (
     <div
-      className="flex gap-6 bg-white cursor-pointer options-center hover:bg-gray-EEEE rounded-4 py-5"
+      className="flex gap-6 bg-white cursor-pointer options-center hover:bg-gray-EEEE rounded-4 py-5 h-38"
       onClick={(e) => onClick(e)}>
       <Image
         src={"/images/check.png"}

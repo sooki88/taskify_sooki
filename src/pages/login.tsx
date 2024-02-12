@@ -2,11 +2,11 @@ import { useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { login } from "@/lib/services/auth";
 import AuthLayout from "@/layouts/auth";
 import AuthForm from "@/layouts/auth/Form";
-import EmailField from "@/components/Auth/EmailField ";
+import EmailField from "@/components/Auth/EmailField";
 import PasswordField from "@/components/Auth/PasswordField";
-import { login } from "@/lib/services/auth";
 import AlertModal, { AlertType } from "@/components/modal/alert";
 
 interface LoginForm {

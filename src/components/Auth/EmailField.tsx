@@ -34,7 +34,7 @@ function EmailField<TFormInput extends FieldValues = FieldValues>({
           <Input id={name} type={name} placeholder="이메일을 입력해 주세요" {...field} isError={!!errors[name]} auth />
         )}
       />
-      {errors[name] && <ErrorMessage>{errors[name]?.message}</ErrorMessage>}
+      {errors[name] && <ErrorMessage>{errors[name]?.message as string}</ErrorMessage>}
     </InputContainer>
   );
 }

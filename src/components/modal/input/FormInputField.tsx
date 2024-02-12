@@ -31,7 +31,7 @@ function FormInputField({
   ...props
 }: CombinedFieldProps) {
   const {
-    trigger,
+    // trigger,
     control,
     formState: { errors },
   } = useFormContext();
@@ -40,9 +40,9 @@ function FormInputField({
   const errorMessage = typeof isMessage === "string" ? isMessage : "";
 
   //blur 적용할거면 사용.
-  const triggerValidationOnBlur = async () => {
-    await trigger(labelName);
-  };
+  // const triggerValidationOnBlur = async () => {
+  //   await trigger(labelName);
+  // };
 
   const fieldClass = `border-1 rounded-6 py-14 px-16`;
   const errorBorder = errors[labelName] ? "border-red" : "border-gray-D9D9";

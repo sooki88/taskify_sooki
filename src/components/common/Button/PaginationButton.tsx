@@ -1,8 +1,9 @@
 import Image from "next/image";
+import { SetStateAction } from "react";
 
 interface PaginationButtonProps {
   currentPage: number;
-  setCurrentPage: any;
+  setCurrentPage: React.Dispatch<SetStateAction<number>>;
   totalPages: number;
 }
 

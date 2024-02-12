@@ -1,14 +1,15 @@
-import { UserServiceResponseDto } from "@/lib/services/auth/schema";
-import { me } from "@/lib/services/users";
 import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useRef, useState } from "react";
-import { DashboardContext } from "@/pages/dashboard/[id]";
-import { useWindowSize } from "usehooks-ts";
-import { useRouter } from "next/router";
 import Image from "next/image";
+import { useWindowSize } from "usehooks-ts";
+import { DashboardContext } from "@/pages/dashboard/[id]";
+import { UserServiceResponseDto } from "@/lib/services/auth/schema";
+import { DashboardApplicationServiceResponseDto } from "@/lib/services/comments/schema";
+import { me } from "@/lib/services/users";
+import SideMenu from "@/components/common/SideMenu";
 
 interface BoardLayoutProps {
-  sideMenu: any;
-  dashboardHeader: any;
+  dashboardList: DashboardApplicationServiceResponseDto[];
+  dashboardHeader: React.ReactElement;
   children: ReactNode;
   scrollBtn?: boolean;
 }
@@ -32,36 +33,24 @@ export const useMyData = () => {
   return context;
 };
 
-function BoardLayout({ sideMenu, dashboardHeader, children, scrollBtn }: BoardLayoutProps) {
+function BoardLayout({ dashboardList, dashboardHeader, children, scrollBtn }: BoardLayoutProps) {
   const [myData, setMyData] = useState<UserServiceResponseDto>({} as UserServiceResponseDto);
   const [scrollPosition, setScrollPosition] = useState<number>(0);
 
   const { columnsData } = useContext(DashboardContext);
   const columnsCount = columnsData.length;
-  const router = useRouter();
-  const dashboardId = router.query.id;
   const columnsWidth = columnsCount * COLUMN_WIDTH;
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { width: windowWidth } = useWindowSize();
   const containerWidth = windowWidth - SIDEBAR_WIDTH;
-  console.log(`scrollPosition:${scrollPosition}`);
 
   const handleScroll = (scrollAmount: number) => {
     if (containerRef.current) {
       const newScrollPosition = scrollPosition + scrollAmount;
       setScrollPosition(newScrollPosition);
       containerRef.current.scrollLeft = newScrollPosition;
-    }
-  };
-
-  const handleScrollReset = () => {
-    if (columnsCount < 6) return;
-    if (containerRef.current) {
-      containerRef.current.scrollLeft = 0;
-      setScrollPosition(0);
-      return;
     }
   };
 
@@ -73,15 +62,25 @@ function BoardLayout({ sideMenu, dashboardHeader, children, scrollBtn }: BoardLa
       setMyData(response.data as UserServiceResponseDto);
     };
 
-    handleScrollReset();
+    const handleScrollReset = () => {
+      if (columnsCount < 6) return;
+      if (containerRef.current) {
+        containerRef.current.scrollLeft = 0;
+        setScrollPosition(0);
+        return;
+      }
+    };
 
+    handleScrollReset();
     fetchMyData();
-  }, [dashboardId]);
+  }, [columnsCount]);
 
   return (
     <MyDataContext.Provider value={{ myData, setMyData }}>
       <div className="grid grid-rows-[60px_1fr] tablet:grid-rows-[70px_1fr] grid-cols-[67px_minmax(auto,_1fr)] tablet:grid-cols-[160px_minmax(auto,_1fr)] pc:grid-cols-[300px_minmax(auto,_1fr)] min-h-screen bg-gray-FAFA">
-        <div className="row-span-2">{sideMenu}</div>
+        <div className="row-span-2">
+          <SideMenu dashboardList={dashboardList} />
+        </div>
         <div className="col-span-1">{dashboardHeader}</div>
         <div ref={containerRef} className="col-span-1 overflow-auto h-[calc(100vh-7rem)] scroll-smooth">
           {children}

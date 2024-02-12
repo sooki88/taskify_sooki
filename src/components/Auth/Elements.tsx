@@ -1,17 +1,13 @@
 import Image from "next/image";
-import { useState, MouseEvent, forwardRef } from "react";
-interface InputProps {
-  id: string;
-  type: string;
-  placeholder: string;
+import { useState, MouseEvent, forwardRef, ReactNode } from "react";
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   isError?: boolean;
   auth?: boolean;
   autoComplete?: string;
-  onChange: any; // 타입 수정 예정
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { id, type, placeholder, isError, auth, autoComplete, ...props },
+  { id, type = "text", placeholder, isError, auth, autoComplete, ...props },
   ref,
 ) {
   const [inputType, setInputType] = useState(type);
@@ -51,8 +47,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   );
 });
 
-export function Label({ children, htmlFor, auth }: any) {
-  const AUTH_TEXT = auth ? "" : "tablet:text-18 font-medium tablet:h-21 h-19";
+export function Label({ children, htmlFor, auth }: { children: ReactNode; htmlFor: string; auth?: boolean }) {
+  const AUTH_TEXT = !auth && "tablet:text-18 font-medium tablet:h-21 h-19";
 
   return (
     <label className={`text-black-3332 text-16 ${AUTH_TEXT}`} htmlFor={htmlFor}>
@@ -61,11 +57,11 @@ export function Label({ children, htmlFor, auth }: any) {
   );
 }
 
-export function ErrorMessage({ children }: any) {
+export function ErrorMessage({ children }: { children: ReactNode }) {
   return <div className="text-red text-14">{children}</div>;
 }
 
-export function InputContainer({ auth, children }: any) {
+export function InputContainer({ auth, children }: { auth: boolean; children: ReactNode }) {
   const gap = auth ? "gap-8" : "gap-10";
   return <div className={`flex flex-col w-full ${gap}`}>{children}</div>;
 }

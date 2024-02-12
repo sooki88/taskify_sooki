@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 type AvatarType = "default" | "card" | "modal" | "dropdown" | "table";
 
@@ -10,16 +11,6 @@ interface AvatarProps {
 
 function Avatar({ nickname, profileImageUrl, avatarType = "default" }: AvatarProps) {
   const initial = profileImageUrl ? "" : nickname?.charAt(0);
-
-  const backgroundStyle = profileImageUrl
-    ? {
-        backgroundImage: `url(${profileImageUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }
-    : {
-        backgroundColor: "orange",
-      };
 
   const sizeClasses = {
     default: "w-34 h-34 text-14 tablet:w-38 tablet:h-38 tablet:text-16 font-semibold",
@@ -33,9 +24,19 @@ function Avatar({ nickname, profileImageUrl, avatarType = "default" }: AvatarPro
 
   return (
     <div
-      className={`flex items-center shrink-0 justify-center text-white border-2 border-white rounded-full ${avatarStyle}`}
-      style={backgroundStyle}>
-      <span>{initial}</span>
+      className={`relative flex items-center shrink-0 justify-center bg-orange text-white border-2 border-white rounded-full ${avatarStyle}`}>
+      {profileImageUrl ? (
+        <Image
+          src={profileImageUrl}
+          alt={nickname || "Avatar"}
+          fill
+          style={{ objectFit: "cover" }}
+          className="rounded-full"
+          sizes="auto"
+        />
+      ) : (
+        <span>{initial}</span>
+      )}
     </div>
   );
 }

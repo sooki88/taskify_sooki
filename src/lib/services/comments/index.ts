@@ -25,7 +25,7 @@ export const createComment = (data: CreateCommentRequestDto): Promise<ServiceRes
  * @returns {Promise<ServiceResponse<CommentServiceDto>>} 댓글 서비스 응답을 포함하는 프로미스
  */
 export const findComments = (qs: FindCommentsRequestDto): Promise<ServiceResponse<FindCommentsResponseDto>> => {
-  return service("get", createUrlWithQueryString(commentAddress.comment, qs as any));
+  return service("get", createUrlWithQueryString(commentAddress.comment, qs));
 };
 
 /**

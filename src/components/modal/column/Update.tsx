@@ -1,7 +1,9 @@
+import { SetStateAction } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useToggle } from "usehooks-ts";
 import Modal from "@/components/common/Modal";
 import { column } from "@/lib/services/columns";
+import { ColumnServiceResponseDto } from "@/lib/services/columns/schema";
 import AlertModal from "../alert";
 import FormInputField from "../input/FormInputField";
 
@@ -12,7 +14,7 @@ type ColumnData = {
 
 interface UpdateColumnProps {
   columnData: ColumnData;
-  updateColumns: any;
+  updateColumns: React.Dispatch<SetStateAction<ColumnServiceResponseDto[]>>;
   onClose: () => void;
 }
 function UpdateColumnModal({ columnData: { title, columnId }, updateColumns, onClose }: UpdateColumnProps) {
@@ -24,10 +26,11 @@ function UpdateColumnModal({ columnData: { title, columnId }, updateColumns, onC
       const form = {
         title,
       };
-      const response = (await column("put", columnId, form)) as any;
+      const response = await column("put", columnId, form)!;
       if (response.data) {
-        updateColumns((prevState: any) =>
-          prevState.map((column: any) => (column.id === columnId ? { ...column, title: response.data.title } : column)),
+        const { title } = response.data;
+        updateColumns((prevState) =>
+          prevState.map((column: ColumnServiceResponseDto) => (column.id === columnId ? { ...column, title } : column)),
         );
       }
     } catch (e) {
@@ -39,7 +42,9 @@ function UpdateColumnModal({ columnData: { title, columnId }, updateColumns, onC
   const callbackDelete = async () => {
     try {
       await column("delete", columnId);
-      updateColumns((prevState: any) => prevState.filter((column: any) => column.id !== columnId));
+      updateColumns((prevState: ColumnServiceResponseDto[]) =>
+        prevState.filter((column: ColumnServiceResponseDto) => column.id !== columnId),
+      );
     } catch (e) {
       Promise.reject();
     }
@@ -55,7 +60,7 @@ function UpdateColumnModal({ columnData: { title, columnId }, updateColumns, onC
         onClose={onClose}
         onDelete={deleteToggle}
         callback={callbackUpdate}
-        useFormData>
+        isFormData>
         <FormInputField labelName="title" labelTitle="이름" defaultValue={title} rules={rules} />
       </Modal>
       {deleteValue && (

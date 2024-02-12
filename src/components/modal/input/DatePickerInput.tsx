@@ -13,7 +13,7 @@ function DatePickerInput({
   selected,
   onChange,
 }: {
-  selected: Date | undefined;
+  selected: string | Date | undefined;
   onChange: (selectedValue: Date | undefined) => void;
 }) {
   return (
@@ -35,8 +35,8 @@ function DatePickerInput({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="">
-        <Calendar mode="single" selected={selected} onSelect={onChange} initialFocus />
+      <PopoverContent className="w-auto p-0 bg-white border-gray-7874 border-1 rounded-8 z-modal">
+        <Calendar mode="single" selected={selected as Date} onSelect={onChange} initialFocus />
       </PopoverContent>
     </Popover>
   );

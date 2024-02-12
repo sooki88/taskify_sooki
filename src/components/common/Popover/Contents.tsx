@@ -6,7 +6,7 @@ interface ContentsProps {
 
 function Contents({ contents }: ContentsProps) {
   return (
-    <div className="absolute flex flex-col items-center justify-center gap-6 p-10 bg-white border-solid top-45 w-86 right-10 tablet:w-150 border-1 rounded-6 border-gray-D9D9">
+    <div className="absolute z-modal flex flex-col items-center justify-center gap-6 p-10 bg-white border-solid top-45 w-86 right-10 tablet:w-150 border-1 rounded-6 border-gray-D9D9">
       {contents.map(({ title, onClick }) => (
         <button
           key={title}

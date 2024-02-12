@@ -1,22 +1,25 @@
-import { useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { Controller, FieldValues, FormProvider, useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { card } from "@/lib/services/cards";
 import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
-import { ColumnServiceResponseDto } from "@/lib/services/columns/schema";
 import { CardServiceResponseDto } from "@/lib/services/cards/schema";
 import { DashboardContext } from "@/pages/dashboard/[id]";
 import Modal from "@/components/common/Modal";
 import Dropdown from "@/components/common/Dropdown";
-import ProfileLabel from "@/components/common/ProfileLabel";
-import { ChipProgress } from "@/components/common/Chips";
 import { AddImageInputField, DatePickerInputField, FormInputField, FormTagInputField } from "../input";
+
+type ImageObject = {
+  url: string;
+  name: string;
+  type: string;
+};
 
 interface UpdateTodoModalProps<T = void> {
   cardId?: number;
   onClose: () => void;
   callback: (data: FieldValues) => Promise<T>;
-  setSelectedImage: any;
+  setSelectedImage: Dispatch<SetStateAction<File | ImageObject | undefined>>;
 }
 
 function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: UpdateTodoModalProps) {
@@ -44,18 +47,11 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
   if (!cardData) return;
   const { id: memberId } = cardData.assignee;
 
-  const renderOptionPrograss = (option: ColumnServiceResponseDto) => {
-    return <ChipProgress columnTitle={option?.title} />;
-  };
-  const renderOptionNickName = (option: MemberApplicationServiceResponseDto) => {
-    return <ProfileLabel data={option} />;
-  };
-
   return (
     <FormProvider {...methods}>
-      <Modal title="할 일 수정" modalType={"update"} onClose={onClose} callback={callback} useFormData>
-        <div className="flex flex-col gap-32">
-          <div className="tablet:flex tablet:gap-16 justify-between">
+      <Modal title="할 일 수정" modalType={"update"} onClose={onClose} callback={callback} isFormData>
+        <div className="flex flex-col gap-32 w-full">
+          <div className="tablet:flex gap-16">
             <Controller
               name="columnId"
               control={methods.control}
@@ -66,7 +62,6 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
                     <label className="text-16 tablet:text-18">상태</label>
                     <Dropdown
                       options={columnsData}
-                      renderOptions={renderOptionPrograss}
                       onChange={(selectedValue) => field.onChange(selectedValue)}
                       defaultIndex={columnsData.findIndex((option) => option.id === field.value)}
                     />
@@ -83,7 +78,6 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
                   <label className="text-16 tablet:text-18">담당자</label>
                   <Dropdown
                     options={memberList}
-                    renderOptions={renderOptionNickName}
                     onChange={(selectedId) => {
                       const selectedMember = memberList.find((member) => member.id === selectedId);
                       if (selectedMember) {
@@ -119,7 +113,7 @@ function UpdateTodoModal({ cardId, onClose, callback, setSelectedImage }: Update
                   마감일
                 </label>
                 <DatePickerInputField
-                  selected={field.value as any}
+                  selected={field.value || undefined}
                   onChange={(selectedValue?: Date) => {
                     const formattedDate = format(selectedValue as Date, "yyyy-MM-dd HH:mm");
                     field.onChange(formattedDate);

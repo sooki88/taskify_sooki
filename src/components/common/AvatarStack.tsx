@@ -1,9 +1,10 @@
+import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
 import Avatar from "./Avatar";
 import ProfileLabel from "./ProfileLabel";
 import { useWindowSize } from "usehooks-ts";
 
 interface AvatarsProps {
-  list: any[] | undefined;
+  list: MemberApplicationServiceResponseDto[];
 }
 
 // list에 기본값 [] 설정해야 동작함

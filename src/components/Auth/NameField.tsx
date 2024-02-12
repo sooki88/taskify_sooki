@@ -1,6 +1,6 @@
 import { SignUpType } from "@/pages/signup";
 import { Label, Input, ErrorMessage, InputContainer } from "./Elements";
-import { Control, Controller, FieldErrors } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 interface NameFieldProps extends SignUpType {
   name: "nickname";

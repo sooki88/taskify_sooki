@@ -1,24 +1,16 @@
-import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
-import { UseFormRegister, UseFormSetValue, useForm } from "react-hook-form";
-import { ProfileChangeFormProps } from "./ProfileChangeForm";
+import Image from "next/image";
+import { FieldValues, UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 interface ImgaeInputProps {
   type: string;
-  id: "profileImageUrl";
-  imgUrl?: any;
-  register: UseFormRegister<any>;
-  setValue: UseFormSetValue<ProfileChangeFormProps>;
+  imgUrl?: string;
+  register: UseFormRegister<FieldValues>;
+  setValue: UseFormSetValue<FieldValues>;
 }
 
-function ImageInput({ type, id, imgUrl, register, setValue }: ImgaeInputProps) {
+function ImageInput({ type, imgUrl, register, setValue }: ImgaeInputProps) {
   const [avatarPreview, setAvatarPreview] = useState("");
-
-  useEffect(() => {
-    if (imgUrl) {
-      setAvatarPreview(imgUrl);
-    }
-  }, [imgUrl]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
@@ -36,6 +28,10 @@ function ImageInput({ type, id, imgUrl, register, setValue }: ImgaeInputProps) {
     setValue("profileImageUrl", undefined);
   };
 
+  useEffect(() => {
+    if (imgUrl) setAvatarPreview(imgUrl);
+  }, [imgUrl]);
+
   return (
     <div className="relative">
       {avatarPreview && (
@@ -48,13 +44,13 @@ function ImageInput({ type, id, imgUrl, register, setValue }: ImgaeInputProps) {
       <label className="bg-[#F5F5F5] rounded-6 w-100 h-100 tablet:w-182 tablet:h-182 flex items-center justify-center shrink-0 overflow-hidden cursor-pointer relative hover:border-2 hover:border-violet">
         <input
           type={type}
-          id={id}
+          id={"profileImageUrl"}
           className="hidden"
           {...register("profileImageUrl")}
           accept="image/*"
           onChange={handleFileChange}
         />
-        {avatarPreview && avatarPreview.length > 0 ? (
+        {avatarPreview && avatarPreview!.length > 0 ? (
           <Image
             fill
             src={avatarPreview}

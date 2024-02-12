@@ -42,7 +42,7 @@ function CreateColumnModal({ onClose, updateColumns }: CreateColumnModalProps) {
 
   return (
     <FormProvider {...methods}>
-      <Modal title="새 컬럼 생성" modalType={"create"} onClose={onClose} callback={callback} useFormData>
+      <Modal title="새 컬럼 생성" modalType={"create"} onClose={onClose} callback={callback} isFormData>
         <FormInputField labelName="title" labelTitle="이름" rules={rules} />
       </Modal>
     </FormProvider>

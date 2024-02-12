@@ -1,21 +1,25 @@
-import React, { useRef, useState, useEffect, ReactNode } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useOnClickOutside, useToggle } from "usehooks-ts";
+import { MemberApplicationServiceResponseDto } from "@/lib/services/members/schema";
+import { ColumnServiceResponseDto } from "@/lib/services/columns/schema";
 import { Lists, Option } from "./Lists";
-import { FieldValue } from "react-hook-form";
+import { ChipProgress } from "../Chips";
+import ProfileLabel from "../ProfileLabel";
 
-// type OptionType = string | Record<string , string>;
+interface OptionCommon {
+  id: number;
+}
 
 interface DropdownProps {
   defaultIndex: number;
-  options: any[];
-  renderOptions?: (option: any) => ReactNode;
+  options: (ColumnServiceResponseDto | MemberApplicationServiceResponseDto)[];
   filteringTerm?: string;
   autoComplete?: boolean;
   onChange: (value: number) => void;
 }
 
-function Dropdown({ defaultIndex, options, renderOptions, filteringTerm, autoComplete, onChange }: DropdownProps) {
+function Dropdown({ defaultIndex, options, filteringTerm, autoComplete, onChange }: DropdownProps) {
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex);
   const [inputValue, setInputValue] = useState("");
   const [isInputMode, setIsInputMode] = useState<boolean>(false);
@@ -56,21 +60,25 @@ function Dropdown({ defaultIndex, options, renderOptions, filteringTerm, autoCom
     setInputValue("");
   };
 
-  const defaultRenderOptions = (option: any) => {
-    return typeof option === "object" ? option[filteringTerm as keyof typeof option] : option;
+  const renderOptions = (option: ColumnServiceResponseDto | MemberApplicationServiceResponseDto) => {
+    if ("title" in option) {
+      return <ChipProgress columnTitle={option.title} />;
+    } else if ("nickname" in option) {
+      return <ProfileLabel data={option} />;
+    }
+    return null; // 또는 적절한 대체 컴포넌트
   };
 
-  const renderOption = renderOptions || defaultRenderOptions;
-
-  const filteredOptions = isInputMode
-    ? options.filter((option) => {
-        const optionValue =
-          typeof option === "object" && option !== null
-            ? option[filteringTerm as keyof typeof option]?.toString()
-            : option.toString();
-        return optionValue.includes(inputValue);
-      })
-    : options;
+  const filteredOptions =
+    isInputMode && filteringTerm
+      ? options.filter((option) => {
+          let optionValue: string = "";
+          if (typeof option === "object" && option !== null && filteringTerm in option) {
+            optionValue = option[filteringTerm as keyof OptionCommon]?.toString() ?? "";
+          }
+          return optionValue.includes(inputValue);
+        })
+      : options;
 
   useOnClickOutside(ref, handleClickOutside);
 
@@ -82,7 +90,7 @@ function Dropdown({ defaultIndex, options, renderOptions, filteringTerm, autoCom
   }, [autoComplete, isInputMode]);
 
   return (
-    <div ref={ref} className="relative w-220 h-48">
+    <div ref={ref} className="relative tablet:w-220 h-48">
       {autoComplete && isInputMode ? (
         <input
           ref={inputRef}
@@ -97,7 +105,7 @@ function Dropdown({ defaultIndex, options, renderOptions, filteringTerm, autoCom
         <div
           className="flex items-center w-full h-48 px-16 border border-gray-D9D9 rounded-6 justify-between cursor-pointer"
           onClick={handleDivClick}>
-          <div>{renderOption(options[selectedIndex])}</div>
+          <div>{renderOptions(options[selectedIndex])}</div>
           <button onClick={handleButtonToggle}>
             <Image src={"/images/arrow_drop_down.png"} width={26} height={26} alt="down" />
           </button>
@@ -107,7 +115,7 @@ function Dropdown({ defaultIndex, options, renderOptions, filteringTerm, autoCom
         <Lists>
           {filteredOptions.map((option, index) => (
             <Option key={index} onClick={() => handleOptionClick(option.id)} isSelected={selectedIndex === index}>
-              {renderOption(option)}
+              {renderOptions(option)}
             </Option>
           ))}
         </Lists>

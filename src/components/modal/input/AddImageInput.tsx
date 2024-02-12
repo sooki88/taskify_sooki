@@ -12,10 +12,14 @@ function AddImageInput({
   onChange,
 }: {
   value?: string;
-  onChange: Dispatch<SetStateAction<File | ImageObject>>;
+  onChange: Dispatch<SetStateAction<File | ImageObject | undefined>>;
 }) {
   const [addImages, setAddImages] = useState<(File | ImageObject)[]>([]);
-  const [selectedImage, setSelectedImage] = useState<File | ImageObject | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | ImageObject | null>({
+    url: "",
+    name: "",
+    type: "",
+  });
 
   const handleImageUpload = () => {
     const imageInput = document.getElementById("imageInput") as HTMLInputElement;
@@ -29,14 +33,14 @@ function AddImageInput({
       const totalImages = addImages.length + newImages.length;
       if (totalImages <= 4) {
         setAddImages((prevImages) => [...newImages, ...prevImages]);
-        console.log("선택된 파일:", newImages);
+        // console.log("선택된 파일:", newImages);
       } else {
         alert("이미지 추가는 최대 4개까지 가능합니다.");
       }
     }
   };
 
-  const handleSelectedImage = (image: File | ImageObject) => {
+  const handleSelectedImage = (image: File) => {
     setSelectedImage(image);
     onChange(image);
   };
@@ -80,8 +84,8 @@ function AddImageInput({
 
         return (
           <div key={index} className="relative">
-            <div onClick={() => handleSelectedImage(image)}>
-              <img
+            <div onClick={() => handleSelectedImage(image as File)}>
+              <Image
                 src={src}
                 alt={`추가된 이미지 ${index}`}
                 width={76}

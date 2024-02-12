@@ -6,9 +6,11 @@ import { ChipCard, ChipProgress } from "@/components/common/Chips";
 import Modal from "@/components/common/Modal";
 import CommentInput from "../input/CommentInput";
 import TaskInfo from "./TaskInfo";
+import { CardServiceResponseDto } from "@/lib/services/cards/schema";
+import Popover from "@/components/common/Popover";
 
 interface TaskModalProps {
-  taskData: any;
+  taskData: CardServiceResponseDto;
   onClose: (e?: React.MouseEvent) => void;
 }
 
@@ -24,12 +26,23 @@ function TaskModal({ taskData, onClose }: TaskModalProps) {
 
   const column = columnsData.find((column) => column.id === taskData.columnId);
 
+  const modalHeaderContent = (
+    <div className="flex items-center gap-15">
+      <Popover cardId={taskData.id}>
+        <Image src="/images/kebab.png" alt="kebab" width={28} height={28} />
+      </Popover>
+      <button onClick={onClose}>
+        <Image src="/images/close.png" alt="close" width={32} height={32} />
+      </button>
+    </div>
+  );
+
   return (
     <FormProvider {...methods}>
-      <Modal title={taskData?.title} onClose={onClose} cardId={taskData.id} hasOptionsbutton>
-        <div className="flex flex-col gap-24 tablet:flex-row w-327 tablet:w-680 pc:w-680">
+      <Modal title={taskData?.title} onClose={onClose} headerContent={modalHeaderContent} hasOptionsbutton>
+        <div className="flex flex-col gap-24 tablet:flex-row w-327 tablet:w-680 pc:w-680 ">
           <div className="flex w-full m-auto tablet:hidden">
-            <TaskInfo data={taskData?.assignee as assignee} dueDate={taskData?.dueDate} />
+            <TaskInfo data={taskData?.assignee as assignee} dueDate={taskData?.dueDate as Date} />
           </div>
           <div className="flex flex-col w-full gap-16 tablet:gap-20 tablet:w-450">
             <div className="flex gap-20">
@@ -42,13 +55,16 @@ function TaskModal({ taskData, onClose }: TaskModalProps) {
             <div className="h-auto font-normal text-black font-Pretendard text-14 rounded-6">
               {taskData?.description}
             </div>
-            <div className="flex items-center justify-center w-full h-auto tablet:w-450">
-              {taskData?.imageUrl && <Image src={taskData?.imageUrl} alt="테스트 이미지" width={450} height={260} />}
+            <div
+              className={`flex items-center justify-center w-full h-auto ${taskData?.imageUrl && "min-h-260"} tablet:w-450 relative`}>
+              {taskData?.imageUrl && (
+                <Image src={taskData?.imageUrl} alt="테스트 이미지" fill style={{ objectFit: "cover" }} sizes="auto" />
+              )}
             </div>
             <CommentInput cardId={taskData.id} columnId={taskData?.columnId as number} />
           </div>
           <div className="hidden tablet:w-180 pc:w-200 tablet:flex tablet:justify-end">
-            <TaskInfo data={taskData?.assignee as assignee} dueDate={taskData?.dueDate} />
+            <TaskInfo data={taskData?.assignee as assignee} dueDate={taskData?.dueDate as Date} />
           </div>
         </div>
       </Modal>

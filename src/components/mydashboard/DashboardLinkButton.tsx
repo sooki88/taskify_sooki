@@ -26,7 +26,7 @@ function DashboardLinkButton({ id, title, color, createdByMe }: DashboardLinkBut
           {title}
           {createdByMe && (
             <div className="relative h-12 w-15 tablet:w-18 tablet:h-14 pc:w-20 pc:h-16">
-              <Image fill src="/images/crown.png" alt="왕관 아이콘 이미지" />
+              <Image fill src="/images/crown.png" alt="왕관 아이콘 이미지" sizes="20px" />
             </div>
           )}
         </div>
