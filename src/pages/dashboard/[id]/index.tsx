@@ -118,8 +118,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 
   const cookieValue = context.req.headers.cookie || "";
+  const token = extractTokenFromCookie(cookieValue);
 
-  if (!cookieValue) {
+  if (!token) {
     return {
       redirect: {
         destination: "/login",
@@ -128,7 +129,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  const token = extractTokenFromCookie(cookieValue);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
