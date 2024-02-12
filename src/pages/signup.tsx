@@ -13,6 +13,8 @@ import EmailField from "@/components/Auth/EmailField";
 import PasswordField from "@/components/Auth/PasswordField";
 import PasswordCheckField from "@/components/Auth/PasswordCheckField";
 import AlertModal, { AlertType } from "@/components/modal/alert";
+import { extractTokenFromCookie } from "@/lib/util/extractTokenFromCookie";
+
 
 export interface SignUpForm {
   email: string;
@@ -111,8 +113,9 @@ export default function SignUp() {
 
 export function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieValue = context.req.headers.cookie || "";
+  const token = extractTokenFromCookie(cookieValue);
 
-  if (cookieValue) {
+  if (token) {
     return {
       redirect: {
         destination: "/mydashboard",

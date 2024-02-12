@@ -8,6 +8,7 @@ import AuthForm from "@/layouts/auth/Form";
 import EmailField from "@/components/Auth/EmailField";
 import PasswordField from "@/components/Auth/PasswordField";
 import AlertModal, { AlertType } from "@/components/modal/alert";
+import { extractTokenFromCookie } from "@/lib/util/extractTokenFromCookie";
 
 interface LoginForm {
   email: string;
@@ -76,8 +77,10 @@ export default function Login() {
 
 export function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieValue = context.req.headers.cookie || "";
+  const token = extractTokenFromCookie(cookieValue);
 
-  if (cookieValue) {
+  if (token) {
+
     return {
       redirect: {
         destination: "/mydashboard",
