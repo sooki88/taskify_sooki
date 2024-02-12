@@ -5,7 +5,7 @@ function Header() {
   return (
     <div className="fixed top-0 left-0 right-0 z-10 flex items-center justify-between w-full py-16 pr-24 bg-white h-70 tablet:pr-40 pc:pr-80 pl-30">
       <Link href="/" className="flex items-center">
-        <Image className="w-full h-auto" width={29} height={33} src="/images/logo.png" alt="로고 이미지" />
+        <Image width={29} height={33} src="/images/logo.png" alt="로고 이미지" />
         <Image
           className="hidden tablet:block"
           width={80}

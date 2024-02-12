@@ -1,7 +1,17 @@
-import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { useWindowSize } from "usehooks-ts";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useContext,
+  useRef,
+  useState,
+  useLayoutEffect,
+} from "react";
 import { DashboardContext } from "@/pages/dashboard/[id]";
+import { useWindowSize } from "usehooks-ts";
+import { LeftScrollButton, RightScrollButton } from "@/components/dashboard/ScrollButton";
+import { useEventListener } from "usehooks-ts";
 import { UserServiceResponseDto } from "@/lib/services/auth/schema";
 import { DashboardApplicationServiceResponseDto } from "@/lib/services/comments/schema";
 import { me } from "@/lib/services/users";
@@ -19,10 +29,6 @@ interface MyDataContextType {
   setMyData: Dispatch<SetStateAction<UserServiceResponseDto>>;
 }
 
-const COLUMN_WIDTH = 354;
-const SIDEBAR_WIDTH = 300;
-const MOVEMENT = COLUMN_WIDTH * 6;
-
 export const MyDataContext = createContext<MyDataContextType | undefined>(undefined);
 
 export const useMyData = () => {
@@ -33,47 +39,66 @@ export const useMyData = () => {
   return context;
 };
 
+const COLUMN_WIDTH = 354;
+const SIDEBAR_WIDTH = 300;
+const MOVEMENT = COLUMN_WIDTH * 3 - 50;
+
 function BoardLayout({ dashboardList, dashboardHeader, children, scrollBtn }: BoardLayoutProps) {
   const [myData, setMyData] = useState<UserServiceResponseDto>({} as UserServiceResponseDto);
   const [scrollPosition, setScrollPosition] = useState<number>(0);
+  const [rightButtonToggle, setRightButtonToggle] = useState(true);
 
   const { columnsData } = useContext(DashboardContext);
-  const columnsCount = columnsData.length;
-  const columnsWidth = columnsCount * COLUMN_WIDTH;
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { width: windowWidth } = useWindowSize();
+  const columnsCount = columnsData.length;
+  const columnsWidth = columnsCount * COLUMN_WIDTH;
   const containerWidth = windowWidth - SIDEBAR_WIDTH;
 
-  const handleScroll = (scrollAmount: number) => {
+  const handleButtonScroll = (scrollAmount: number) => {
     if (containerRef.current) {
+      containerRef.current.style.setProperty("scroll-behavior", "smooth");
       const newScrollPosition = scrollPosition + scrollAmount;
       setScrollPosition(newScrollPosition);
       containerRef.current.scrollLeft = newScrollPosition;
     }
   };
 
-  const scrollLimit = windowWidth - 354;
+  const onScroll = () => {
+    if (containerRef.current) {
+      const changedScrollPosition = containerRef.current.scrollLeft;
+      const scrollbarWidth = containerRef.current.clientWidth;
+      const scrollWidth = containerRef.current.scrollWidth;
+      setScrollPosition(changedScrollPosition);
 
-  useEffect(() => {
+      const isAtRightEnd = changedScrollPosition + scrollbarWidth >= scrollWidth;
+      setRightButtonToggle(!isAtRightEnd);
+    }
+  };
+
+  useEventListener("scroll", onScroll, containerRef);
+
+  useLayoutEffect(() => {
     const fetchMyData = async () => {
       const response = await me("get");
       setMyData(response.data as UserServiceResponseDto);
     };
 
     const handleScrollReset = () => {
-      if (columnsCount < 6) return;
       if (containerRef.current) {
-        containerRef.current.scrollLeft = 0;
+        containerRef.current.style.setProperty("scroll-behavior", "auto");
+        containerRef.current.scrollTo(0, 0);
         setScrollPosition(0);
+        setRightButtonToggle(true);
         return;
       }
     };
 
     handleScrollReset();
     fetchMyData();
-  }, [columnsCount]);
+  }, [columnsData]);
 
   return (
     <MyDataContext.Provider value={{ myData, setMyData }}>
@@ -82,29 +107,25 @@ function BoardLayout({ dashboardList, dashboardHeader, children, scrollBtn }: Bo
           <SideMenu dashboardList={dashboardList} />
         </div>
         <div className="col-span-1">{dashboardHeader}</div>
-        <div ref={containerRef} className="col-span-1 overflow-auto h-[calc(100vh-7rem)] scroll-smooth">
+        <div ref={containerRef} className="col-span-1 overflow-auto h-[calc(100vh-7rem)] ">
           {children}
         </div>
       </div>
       {scrollBtn && columnsWidth > containerWidth && (
-        <div className="hidden pc:block">
+        <div className="hidden pc:block ">
           {scrollPosition !== 0 && (
-            <button
-              className="pc:fixed  pc:top-500 pc:left-330"
+            <LeftScrollButton
               onClick={() => {
-                handleScroll(-MOVEMENT);
-              }}>
-              <Image src="/images/arrow_left.png" alt="arrow left" width={16} height={16} />
-            </button>
+                handleButtonScroll(-MOVEMENT);
+              }}
+            />
           )}
-          {scrollPosition < scrollLimit && (
-            <button
-              className="pc:fixed  pc:top-500 pc:right-40"
+          {rightButtonToggle && (
+            <RightScrollButton
               onClick={() => {
-                handleScroll(MOVEMENT);
-              }}>
-              <Image src="/images/arrow_right.png" alt="arrow right" width={16} height={16} />
-            </button>
+                handleButtonScroll(MOVEMENT);
+              }}
+            />
           )}
         </div>
       )}

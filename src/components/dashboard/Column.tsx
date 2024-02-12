@@ -73,7 +73,7 @@ function Column({ column, updateColumns }: ColumnProps) {
   const cardCount = cardLists?.cards.length;
 
   return (
-    <section className="flex flex-col flex-shrink-0 w-full gap-16 p-12 pc:min-h-screen tablet:gap-24 pc:w-354 tablet:p-20 bg-gray-FAFA border-b-1 border-b-gray-EEEE pc:border-r-gray-EEEE pc:border-r-1 pc:border-b-0">
+    <section className="flex flex-col flex-shrink-0 w-full gap-16 p-12 pc:min-h-[calc(100vh-9rem)] tablet:gap-24 pc:w-354 tablet:p-20 bg-gray-FAFA border-b-1 border-b-gray-EEEE pc:border-r-gray-EEEE pc:border-r-1 pc:border-b-0">
       <div className="flex justify-between">
         <div className="flex items-center gap-8">
           <span className="relative inline-block size-8">
