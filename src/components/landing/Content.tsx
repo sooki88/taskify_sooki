@@ -113,7 +113,7 @@ export default function Content() {
             <div className="col-span-1">
               <div className="flex items-center justify-center px-41 tablet:px-39 rounded-t-8 h-260 bg-black-4B4B">
                 <Image
-                  className="w-auto h-auto"
+                  className="w-300 h-195"
                   width={300}
                   height={195}
                   src="/images/landing5.svg"
