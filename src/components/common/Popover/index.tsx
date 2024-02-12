@@ -53,11 +53,14 @@ function Popover({ children, cardId }: PopoverProps) {
         assigneeUserId: assignee.id,
         columnId: data.columnId,
       };
-      if (selectedImage) {
+
+      if (selectedImage instanceof File) {
         const imageUrl = await postImageToServer(selectedImage as File, formData.columnId);
         if (imageUrl) {
           formData.imageUrl = imageUrl;
         }
+      } else {
+        formData.imageUrl = null;
       }
 
       const response = await card("put", cardId, formData);
