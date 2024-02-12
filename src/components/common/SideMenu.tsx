@@ -29,7 +29,7 @@ function DashboardItem({ id, title, createdByMe, color }: DashboardItemProps) {
 
   return (
     <div
-      className="flex items-center justify-center gap-6 p-12 tablet:justify-start h-45 rounded-4 hover:bg-violet-F1EF text-gray-7874 hover:text-black-3332"
+      className="flex items-center justify-center gap-6 p-12 tablet:justify-start h-45 rounded-4 hover:bg-violet-F1EF text-gray-7874 hover:text-black-3332 cursor-pointer"
       onClick={() => handleClick(id)}>
       <p className={`flex-none size-8 ${dashboardColor} rounded-full tablet:mr-10 mr-0`} />
       {tabletOrLarge && (
