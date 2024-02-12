@@ -36,7 +36,7 @@ function AvatarStack({ list = [] }: AvatarsProps) {
       <div
         className={`absolute hidden border border-gray-D9D9 rounded-8 border-solid top-45 p-12 w-160 right-0 group-hover:flex-col group-hover:flex group-hover:items-start group-hover:gap-4 group-hover:flex-nowrap bg-white`}>
         {list.map((data, index) => {
-          return <ProfileLabel key={index} data={data} />;
+          return <ProfileLabel key={index} data={data} avatarType="dropdown" />;
         })}
       </div>
     </div>
