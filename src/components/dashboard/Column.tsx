@@ -80,7 +80,7 @@ function Column({ column, updateColumns }: ColumnProps) {
             <Image width={8} height={8} src="/images/ellipse.png" alt="원 아이콘 이미지" />
           </span>
           <p className="mr-4 font-bold tablet:text-18">{column.title}</p>
-          <ChipNum totalCount={cardCount as number} />
+          <ChipNum totalCount={(cardCount as number) || 0} />
         </div>
         <button className="relative inline-block size-22 tablet:size-24" onClick={columnUpdateToggle}>
           <Image fill src="/images/settings.png" alt="setting" sizes="auto" />

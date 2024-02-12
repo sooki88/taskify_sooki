@@ -64,7 +64,7 @@ function Dropdown({ defaultIndex, options, filteringTerm, autoComplete, onChange
     if ("title" in option) {
       return <ChipProgress columnTitle={option.title} />;
     } else if ("nickname" in option) {
-      return <ProfileLabel data={option} />;
+      return <ProfileLabel data={option} avatarType="modal" />;
     }
     return null; // 또는 적절한 대체 컴포넌트
   };

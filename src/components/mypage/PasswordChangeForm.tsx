@@ -79,6 +79,10 @@ function PasswordChangeForm() {
           register={register}
           validation={{
             required: "비밀번호를 입력해 주세요.",
+            minLength: {
+              value: 8,
+              message: "새 비밀번호는 최소 8자 이상이어야 합니다.",
+            },
           }}
           placeholder="새 비밀번호 입력"
           labelTitle="새 비밀번호"
