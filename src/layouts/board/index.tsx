@@ -1,13 +1,4 @@
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  createContext,
-  useContext,
-  useRef,
-  useState,
-  useLayoutEffect,
-} from "react";
+import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useRef, useState, useEffect } from "react";
 import { DashboardContext } from "@/pages/dashboard/[id]";
 import { useWindowSize } from "usehooks-ts";
 import { LeftScrollButton, RightScrollButton } from "@/components/dashboard/ScrollButton";
@@ -80,7 +71,7 @@ function BoardLayout({ dashboardList, dashboardHeader, children, scrollBtn }: Bo
 
   useEventListener("scroll", onScroll, containerRef);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const fetchMyData = async () => {
       const response = await me("get");
       setMyData(response.data as UserServiceResponseDto);
